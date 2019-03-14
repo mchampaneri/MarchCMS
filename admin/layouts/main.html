@@ -1,0 +1,14 @@
+<html>
+    <head>
+        <title>{{ yield pageTitle() }}</title>
+        {{ include "./_head.html" }}
+        {{ yield pagePreLoad() }}
+    </head>
+    <body class="has-navbar-fixed-bottom">
+        {{ include "./_header.html" }}
+            {{ yield body() }}
+        {{ include "./_footer.html" }}
+        {{ include "./_foot.html" }}
+        {{ yield pagePostLoad() }}
+    </body>
+</html>
