@@ -25,18 +25,19 @@ func loadConfig(config *Config) {
 
 func serveWeb(address string) {
 
-	log.Println("Listening on ", address)
 	// start web on spacific address
 	router := mux.NewRouter()
+	log.Println("Listening on ", address)
 
+	// slingpages resource routes
 	router.PathPrefix("/sl-res/").
 		Handler(http.StripPrefix("/sl-res/",
 			http.FileServer(http.Dir("./admin/resource"))))
 
-	router.HandleFunc("/admin", func(w http.ResponseWriter, r *http.Request) {
-		renderAdmin(w, "page/index.html", map[string]interface{}{})
-	})
+	// admin routes
+	adminRoutes(router)
 
+	// Loading frontend routes ...
 	var routes []SlingRoute
 	if err := db.All(&routes); err != nil {
 		log.Fatalln("failed to load routes : ", err.Error())

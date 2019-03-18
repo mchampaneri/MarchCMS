@@ -1,15 +1,83 @@
-<nav class="navbar is-fixed-bottom has-background-grey-light" role="navigation" aria-label="main navigation">
-  <div class="container">
-    <div class="navbar-brand">
-      <a class="navbar-item" href="/">
-        <span>AdminPanel</span>
-      </a>
+<nav class="navbar is-fixed-top has-background-white" role="navigation" aria-label="main navigation">
+    <div class="container">
+        <div class="navbar-brand">
+            <a class="navbar-item" href="/">
+                <b>AdminPanel</b>
+            </a>
+            <a role="button" class="navbar-burger" aria-label="menu" aria-expanded="false">
+                <span aria-hidden="true"></span>
+                <span aria-hidden="true"></span>
+                <span aria-hidden="true"></span>
+            </a>
+        </div>
 
-      <a role="button" class="navbar-burger" aria-label="menu" aria-expanded="false">
-        <span aria-hidden="true"></span>
-        <span aria-hidden="true"></span>
-        <span aria-hidden="true"></span>
-      </a>
+        <div class="navbar-menu navbar-end">
+
+            <a class="navbar-item">
+                Home
+            </a>
+
+            <a class="navbar-item">
+                Dashboard
+            </a>
+
+            <!-- Content Menu-->
+            <div class="navbar-item has-dropdown  ">
+                <a class="navbar-link">
+                    Content
+                </a>
+                <div class="navbar-dropdown">
+                    <!-- User & Settings  -->
+                    <a class="navbar-item">
+                        Pages
+                    </a>
+                    <a class="navbar-item">
+                        Posts
+                    </a>
+                </div>
+            </div>
+
+            <a class="navbar-item">
+                Themes
+            </a>
+
+            <!-- Adminitstaration Menu -->
+            <div class="navbar-item has-dropdown ">
+
+                <a class="navbar-link">
+                    <div class="image is-32X32">
+                        <img class="is-rounded" src="https://bulma.io/images/placeholders/128x128.png">
+                    </div>
+                </a>
+
+                <div class="navbar-dropdown">
+                    <!-- User & Settings  -->
+                    <a class="navbar-item">
+                        Author Profile
+                    </a>
+                    <a class="navbar-item">
+                        Acess Settings
+                    </a>
+                    <a class="navbar-item">
+                        Site Settings
+                    </a>
+                    <a class="navbar-item">
+                        SignOut
+                    </a>
+                </div>
+            </div>
+
+        </div>
     </div>
-  </div>
 </nav>
+
+<div class="container">
+    <nav class="breadcrumb is-small" aria-label="breadcrumbs">
+        <ul>
+            <li><a href="#">Bulma</a></li>
+            <li><a href="#">Documentation</a></li>
+            <li><a href="#">Components</a></li>
+            <li class="is-active"><a href="#" aria-current="page">Breadcrumb</a></li>
+        </ul>
+    </nav>
+</div>
