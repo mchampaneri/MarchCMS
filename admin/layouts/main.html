@@ -8,7 +8,9 @@
 
 <body class="has-navbar-fixed-top has-background-light">
     {{ include "./_header.html" }}
-            {{ yield body() }}
+    <div id="app">
+        {{ yield body() }}
+    </div>
     {{ include "./_footer.html" }}
     {{ include "./_foot.html" }}
     {{ yield pagePostLoad() }}

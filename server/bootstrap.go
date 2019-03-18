@@ -32,7 +32,7 @@ func serveWeb(address string) {
 	// slingpages resource routes
 	router.PathPrefix("/sl-res/").
 		Handler(http.StripPrefix("/sl-res/",
-			http.FileServer(http.Dir("./admin/resource"))))
+			http.FileServer(http.Dir("./admin/public"))))
 
 	// admin routes
 	adminRoutes(router)
