@@ -18,6 +18,11 @@
       <h2 class="subtitle">
         ...
       </h2>
+      <div>
+        {{ range .pages }}
+          <li> {{ .PageTitle }} </li>
+        {{ end }}
+      </div>
     </div>
   </div>
 </section>

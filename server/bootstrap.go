@@ -38,14 +38,34 @@ func serveWeb(address string) {
 	adminRoutes(router)
 
 	// Loading frontend routes ...
-	var routes []SlingRoute
-	if err := db.All(&routes); err != nil {
-		log.Fatalln("failed to load routes : ", err.Error())
-	} else {
-		for _, route := range routes {
-			mountRoute(route, router)
+	// var routes []SlingRoute
+	// if err := db.All(&routes); err != nil {
+	// 	log.Fatalln("failed to load routes : ", err.Error())
+	// } else {
+	// 	for _, route := range routes {
+	// 		mountRoute(route, router)
+	// 	}
+	// }
+
+	router.HandleFunc(`/{rest:[a-zA-Z0-9=\-\/]*}`, func(w http.ResponseWriter, r *http.Request) {
+		var slingRoute SlingRoute
+
+		log.Println("Handling at rest routes")
+
+		log.Println("PageURL for page ", r.URL.Path)
+		if err := db.One("PageURL", r.URL.Path, &slingRoute); err == nil {
+			log.Println("PageURL for page ", r.URL.Path)
+			// var slingPage SlingPage
+			// if err := db.Find("PageNumber", slingRoute.PageNumber, &slingPage); err == nil {
+			renderPage(w, slingRoute)
+			// } else {
+			// log.Println("could not fetch page  for ", slingRoute.PageNumber)
+			// }
+		} else {
+			log.Println("could not fetch route ", r.URL.Path)
 		}
-	}
+
+	})
 
 	if httpErr := http.ListenAndServe(address, router); httpErr != nil {
 		log.Fatalf("Failed to start web service : %s", httpErr.Error())

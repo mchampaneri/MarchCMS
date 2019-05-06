@@ -9,6 +9,8 @@ window._ = require('lodash');
 window.axios = require('axios');
 window.axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
 window.axios.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded'
+// let token = document.head.querySelector('meta[name="csrf-token"]');
+// window.axios.defaults.headers.common['X-CSRF-TOKEN'] = token.content;
 /**
  * Next we will register the CSRF Token as a common header with Axios so that
  * all outgoing HTTP requests automatically have it attached. This is just

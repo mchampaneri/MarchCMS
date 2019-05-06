@@ -10,17 +10,18 @@ var sampleRoutes = []SlingRoute{
 	SlingRoute{
 		PageURL: "/home",
 		// PageNumber: "xyz-1",
-		PageTitle: "Home",
+
 	},
 	SlingRoute{
 		PageURL: "/about",
 		// PageNumber: "xyz-2",
-		PageTitle: "About",
+
 	},
 }
 
 var samplePages = []SlingPage{
 	SlingPage{
+		PageTitle: "Home",
 		// PageNumber: "xyz-1",
 		Content: SlingPageContent{
 			Descritpion: "Home page is alway home to website",
@@ -30,6 +31,7 @@ var samplePages = []SlingPage{
 	},
 	SlingPage{
 		// PageNumber: "xyz-2",
+		PageTitle: "About",
 		Content: SlingPageContent{
 			Descritpion: "Home page is alway home to website",
 			Keywords:    "SlingPages, High Performace CMS, Compiled to navtive ",

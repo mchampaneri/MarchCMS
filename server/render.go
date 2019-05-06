@@ -26,9 +26,11 @@ func init() {
 	frontInstance.AddGlobalFunc("SiteTitle", func(a jet.Arguments) reflect.Value {
 		return reflect.ValueOf(config.Name)
 	})
-	frontInstance.AddGlobalFunc("PageContent", func(a jet.Arguments) reflect.Value {
-		return reflect.ValueOf(config.Name)
-	})
+
+	// frontInstance.AddGlobalFunc("PageContent", func(a jet.Arguments) reflect.Value {
+	// 	return reflect.ValueOf(config.Name)
+	// })
+
 	frontInstance.AddGlobalFunc("PageList", func(a jet.Arguments) reflect.Value {
 		return reflect.ValueOf(sampleRoutes)
 	})
@@ -48,6 +50,7 @@ func renderPage(w io.Writer, r SlingRoute) {
 		"Page":  page,
 		"Route": r,
 	}
+	log.Println(page)
 	if err = t.Execute(w, nil, dataMap); err != nil {
 		log.Fatalf(" - respnose-generator.go  View  : %s", err.Error())
 	}

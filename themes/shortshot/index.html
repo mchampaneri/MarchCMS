@@ -13,13 +13,6 @@
 <h1>{{ SiteTitle() }}</h1>
 
 <hr>
-<ul>
-    {{ range _ , page := PageList() }}
-    <a href="{{page.PageURL}}">
-        <li>{{ page.PageTitle }}</li>
-    </a>
-    {{ end }}
-</ul>
 
 {{ .Page.Content.HTML|raw }}
 
