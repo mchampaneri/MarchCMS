@@ -27,6 +27,10 @@ func init() {
 		return reflect.ValueOf(config.Name)
 	})
 
+	frontInstance.AddGlobalFunc("PageList", func(a jet.Arguments) reflect.Value {
+		return reflect.ValueOf(config.Name)
+	})
+
 	// frontInstance.AddGlobalFunc("PageContent", func(a jet.Arguments) reflect.Value {
 	// 	return reflect.ValueOf(config.Name)
 	// })

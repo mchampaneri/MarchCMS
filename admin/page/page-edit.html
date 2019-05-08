@@ -1,0 +1,29 @@
+{{extends "./layouts/main.html"}}
+
+{{ block pageTitle() }}
+    {{ SiteTitle() }}| Admin
+{{ end }}
+
+{{ block pagePreLoad() }}
+{{ end }}
+
+{{ block body() }}
+
+<section class="hero">
+    <div class="hero-body">
+        <div class="container">
+                <editor isEdit='true'
+                oPageTitle="{{.page.PageTitle}}"
+                 oPageURL="{{.route.PageURL}}"
+                  oDesc="{{.page.Content.Desc}}"
+                   oKeywords="{{.page.Content.Keywords}}"
+                    oHTML="{{.page.Content.HTML|raw}}"
+                     oPageNumber="{{.page.PageNumber}}"></editor>
+        </div>
+    </div>
+</section>
+
+{{ end }}
+
+{{ block pagePostLoad() }}
+{{ end }}

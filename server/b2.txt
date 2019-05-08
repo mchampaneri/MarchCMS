@@ -1,0 +1,38 @@
+	router.HandleFunc("/admin/page/{id}/edit", func(w http.ResponseWriter, r *http.Request) {
+		param := mux.Vars(r)
+		slingRoute := SlingRoute{}
+
+		if err := db.One("PageNumber", param["id"], &slingRoute); err == nil {
+			slingPage := SlingPage{}
+			if err := db.One("PageNumber", param["id"], &slingPage); err == nil {
+				if r.Method == "GET" {
+					renderAdmin(w, "page/page-edit.html",
+						map[string]interface{}{
+							"route": slingRoute,
+							"page":  slingPage,
+						})
+
+				} else if r.Method == "POST" {
+					var requestData struct {
+						Desc, HTML, Keywords, PageTitle, PageURL string
+					}
+					requestDecoder := json.NewDecoder(r.Body)
+					requestDecoder.Decode(&requestData)
+					slingRoute.PageURL = requestData.PageURL
+					slingPage.PageTitle = requestData.PageTitle
+					slingPage.Content.Desc = requestData.Desc
+					slingPage.Content.HTML = requestData.HTML
+					slingPage.Content.Keywords = requestData.Keywords
+					db.Update(&slingPage)
+					db.Update(&slingRoute)
+					return
+				}
+
+			} else {
+				log.Fatalln("couldn not get page for corrsponding route")
+			}
+		} else {
+			log.Fatalln("couldn not get route for corrsponding route")
+		}
+
+	})

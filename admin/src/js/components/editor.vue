@@ -39,38 +39,70 @@ import VueTrix from "vue-trix";
 
 export default{
 
+    props:['isedit','opagetitle','opageurl','odesc','okeywords','ohtml','opagenumber'],
+
+ components: {
+    VueTrix
+  },
 
     mounted(){
         console.log("Editor component has been mounted");
+        var vm = this
+        if(vm.isedit == "true"){
+            vm.PageTitle = vm.opagetitle
+            vm.PageURL = vm.opageurl
+            vm.HTML = vm.ohtml
+            vm.Desc = vm.odesc
+            vm.Keywords = vm.okeywords
+            vm.PageNumber = vm.opagenumber
+        }
     },
+
 
 data(){
         return{
-            HTML:"none",
+            HTML:"",
             PageTitle:"",
-            PageContent:"",
             PageURL:"",
             Desc:"",
             Keywords:"",
+            PageNumber:"-",
         }
     },
 
     methods:{
         SavePage:function(){
             var vm = this;
-            axios.post('/admin/page/create', {
-                'PageTitle':vm.PageTitle,
-                'PageURL':vm.PageURL,
-                'Desc':vm.Desc,
-                'Keywords':vm.Keywords,
-                'HTML':vm.HTML,
-            })
-            .then(function (response) {
-                console.log(response);
-            })
-            .catch(function (error) {
-                console.log(error);
-            });
+
+            if (vm.isedit == 'true'){
+                axios.post('/admin/page/'+vm.PageNumber+'/edit', {
+                    'PageTitle':vm.PageTitle,
+                    'PageURL':vm.PageURL,
+                    'Desc':vm.Desc,
+                    'Keywords':vm.Keywords,
+                    'HTML':vm.HTML,
+                })
+                .then(function (response) {
+                    console.log(response);
+                })
+                .catch(function (error) {
+                    console.log(error);
+                });
+            }else{
+                 axios.post('/admin/page/create', {
+                     'PageTitle':vm.PageTitle,
+                     'PageURL':vm.PageURL,
+                     'Desc':vm.Desc,
+                     'Keywords':vm.Keywords,
+                     'HTML':vm.HTML,
+                 })
+                 .then(function (response) {
+                     console.log(response);
+                 })
+                 .catch(function (error) {
+                     console.log(error);
+                 });
+            }
         }
     },
 

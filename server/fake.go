@@ -24,18 +24,18 @@ var samplePages = []SlingPage{
 		PageTitle: "Home",
 		// PageNumber: "xyz-1",
 		Content: SlingPageContent{
-			Descritpion: "Home page is alway home to website",
-			Keywords:    "SlingPages, High Performace CMS, Compiled to navtive ",
-			HTML:        "<h1>Home Page</h1>",
+			Desc:     "Home page is alway home to website",
+			Keywords: "SlingPages, High Performace CMS, Compiled to navtive ",
+			HTML:     "<h1>Home Page</h1>",
 		},
 	},
 	SlingPage{
 		// PageNumber: "xyz-2",
 		PageTitle: "About",
 		Content: SlingPageContent{
-			Descritpion: "Home page is alway home to website",
-			Keywords:    "SlingPages, High Performace CMS, Compiled to navtive ",
-			HTML:        "<h2> This is about page</h2>",
+			Desc:     "Home page is alway home to website",
+			Keywords: "SlingPages, High Performace CMS, Compiled to navtive ",
+			HTML:     "<h2> This is about page</h2>",
 		},
 	},
 }

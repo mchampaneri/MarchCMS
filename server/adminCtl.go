@@ -28,9 +28,11 @@ func adminRoutes(router *mux.Router) {
 			}
 			requestDecoder := json.NewDecoder(r.Body)
 			requestDecoder.Decode(&requestData)
+
 			newRoute := SlingRoute{
 				PageURL: requestData.PageURL,
 			}
+
 			if uuid, err := uuid.NewV1(); err != nil {
 				log.Fatalln("Failed to gerate page id :", err.Error())
 			} else {
@@ -41,9 +43,9 @@ func adminRoutes(router *mux.Router) {
 					newPage := SlingPage{
 						PageTitle: requestData.PageTitle,
 						Content: SlingPageContent{
-							Descritpion: requestData.Desc,
-							HTML:        requestData.HTML,
-							Keywords:    requestData.Keywords,
+							Desc:     requestData.Desc,
+							HTML:     requestData.HTML,
+							Keywords: requestData.Keywords,
 						},
 					}
 					newPage.PageNumber = newRoute.PageNumber
@@ -59,7 +61,47 @@ func adminRoutes(router *mux.Router) {
 	})
 
 	router.HandleFunc("/admin/page/{id}/edit", func(w http.ResponseWriter, r *http.Request) {
-		renderAdmin(w, "page/page-edit.html", map[string]interface{}{})
+		param := mux.Vars(r)
+		slingRoute := SlingRoute{}
+
+		if err := db.One("PageNumber", param["id"], &slingRoute); err == nil {
+			slingPage := SlingPage{}
+			if err := db.One("PageNumber", param["id"], &slingPage); err == nil {
+
+				if r.Method == "GET" {
+					renderAdmin(w, "page/page-edit.html", map[string]interface{}{
+						"route": slingRoute,
+						"page":  slingPage,
+					})
+					return
+				} else {
+
+					var requestData struct {
+						Desc, HTML, Keywords, PageTitle, PageURL string
+					}
+					requestDecoder := json.NewDecoder(r.Body)
+					requestDecoder.Decode(&requestData)
+
+					slingRoute.PageURL = requestData.PageURL
+					slingRoute.PageNumber = param["id"]
+
+					slingPage.PageNumber = param["id"]
+					slingPage.PageTitle = requestData.PageTitle
+					slingPage.Content.Desc = requestData.Desc
+					slingPage.Content.HTML = requestData.HTML
+					slingPage.Content.Keywords = requestData.Keywords
+					db.Save(&slingPage)
+					db.Save(&slingRoute)
+					return
+				}
+
+			} else {
+				log.Fatalln("couldn not get page for corrsponding route")
+			}
+		} else {
+			log.Fatalln("couldn not get route for corrsponding route")
+		}
+
 	})
 
 	router.HandleFunc("/admin/pages/list", func(w http.ResponseWriter, r *http.Request) {

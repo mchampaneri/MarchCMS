@@ -9,23 +9,35 @@
 
 {{ block body() }}
 
-<section class="hero is-medium is-primary is-bold">
-  <div class="hero-body">
+<section class="section has-background-white">
+
+
     <div class="container">
-      <h1 class="title">
-        Write your first page
-      </h1>
-      <h2 class="subtitle">
-        ...
-      </h2>
-      <div>
-        {{ range .pages }}
-          <li> {{ .PageTitle }} </li>
-        {{ end }}
+          <h3 class="title is-3">Pages</h3>
+          <table class="table is-striped  is-fullwidth">
+              <thead>
+                <td>PageTitle</td>
+                <td>Published On</td>
+                <td> - </td>
+              </thead>
+              <tbody>
+                  {{ range i , page :=   .pages }}
+                  <tr>
+                    <td>
+                        <a href="/admin/page/{{page.PageNumber}}/edit">
+                          {{ page.PageTitle }}
+                        </a>
+                    </td>
+                    <td> - </td>
+                    <td> - </td>
+                  </tr>
+                {{ end }}
+              </tbody>
+            </table>
       </div>
-    </div>
-  </div>
-</section>
+
+
+  </section>
 
 {{ end }}
 
