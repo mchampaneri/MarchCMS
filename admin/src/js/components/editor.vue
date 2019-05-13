@@ -2,52 +2,74 @@
     <div>
         <div class="field">
             <div class="control">
+                 <label class="label">Page Title</label>
                 <input class="input is-medium" type="text"
                 v-model="PageTitle"
                 placeholder="Page Title">
             </div>
+        </div>
+        <div class="field">
              <div class="control">
+                  <label class="label">Page URL</label>
                 <input class="input is-medium" type="text"
                 v-model="PageURL"
                 placeholder="Page URL">
             </div>
+        </div>
+        <div class="field">
              <div class="control">
+                <label class="label">Page Description</label>
                 <input class="input is-medium" type="text"
                 v-model="Desc"
                 placeholder="Page Description">
             </div>
+        </div>
+        <div class="field">
              <div class="control">
+                <label class="label">Page keywords </label>
                 <input class="input is-medium" type="text"
                 v-model="Keywords"
                 placeholder="Page Keywords">
             </div>
         </div>
-        <VueTrix v-model="HTML"
-                placeholder="Enter content"
-                trix-file-accept="alert('something is beign dragged')"
-                localStorage/>
+        <div class="field">
+             <div class="control">
+                <label class="label">Page Template</label>
+                <select  v-model="PageTemplate">
+                    <option v-bind:value="template" v-bind:key="i" v-for="(template,i) in PageTemplates">
+                            {{ template }}
+                    </option>
+                </select>
+            </div>
+        </div>
+
+       <div class="field">
+                <label class="label">Content ( in markdown )</label>
+                <div class="control">
+                <textarea class="textarea"
+                v-model="HTML"
+                placeholder="Textarea"></textarea>
+            </div>
+        </div>
 
         <div class="control">
-            <button class="btn btn-default" @click="SavePage()">Save</button>
+            <button class="button is-link" @click="SavePage()">Save</button>
         </div>
     </div>
 </template>
 
 <script>
 
-import VueTrix from "vue-trix";
 
 export default{
 
-    props:['isedit','opagetitle','opageurl','odesc','okeywords','ohtml','opagenumber'],
+    props:['isedit','opagetitle','opageurl','odesc','okeywords','ohtml','opagenumber', 'pagetemplates', 'pagetemplate'],
 
- components: {
-    VueTrix
-  },
 
     mounted(){
         console.log("Editor component has been mounted");
         var vm = this
+        vm.PageTemplates = vm.pagetemplates
         if(vm.isedit == "true"){
             vm.PageTitle = vm.opagetitle
             vm.PageURL = vm.opageurl
@@ -55,6 +77,7 @@ export default{
             vm.Desc = vm.odesc
             vm.Keywords = vm.okeywords
             vm.PageNumber = vm.opagenumber
+            vm.PageTemplate = vm.pagetemplate
         }
     },
 
@@ -67,6 +90,8 @@ data(){
             Desc:"",
             Keywords:"",
             PageNumber:"-",
+            PageTemplate:"-",
+            PageTemplates:"-",
         }
     },
 
@@ -81,6 +106,7 @@ data(){
                     'Desc':vm.Desc,
                     'Keywords':vm.Keywords,
                     'HTML':vm.HTML,
+                    'PageTemplate':vm.PageTemplate,
                 })
                 .then(function (response) {
                     console.log(response);
@@ -95,9 +121,11 @@ data(){
                      'Desc':vm.Desc,
                      'Keywords':vm.Keywords,
                      'HTML':vm.HTML,
+                       'PageTemplate':vm.PageTemplate,
                  })
                  .then(function (response) {
                      console.log(response);
+                     window.location = "/admin/page/"+response.data.PageNumber+"/edit"
                  })
                  .catch(function (error) {
                      console.log(error);

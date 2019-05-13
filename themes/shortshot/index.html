@@ -1,19 +1,21 @@
 <html>
 
 <head>
-    <title>{{ SiteTitle() }}</title>
+    <title>{{ SiteTitle() }} | {{ .Page.PageTitle }}</title>
 </head>
 
 <body>
     {{ SiteTitle() }}
 </body>
 
-{{ .Route.PageURL }}
+{{ .Page.PageURL }}
 
 <h1>{{ SiteTitle() }}</h1>
 
 <hr>
 
-{{ .Page.Content.HTML|raw }}
+{{ PageList() }}
 
+{{ .Page.Content.HTML|raw }}
+{{ .output |raw }}
 </html>

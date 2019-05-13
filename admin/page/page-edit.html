@@ -14,10 +14,12 @@
         <div class="container">
                 <editor isEdit='true'
                 oPageTitle="{{.page.PageTitle}}"
-                 oPageURL="{{.route.PageURL}}"
+                 oPageURL="{{.page.PageURL}}"
                   oDesc="{{.page.Content.Desc}}"
                    oKeywords="{{.page.Content.Keywords}}"
                     oHTML="{{.page.Content.HTML|raw}}"
+                    pagetemplate="{{.page.PageTemplate}}"
+                    :pagetemplates ='{{PageTemplates()| writeJson}}'
                      oPageNumber="{{.page.PageNumber}}"></editor>
         </div>
     </div>

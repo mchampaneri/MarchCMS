@@ -9,34 +9,36 @@
 
 {{ block body() }}
 
-<section class="section has-background-white">
+<section class="section ">
 
-
-    <div class="container">
-          <h3 class="title is-3">Pages</h3>
+    <div class="container box">
+        <div>
+            <div>
+              <h4 class="is-size-4 is-pulled-left"> Pages</h4>
+              <a href="/admin/page/create" class="button is-link is-pulled-right"> New Page </a>
+            </div>
+        </div>
+        <div style="clear:both"></div>
+        <hr>
           <table class="table is-striped  is-fullwidth">
-              <thead>
-                <td>PageTitle</td>
-                <td>Published On</td>
-                <td> - </td>
-              </thead>
+
               <tbody>
                   {{ range i , page :=   .pages }}
                   <tr>
                     <td>
                         <a href="/admin/page/{{page.PageNumber}}/edit">
                           {{ page.PageTitle }}
-                        </a>
+                        </a><br>
+                        <a href="/admin/page/{{page.PageNumber}}/edit" target="new">Edit</a> |
+                        <a href="{{page.PageURL}}" target="new">View</a> |
+                        <a href="/admin/page/{{page.PageNumber}}/delete" target="new">Delete</a>
                     </td>
-                    <td> - </td>
-                    <td> - </td>
+                    <td> {{ page.Co }} <br> <span class="has-text-grey">Created at</span></td>
                   </tr>
                 {{ end }}
               </tbody>
             </table>
       </div>
-
-
   </section>
 
 {{ end }}

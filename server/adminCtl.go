@@ -2,9 +2,9 @@ package main
 
 import (
 	"encoding/json"
-	"fmt"
 	"log"
 	"net/http"
+	"time"
 
 	"github.com/gorilla/mux"
 	uuid "github.com/satori/go.uuid"
@@ -18,7 +18,7 @@ func adminRoutes(router *mux.Router) {
 	})
 
 	// content routes
-	router.HandleFunc("/admin/page/create", func(w http.ResponseWriter, r *http.Request) {
+	router.HandleFunc("/admin/page/create-v1", func(w http.ResponseWriter, r *http.Request) {
 		if r.Method == "GET" {
 			renderAdmin(w, "page/page-create.html", map[string]interface{}{})
 		} else if r.Method == "POST" {
@@ -53,14 +53,53 @@ func adminRoutes(router *mux.Router) {
 						log.Fatalln("failed to save page : ", err.Error())
 					} else {
 						log.Println("Route & page saved with id ", newRoute.PageNumber, newRoute.PageURL)
-						fmt.Fprintln(w, newPage)
+						renderJSON(w, newPage)
 					}
 				}
 			}
 		}
 	})
 
-	router.HandleFunc("/admin/page/{id}/edit", func(w http.ResponseWriter, r *http.Request) {
+	router.HandleFunc("/admin/page/create", func(w http.ResponseWriter, r *http.Request) {
+		if r.Method == "GET" {
+			renderAdmin(w, "page/page-create.html", map[string]interface{}{})
+		} else if r.Method == "POST" {
+
+			var requestData struct {
+				Desc, HTML, Keywords, PageTitle, PageURL, PageTemplate string
+			}
+			requestDecoder := json.NewDecoder(r.Body)
+			requestDecoder.Decode(&requestData)
+
+			if uuid, err := uuid.NewV1(); err != nil {
+				log.Fatalln("Failed to gerate page id :", err.Error())
+			} else {
+
+				newPage := SlingPage{
+					PageTemplate: requestData.PageTemplate,
+					PageURL:      requestData.PageURL,
+					PageTitle:    requestData.PageTitle,
+					Content: SlingPageContent{
+						Desc:     requestData.Desc,
+						HTML:     requestData.HTML,
+						Keywords: requestData.Keywords,
+					},
+				}
+				newPage.PageNumber = uuid.String()
+				newPage.Co = time.Now()
+				newPage.Uo = time.Now()
+				if err := db.Save(&newPage); err != nil {
+					log.Fatalln("failed to save page : ", err.Error())
+				} else {
+					log.Println("Route & page saved with id ", newPage)
+					renderJSON(w, newPage)
+				}
+			}
+		}
+
+	})
+
+	router.HandleFunc("/admin/page/{id}/edit-v1", func(w http.ResponseWriter, r *http.Request) {
 		param := mux.Vars(r)
 		slingRoute := SlingRoute{}
 
@@ -100,6 +139,60 @@ func adminRoutes(router *mux.Router) {
 			}
 		} else {
 			log.Fatalln("couldn not get route for corrsponding route")
+		}
+
+	})
+
+	router.HandleFunc("/admin/page/{id}/edit", func(w http.ResponseWriter, r *http.Request) {
+		param := mux.Vars(r)
+
+		slingPage := SlingPage{}
+		if err := db.One("PageNumber", param["id"], &slingPage); err == nil {
+
+			if r.Method == "GET" {
+				renderAdmin(w, "page/page-edit.html", map[string]interface{}{
+					"page": slingPage,
+				})
+				return
+			} else {
+
+				var requestData struct {
+					Desc, HTML, Keywords, PageTitle, PageURL, PageTemplate string
+				}
+				requestDecoder := json.NewDecoder(r.Body)
+				requestDecoder.Decode(&requestData)
+				slingPage.PageTemplate = requestData.PageTemplate
+				slingPage.PageURL = requestData.PageURL
+				slingPage.PageNumber = param["id"]
+				slingPage.PageTitle = requestData.PageTitle
+				slingPage.Content.Desc = requestData.Desc
+				slingPage.Content.HTML = requestData.HTML
+				slingPage.Content.Keywords = requestData.Keywords
+				slingPage.Uo = time.Now()
+
+				db.Save(&slingPage)
+
+				return
+			}
+
+		} else {
+			log.Fatalln("couldn not get page for corrsponding route")
+		}
+
+	})
+
+	router.HandleFunc("/admin/page/{id}/delete", func(w http.ResponseWriter, r *http.Request) {
+		param := mux.Vars(r)
+
+		slingPage := SlingPage{}
+		if err := db.One("PageNumber", param["id"], &slingPage); err == nil {
+			if err := db.DeleteStruct(&slingPage); err == nil {
+				http.Redirect(w, r, "/admin/pages/list", 301)
+			} else {
+				http.Redirect(w, r, "/admin/pages/list", 301)
+			}
+		} else {
+			log.Fatalln("couldn not get page for corrsponding route")
 		}
 
 	})
