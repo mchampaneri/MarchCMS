@@ -2,6 +2,7 @@ package main
 
 import (
 	"log"
+	"os"
 
 	"github.com/satori/go.uuid"
 
@@ -25,6 +26,7 @@ var dbErr error
 
 // CMS wide config
 var config, jsonConfig Config
+var root, _ = os.Getwd()
 
 func main() {
 

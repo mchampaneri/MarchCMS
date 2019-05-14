@@ -1,0 +1,31 @@
+{{extends "./layouts/main.html"}}
+
+{{ block pageTitle() }}
+    {{ SiteTitle() }}| Admin
+{{ end }}
+
+{{ block pagePreLoad() }}
+{{ end }}
+
+{{ block body() }}
+
+<section class="hero">
+    <div class="hero-body">
+        <div class="container">
+                <post-editor isEdit='true'
+                oPageTitle="{{.post.PageTitle}}"
+                 oPageURL="{{.post.PageURL}}"
+                  oDesc="{{.post.Content.Desc}}"
+                   oKeywords="{{.post.Content.Keywords}}"
+                    oHTML="{{.post.Content.HTML|raw}}"
+                    pagetemplate="{{.post.PageTemplate}}"
+                    :pagetemplates ='{{PostTemplates()| writeJson}}'
+                     oPageNumber="{{.post.PageNumber}}"></post-editor>
+        </div>
+    </div>
+</section>
+
+{{ end }}
+
+{{ block pagePostLoad() }}
+{{ end }}

@@ -1,0 +1,47 @@
+{{extends "./layouts/main.html "}}
+
+{{ block pageTitle() }}
+{{ SiteTitle() }}| Admin
+{{ end }}
+
+{{ block pagePreLoad() }}
+{{ end }}
+
+{{ block body() }}
+
+<section class="section ">
+
+    <div class="container box">
+        <div>
+            <div>
+              <h4 class="is-size-4 is-pulled-left"> Posts </h4>
+              <a href="/admin/post/create" class="button is-link is-pulled-right"> New Post </a>
+            </div>
+        </div>
+        <div style="clear:both"></div>
+        <hr>
+          <table class="table is-striped  is-fullwidth">
+
+              <tbody>
+                  {{ range i , post :=   .posts }}
+                  <tr>
+                    <td>
+                        <a href="/admin/post/{{post.PageNumber}}/edit">
+                          {{ post.PageTitle }}
+                        </a><br>
+                        <a href="/admin/post/{{post.PageNumber}}/edit" target="new">Edit</a> |
+                        <a href="{{post.PageURL}}" target="new">View</a> |
+                        <a href="/admin/post/{{post.PageNumber}}/delete" target="new">Delete</a>
+                    </td>
+                    <td> {{ post.Co }} <br> <span class="has-text-grey">Created at</span></td>
+                  </tr>
+                {{ end }}
+              </tbody>
+            </table>
+      </div>
+  </section>
+
+{{ end }}
+
+{{ block pagePostLoad() }}
+{{ end }}

@@ -16,7 +16,8 @@ window.Vue = require('vue');
  */
 
 
-Vue.component("Editor",require("./components/editor.vue"))
+Vue.component("PageEditor",require("./components/PageEditor.vue"))
+Vue.component("PostEditor",require("./components/PostEditor.vue"))
 const app = new Vue({
     el: '#app'
 });

@@ -12,7 +12,7 @@
 <section class="hero">
     <div class="hero-body">
         <div class="container">
-                <editor isEdit='true'
+                <page-editor isEdit='true'
                 oPageTitle="{{.page.PageTitle}}"
                  oPageURL="{{.page.PageURL}}"
                   oDesc="{{.page.Content.Desc}}"
@@ -20,7 +20,7 @@
                     oHTML="{{.page.Content.HTML|raw}}"
                     pagetemplate="{{.page.PageTemplate}}"
                     :pagetemplates ='{{PageTemplates()| writeJson}}'
-                     oPageNumber="{{.page.PageNumber}}"></editor>
+                     oPageNumber="{{.page.PageNumber}}"></page-editor>
         </div>
     </div>
 </section>

@@ -43,35 +43,34 @@ func serveWeb(address string) {
 	// admin routes
 	adminRoutes(router)
 
-	// Loading frontend routes ...
-	// var routes []SlingRoute
-	// if err := db.All(&routes); err != nil {
-	// 	log.Fatalln("failed to load routes : ", err.Error())
-	// } else {
-	// 	for _, route := range routes {
-	// 		mountRoute(route, router)
-	// 	}
-	// }
+	// Handling posts
+	router.HandleFunc(`/post/{rest:[a-zA-Z0-9=\-\/]*}`, func(w http.ResponseWriter, r *http.Request) {
+		var slingpost SlingPost
+		log.Println("Handling at rest routes")
 
+		log.Println("PageURL for page ", r.URL.Path)
+		if err := db.One("PageURL", r.URL.Path, &slingpost); err == nil {
+			log.Println("PageURL for page ", r.URL.Path)
+			renderPost(w, slingpost)
+		} else {
+			log.Println("could not fetch route ", r.URL.Path)
+		}
+	})
+
+	// Handling pages
 	router.HandleFunc(`/{rest:[a-zA-Z0-9=\-\/]*}`, func(w http.ResponseWriter, r *http.Request) {
-
 		var slingPage SlingPage
 		log.Println("Handling at rest routes")
 
 		log.Println("PageURL for page ", r.URL.Path)
 		if err := db.One("PageURL", r.URL.Path, &slingPage); err == nil {
 			log.Println("PageURL for page ", r.URL.Path)
-			// var slingPage SlingPage
-			// if err := db.Find("PageNumber", slingRoute.PageNumber, &slingPage); err == nil {
 			renderPage(w, slingPage)
-			// } else {
-			// log.Println("could not fetch page  for ", slingRoute.PageNumber)
-			// }
 		} else {
-			log.Println("could not fetch route ", r.URL.Path)
+			renderPage(w, SlingPage{PageTemplate: "404.html"})
 		}
-
 	})
+
 	if httpErr := http.ListenAndServe(address, router); httpErr != nil {
 		log.Fatalf("Failed to start web service : %s", httpErr.Error())
 	} else {
