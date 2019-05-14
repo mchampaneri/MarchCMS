@@ -17,6 +17,20 @@ func adminRoutes(router *mux.Router) {
 		renderAdmin(w, "page/dashboard.html", map[string]interface{}{})
 	})
 
+	// Settings Route
+	router.HandleFunc("/admin/settings", func(w http.ResponseWriter, r *http.Request) {
+		renderAdmin(w, "page/settings.html", map[string]interface{}{})
+	})
+
+	router.HandleFunc("/admin/set-theme/{theme-folder-name}", func(w http.ResponseWriter, r *http.Request) {
+		param := mux.Vars(r)
+		config.Theme = param["theme-folder-name"]
+		if err := db.Save(&config); err != nil {
+			log.Fatalln("Failed to update theme ", err.Error())
+		}
+		renderAdmin(w, "page/settings.html", map[string]interface{}{})
+	})
+
 	// content routes
 	router.HandleFunc("/admin/page/create-v1", func(w http.ResponseWriter, r *http.Request) {
 		if r.Method == "GET" {

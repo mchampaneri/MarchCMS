@@ -19,11 +19,11 @@ import (
 // Root directory for view files
 // [ where html templates are stored .. ]
 var root, _ = os.Getwd()
-var frontInstance = jet.NewHTMLSet(filepath.Join(root, "themes", "shortshot"))
-var adminInstance = jet.NewHTMLSet(filepath.Join(root, "admin"))
+var frontInstance, adminInstance *jet.Set
 
-func init() {
-
+func oninit() {
+	frontInstance = jet.NewHTMLSet(filepath.Join(root, "themes"))
+	adminInstance = jet.NewHTMLSet(filepath.Join(root, "admin"))
 	frontInstance.SetDevelopmentMode(true)
 	adminInstance.SetDevelopmentMode(true)
 
@@ -43,10 +43,26 @@ func init() {
 		return reflect.ValueOf(config.Name)
 	})
 
+	adminInstance.AddGlobalFunc("ActiveTheme", func(a jet.Arguments) reflect.Value {
+		return reflect.ValueOf(config.Theme)
+	})
+
 	adminInstance.AddGlobalFunc("PageTemplates", func(a jet.Arguments) reflect.Value {
 		// Read Pages templates
 		templates := make([]string, 0, 10)
-		if fileInfo, err := ioutil.ReadDir(filepath.Join(root, "themes", "shortshot", "pages")); err == nil {
+		if fileInfo, err := ioutil.ReadDir(filepath.Join(root, "themes", config.Theme, "pages")); err == nil {
+			for _, file := range fileInfo {
+				templates = append(templates, file.Name())
+			}
+			return reflect.ValueOf(templates)
+		}
+		return reflect.ValueOf(nil)
+	})
+
+	adminInstance.AddGlobalFunc("InstalledThemes", func(a jet.Arguments) reflect.Value {
+		// Read Pages templates
+		templates := make([]string, 0, 10)
+		if fileInfo, err := ioutil.ReadDir(filepath.Join(root, "themes")); err == nil {
 			for _, file := range fileInfo {
 				templates = append(templates, file.Name())
 			}
@@ -63,7 +79,12 @@ func renderPage(w io.Writer, page SlingPage) {
 		pageTemplate = filepath.Join(".", "pages", page.PageTemplate)
 	}
 	// log.Fatalln(filepath.Join(root, "themes", "shortshot", "pages", pageTemplate))
-	t, err := frontInstance.GetTemplate(pageTemplate)
+	t, err := frontInstance.GetTemplate(filepath.Join(config.Theme, pageTemplate))
+	if err != nil {
+
+		log.Fatalln(pageTemplate, " - ", config.Theme, " - ", err.Error())
+	}
+
 	dataMap := map[string]interface{}{
 		"Page": page,
 		// "Route": r,

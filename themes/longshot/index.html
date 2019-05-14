@@ -1,0 +1,21 @@
+<html>
+
+<head>
+    <title>{{ SiteTitle() }} | {{ .Page.PageTitle }}</title>
+</head>
+
+<body>
+    {{ SiteTitle() }}
+</body>
+
+{{ .Page.PageURL }}
+
+<h1>{{ SiteTitle() }}</h1>
+
+<hr>
+
+{{ PageList() }}
+<h1> LongShot Theme </h1>
+{{ .Page.Content.HTML|raw }}
+{{ .output |raw }}
+</html>

@@ -1,0 +1,27 @@
+{{extends "./layouts/main.html "}}
+
+{{ block pageTitle() }}
+{{ SiteTitle() }}| Settings
+{{ end }}
+
+{{ block pagePreLoad() }}
+{{ end }}
+
+{{ block body() }}
+<div class="section">
+    <div class="container box">
+            {{ range InstalledThemes() }}
+                <a href="/admin/set-theme/{{.}}"
+                    {{ if . == ActiveTheme() }}
+                        class="Active"
+                    {{ end }}
+                >{{.}}</p>
+            {{ end }}
+    </div>
+</div>
+
+
+{{ end }}
+
+{{ block pagePostLoad() }}
+{{ end }}

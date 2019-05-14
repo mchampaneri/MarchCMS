@@ -1,5 +1,7 @@
 {
     "Address":"127.0.0.1:20196",
     "Name":"SlingPages",
-    "Database":"spd"
+    "Database":"spd",
+    "Status":"Active",
+    "Theme":"shortshot"
 }

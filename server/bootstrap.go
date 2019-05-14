@@ -20,6 +20,7 @@ func loadConfig(config *Config) {
 		if decodingErr := configDecoder.Decode(config); decodingErr != nil {
 			log.Fatalf("Failed to decode config : %s \n", decodingErr.Error())
 		}
+
 	}
 }
 
