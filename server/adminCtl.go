@@ -6,6 +6,7 @@ import (
 	"log"
 	"net/http"
 	"os"
+	"os/exec"
 	"path/filepath"
 	"time"
 
@@ -25,6 +26,21 @@ func adminRoutes(router *mux.Router) {
 				log.Println("error while eturing asset ", err.Error())
 			} else {
 				io.Copy(w, thumbFile)
+			}
+		})
+
+	// extensions routes
+	router.HandleFunc("/admin/extensions/{extension-name}",
+		func(w http.ResponseWriter, r *http.Request) {
+			log.Println("Starting Appliction")
+			param := mux.Vars(r)
+			extensionPath := filepath.Join(extensionFolder, param["extension-name"], "hello.exe")
+			cmd := exec.Command(extensionPath)
+			if err := cmd.Start(); err == nil {
+				loadExtensions()
+				// http.Redirect(w, r, "/admin/settings", 301)
+			} else {
+				log.Fatal(err.Error())
 			}
 		})
 

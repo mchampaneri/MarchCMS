@@ -3,22 +3,11 @@ package main
 import (
 	"log"
 	"os"
-
-	"github.com/satori/go.uuid"
+	"path/filepath"
 
 	"github.com/asdine/storm"
+	uuid "github.com/satori/go.uuid"
 )
-
-// Config holds global configurations
-// of cms
-type Config struct {
-	ID       string `json:"id"`
-	Address  string `json:"Address"`
-	Name     string `json:"Name"`
-	Database string `json:"Database"`
-	Theme    string `json:"Theme"`
-	Status   string `json:"Status"`
-}
 
 // Global db variables
 var db *storm.DB
@@ -28,14 +17,22 @@ var dbErr error
 var config, jsonConfig Config
 var root, _ = os.Getwd()
 
+// // Folder Paths
+var themesFolder = filepath.Join(root, "themes")
+var adminFolder = filepath.Join(root, "admin")
+var extensionFolder = filepath.Join(root, "extensions")
+
 func main() {
 
 	// Loading configurations
 	loadConfig(&jsonConfig)
+
+	// loadExtensions()
 	// Preapring db
 	db, dbErr = storm.Open("my.db")
-	// preparing fake data
-	// feedFakeData()
+
+	// Find and load active config from db
+	// or prepare new one from json
 	if err := db.One("Status", "Active", &config); err != nil {
 		idForConfig, _ := uuid.NewV4()
 		jsonConfig.ID = idForConfig.String()
@@ -48,8 +45,8 @@ func main() {
 			}
 		}
 	}
+
 	// loading webservice
 	serveWeb(config.Address) // loading web service
-
 	defer db.Close()
 }

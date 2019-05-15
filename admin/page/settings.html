@@ -28,7 +28,18 @@
     </div>
 </div>
 
-
+<div class="section">
+    <div class="container">
+        <h4 class="title">Extensions</h4>
+        <div class="columns">
+            {{ range AvailableExtensions() }}
+            <div class="column">
+                <a href="{{.Thumb}}">{{.Name}}</a>
+            </div>
+            {{ end }}
+        </div>
+    </div>
+</div>
 {{ end }}
 
 {{ block pagePostLoad() }}

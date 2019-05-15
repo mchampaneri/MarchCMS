@@ -2,12 +2,24 @@ package main
 
 import "time"
 
-// SlingRoute is routing entity for SlingPages
-// Deprecated Struct
-// type SlingRoute struct {
-// 	PageURL    string `json:"PageURL"`
-// 	PageNumber string `json:"PageNumber" storm:"id"`
-// }
+type Response struct {
+	Message string
+}
+
+type Request struct {
+	Name string
+}
+
+// Config holds global configurations
+// of cms
+type Config struct {
+	ID       string `json:"id"`
+	Address  string `json:"Address"`
+	Name     string `json:"Name"`
+	Database string `json:"Database"`
+	Theme    string `json:"Theme"`
+	Status   string `json:"Status"`
+}
 
 // SlingPage is root struct for SlignPages
 type SlingPage struct {

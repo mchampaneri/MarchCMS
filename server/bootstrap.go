@@ -3,8 +3,10 @@ package main
 
 import (
 	"encoding/json"
+	"fmt"
 	"log"
 	"net/http"
+	"net/rpc"
 	"os"
 
 	"github.com/gorilla/mux"
@@ -22,6 +24,26 @@ func loadConfig(config *Config) {
 		}
 
 	}
+}
+
+func loadExtensions() {
+	client, err := rpc.Dial("tcp", "127.0.0.1:10000")
+	defer client.Close()
+	if err != nil {
+		log.Fatal(err.Error())
+	}
+
+	response := Response{}
+	callErr := client.Call("HelloRequest.Hello",
+		Request{Name: "Manish"},
+		&response)
+
+	if callErr != nil {
+		log.Fatalln("failed to make call :", callErr.Error())
+	}
+
+	fmt.Println("responsoe from extnsion is below")
+	fmt.Println(response.Message)
 }
 
 func serveWeb(address string) {
@@ -78,11 +100,3 @@ func serveWeb(address string) {
 	}
 
 }
-
-// func mountRoute(route SlingRoute, router *mux.Router) {
-// 	router.HandleFunc(route.PageURL,
-// 		func(w http.ResponseWriter, r *http.Request) {
-// 			log.Print(r.URL.Path)
-// 			renderPage(w, route)
-// 		})
-// }

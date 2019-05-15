@@ -15,12 +15,8 @@ import (
 	blackfriday "gopkg.in/russross/blackfriday.v2"
 )
 
-// Root directory for view files
-// [ where html templates are stored .. ]
-
-// var frontInstance, adminInstance *jet.Set
-var frontInstance = jet.NewHTMLSet(filepath.Join(root, "themes"))
-var adminInstance = jet.NewHTMLSet(filepath.Join(root, "admin"))
+var frontInstance = jet.NewHTMLSet(themesFolder)
+var adminInstance = jet.NewHTMLSet(adminFolder)
 
 func init() {
 
@@ -78,6 +74,19 @@ func init() {
 			for _, file := range fileInfo {
 				templates = append(templates, struct{ Name, Thumb string }{file.Name(),
 					fmt.Sprint("/admin/themes-thumb/", file.Name(), "/thumb.png")})
+			}
+			return reflect.ValueOf(templates)
+		}
+		return reflect.ValueOf(nil)
+	})
+
+	adminInstance.AddGlobalFunc("AvailableExtensions", func(a jet.Arguments) reflect.Value {
+		// Read Pages templates
+		templates := make([]struct{ Name, Thumb string }, 0, 10)
+		if fileInfo, err := ioutil.ReadDir(filepath.Join(root, "extensions")); err == nil {
+			for _, file := range fileInfo {
+				templates = append(templates, struct{ Name, Thumb string }{file.Name(),
+					fmt.Sprint("/admin/extensions/", file.Name())})
 			}
 			return reflect.ValueOf(templates)
 		}
