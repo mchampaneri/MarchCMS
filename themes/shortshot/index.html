@@ -6,16 +6,7 @@
 
 <body>
     {{ SiteTitle() }}
+    {{ CallExtensionMethod("seorocket","SEORocket.SEOMeta", .Page.Content.Keywords+","+.Page.Content.Desc ).Output | raw }}
+    {{ CallExtensionMethod("seorocket","SEORocket.ContactUS" , "https://www.mchampaneri.in").Output | raw }}
 </body>
-
-{{ .Page.PageURL }}
-
-<h1>{{ SiteTitle() }}</h1>
-
-<hr>
-
-{{ PageList() }}
-<h1> ShortShot Theme </h1>
-{{ .Page.Content.HTML|raw }}
-{{ .output |raw }}
 </html>

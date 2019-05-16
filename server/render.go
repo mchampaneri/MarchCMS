@@ -8,6 +8,7 @@ import (
 	"io/ioutil"
 	"log"
 	"net/http"
+	"os"
 	"path/filepath"
 	"reflect"
 
@@ -32,6 +33,18 @@ func init() {
 		var AllPages []SlingPage
 		db.All(&AllPages)
 		return reflect.ValueOf(AllPages)
+	})
+
+	frontInstance.AddGlobalFunc("CallExtensionMethod", func(a jet.Arguments) reflect.Value {
+		inputString := map[string]interface{}{
+			"stringInput": a.Get(2).String()}
+		request := Request{
+			Type:  "HTML",
+			Input: inputString,
+		}
+		response := new(Response)
+		extensions[a.Get(0).String()].Call(a.Get(1).String(), request, response)
+		return reflect.ValueOf(response)
 	})
 
 	////////////// Admin //////////////////
@@ -82,11 +95,22 @@ func init() {
 
 	adminInstance.AddGlobalFunc("AvailableExtensions", func(a jet.Arguments) reflect.Value {
 		// Read Pages templates
-		templates := make([]struct{ Name, Thumb string }, 0, 10)
+		templates := make([]RpcExtension, 0, 10)
 		if fileInfo, err := ioutil.ReadDir(filepath.Join(root, "extensions")); err == nil {
 			for _, file := range fileInfo {
-				templates = append(templates, struct{ Name, Thumb string }{file.Name(),
-					fmt.Sprint("/admin/extensions/", file.Name())})
+				configFile := filepath.Join(extensionFolder, file.Name(), "config.json")
+				readFile, err := os.Open(configFile)
+				if err != nil {
+					log.Fatalln(err.Error())
+				}
+				var extensionConfig RpcExtension
+				configDecoder := json.NewDecoder(readFile)
+				configDecoder.Decode(&extensionConfig)
+				templates = append(templates, RpcExtension{
+					Name:    extensionConfig.Name,
+					Status:  extensionConfig.Status,
+					Address: extensionConfig.Address,
+				})
 			}
 			return reflect.ValueOf(templates)
 		}

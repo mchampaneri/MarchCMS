@@ -2,12 +2,16 @@
 package main
 
 import (
+	"encoding/gob"
 	"encoding/json"
 	"fmt"
+	"io/ioutil"
 	"log"
 	"net/http"
 	"net/rpc"
+	"net/url"
 	"os"
+	"path/filepath"
 
 	"github.com/gorilla/mux"
 )
@@ -27,23 +31,27 @@ func loadConfig(config *Config) {
 }
 
 func loadExtensions() {
-	client, err := rpc.Dial("tcp", "127.0.0.1:10000")
-	defer client.Close()
-	if err != nil {
-		log.Fatal(err.Error())
+	if fileInfo, err := ioutil.ReadDir(filepath.Join(root, "extensions")); err == nil {
+		for _, file := range fileInfo {
+			configFile := filepath.Join(extensionFolder, file.Name(), "config.json")
+			readFile, err := os.Open(configFile)
+			if err != nil {
+				log.Fatalln(err.Error())
+			}
+			var extensionConfig RpcExtension
+			configDecoder := json.NewDecoder(readFile)
+			configDecoder.Decode(&extensionConfig)
+			// Registring extension
+			if client, err := rpc.Dial("tcp", extensionConfig.Address); err == nil {
+				extensions[extensionConfig.Name] = client
+				log.Println(extensionConfig.Name, " : loaded")
+			} else {
+				log.Fatalln("failed to register extension : ", extensionConfig.Name, err.Error())
+			}
+		}
+	} else {
+		log.Fatalln("failed to load extension ", err.Error())
 	}
-
-	response := Response{}
-	callErr := client.Call("HelloRequest.Hello",
-		Request{Name: "Manish"},
-		&response)
-
-	if callErr != nil {
-		log.Fatalln("failed to make call :", callErr.Error())
-	}
-
-	fmt.Println("responsoe from extnsion is below")
-	fmt.Println(response.Message)
 }
 
 func serveWeb(address string) {
@@ -77,6 +85,47 @@ func serveWeb(address string) {
 		} else {
 			log.Println("could not fetch route ", r.URL.Path)
 		}
+	})
+
+	router.HandleFunc(`/extension`, func(w http.ResponseWriter, r *http.Request) {
+		gob.Register(url.Values{})
+		switch r.Header.Get("Content-type") {
+		case "application/x-www-form-urlencoded":
+			{
+				resp := new(Response)
+				if err := r.ParseForm(); err == nil {
+					if err := extensions[r.FormValue("extname")].Call(r.FormValue("extmethod"),
+						Request{Input: map[string]interface{}{"form": r.Form},
+							Type: "HTML"},
+						resp); err == nil {
+						log.Println(resp.Output)
+						http.Redirect(w, r, r.FormValue("redirectURL"), 301)
+					} else {
+						log.Fatalln("extensin failed to handle :", err.Error())
+					}
+				} else {
+					log.Fatalln("failed to parse form ", err.Error())
+				}
+			}
+		case "application/json":
+			{
+				var requestJSON struct {
+					ResponseType    string
+					Input           string
+					ExtensionName   string
+					ExtensionMethod string
+				}
+				resp := new(Response)
+				requrstDecoder := json.NewDecoder(r.Body)
+				if err := requrstDecoder.Decode(requestJSON); err == nil {
+					extensions[requestJSON.ExtensionName].Call(requestJSON.ExtensionMethod, requestJSON.Input, resp)
+					fmt.Fprintln(w, resp)
+				} else {
+					log.Fatalln("could not decode extension request ", err.Error())
+				}
+			}
+		}
+
 	})
 
 	// Handling pages

@@ -2,6 +2,7 @@ package main
 
 import (
 	"log"
+	"net/rpc"
 	"os"
 	"path/filepath"
 
@@ -16,6 +17,9 @@ var dbErr error
 // CMS wide config
 var config, jsonConfig Config
 var root, _ = os.Getwd()
+
+// Extension Handles
+var extensions = make(map[string]*rpc.Client)
 
 // // Folder Paths
 var themesFolder = filepath.Join(root, "themes")
@@ -46,6 +50,7 @@ func main() {
 		}
 	}
 
+	loadExtensions()
 	// loading webservice
 	serveWeb(config.Address) // loading web service
 	defer db.Close()

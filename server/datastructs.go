@@ -2,12 +2,21 @@ package main
 
 import "time"
 
+type RpcExtension struct {
+	Name    string `json:"Name"`
+	Address string `json:"Address"`
+	Status  string `json:"Status"`
+}
+
 type Response struct {
-	Message string
+	Output string
+	Type   string
+	Status string
 }
 
 type Request struct {
-	Name string
+	Type  string
+	Input map[string]interface{}
 }
 
 // Config holds global configurations
