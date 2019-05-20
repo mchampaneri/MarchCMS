@@ -10,17 +10,21 @@
 {{ block body() }}
 <div class="section">
     <div class="container">
-        <h4 class="title">Themes </h4>
+        <div class="columns">
+            <div class="column is-three-quarters">
+                <h4 class="title">Themes </h4>
+            </div>
+            <div class="column"><input type="text" class="input" placeholder="Search More"></div>
+        </div>
         <div class="columns">
             {{ range InstalledThemes() }}
-            <div class="column">
+            <div class="column is-one-quarter">
                 <div class="box">
-                   <img src="{{.Thumb}}" alt="" class="image">
-                   <h5 class="title is-5">{{.Name}}</h5>
-                   <a href="/admin/set-theme/{{.Name}}"
-                    class="button is-primary  {{ if . == ActiveTheme() }}is-inverted {{ end }}"
-
-               > Apply </a>
+                    <img src="{{.Thumb}}" alt="" class="image">
+                    <h5 class="title is-5">{{.Name}}</h5>
+                    <a href="/admin/set-theme/{{.Name}}"
+                        class="button  is-primary  {{ if . == ActiveTheme() }} has-text-success {{ else }}  {{ end }}">
+                        Apply </a>
                 </div>
             </div>
             {{ end }}
@@ -30,14 +34,38 @@
 
 <div class="section">
     <div class="container">
-        <h4 class="title">Extensions</h4>
         <div class="columns">
-            {{ AvailableExtensions() }}
+            <div class="column is-three-quarters">
+                <h4 class="title"> <i class="fa fa-plug" aria-hidden="true"></i>
+                     Extensions</h4>
+            </div>
+            <div class="column"><input type="text" class="input" placeholder="Search More"></div>
+        </div>
+        <hr>
+        <div class="columns">
             {{ range AvailableExtensions() }}
-            <div class="column">
-                <a href="{{.Name}}">{{.Name}}</a>
-                <a href="{{.Name}}">{{.Address}}</a>
-                <a href="{{.Name}}">{{.Status}}</a>
+            <div class="column  is-one-third">
+                <div class="box">
+                    <div class="field">
+                        <h4 class="title is-5">{{.Name}}</h4>
+                    </div>
+                    <hr>
+                    <div class="field">
+                        <label for="" class="label">Description</label>
+                        <p>{{.Desc}}</p>
+                    </div>
+                    <div class="field">
+                        <label for="" class="label">Extension Address</label>
+                        <input type="text" class="input" value="{{.Address}}">
+                    </div>
+                    <div class="field">
+                        <label for="" class="label">Author Name</label>
+                        <p>{{.Author}}</p>
+                    </div>
+                    <div class="field">
+                        <a href="#" class="butto">{{.Status}}</a>
+                    </div>
+                </div>
             </div>
             {{ end }}
         </div>

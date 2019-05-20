@@ -6,6 +6,10 @@ type RpcExtension struct {
 	Name    string `json:"Name"`
 	Address string `json:"Address"`
 	Status  string `json:"Status"`
+	Author  string `json:"Author"`
+	Desc    string `json:"Desc"`
+	Website string `json:"Website"`
+	Licence string `json:"Licence"`
 }
 
 type Response struct {

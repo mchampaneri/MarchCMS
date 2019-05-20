@@ -1,5 +1,6 @@
 {
     "Address":"127.0.0.1:10000",
     "Name":"seorocket",
-    "Status":"active"
+    "Status":"active",
+    "Desc":"Gives a best search engine optimization. Switch it, set it and you done."
 }

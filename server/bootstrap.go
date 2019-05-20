@@ -36,17 +36,22 @@ func loadExtensions() {
 			configFile := filepath.Join(extensionFolder, file.Name(), "config.json")
 			readFile, err := os.Open(configFile)
 			if err != nil {
-				log.Fatalln(err.Error())
+				log.Println(err.Error())
 			}
 			var extensionConfig RpcExtension
 			configDecoder := json.NewDecoder(readFile)
 			configDecoder.Decode(&extensionConfig)
-			// Registring extension
-			if client, err := rpc.Dial("tcp", extensionConfig.Address); err == nil {
-				extensions[extensionConfig.Name] = client
-				log.Println(extensionConfig.Name, " : loaded")
-			} else {
-				log.Fatalln("failed to register extension : ", extensionConfig.Name, err.Error())
+
+			if extensionConfig.Status == "active" {
+				// if freePort, err := getAvailablePort(); err == nil {
+				// Registring extension
+				if client, err := rpc.Dial("tcp", extensionConfig.Address); err == nil {
+					log.Println(extensionConfig.Name, " : loaded")
+					extensions[extensionConfig.Name] = client
+				} else {
+					log.Println("Failed to register extension : ", extensionConfig.Name, err.Error())
+				}
+				// }
 			}
 		}
 	} else {

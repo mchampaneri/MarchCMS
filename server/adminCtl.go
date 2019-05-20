@@ -32,13 +32,13 @@ func adminRoutes(router *mux.Router) {
 	// extensions routes
 	router.HandleFunc("/admin/extensions/{extension-name}",
 		func(w http.ResponseWriter, r *http.Request) {
-			log.Println("Starting Appliction")
 			param := mux.Vars(r)
-			extensionPath := filepath.Join(extensionFolder, param["extension-name"], "hello.exe")
-			cmd := exec.Command(extensionPath)
+			executable := filepath.Join(extensionFolder, param["extension-name"], "serve.exe")
+			cmd := exec.Command(executable)
 			if err := cmd.Start(); err == nil {
-				loadExtensions()
-				// http.Redirect(w, r, "/admin/settings", 301)
+				// configFile := filepath.Join(extensionFolder, param["extension-name"], "config.json")
+				// extensions[param["extension-name"]]
+				http.Redirect(w, r, "/admin/settings", 301)
 			} else {
 				log.Fatal(err.Error())
 			}

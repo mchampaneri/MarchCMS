@@ -43,8 +43,17 @@ func init() {
 			Input: inputString,
 		}
 		response := new(Response)
-		extensions[a.Get(0).String()].Call(a.Get(1).String(), request, response)
-		return reflect.ValueOf(response)
+		if extensions[a.Get(0).String()] != nil {
+			if err := extensions[a.Get(0).String()].Call(a.Get(1).String(), request, response); err == nil {
+				return reflect.ValueOf(response)
+			} else {
+				response.Output = fmt.Sprint("Extension Method not found : ", a.Get(0).String())
+				return reflect.ValueOf(response)
+			}
+		} else {
+			response.Output = fmt.Sprint("Extension not found : ", a.Get(0).String())
+			return reflect.ValueOf(response)
+		}
 	})
 
 	////////////// Admin //////////////////
@@ -54,6 +63,19 @@ func init() {
 
 	adminInstance.AddGlobalFunc("ActiveTheme", func(a jet.Arguments) reflect.Value {
 		return reflect.ValueOf(config.Theme)
+	})
+
+	adminInstance.AddGlobalFunc("PluginMenu", func(a jet.Arguments) reflect.Value {
+
+		menus := make([]string, 1, 10)
+		for _, extension := range extensions {
+			request := Request{}
+			response := new(Response)
+			if err := extension.Call("Admin.HookInMenu", request, response); err == nil {
+				menus = append(menus, response.Output)
+			}
+		}
+		return reflect.ValueOf(menus)
 	})
 
 	adminInstance.AddGlobalFunc("PageTemplates", func(a jet.Arguments) reflect.Value {
@@ -106,11 +128,7 @@ func init() {
 				var extensionConfig RpcExtension
 				configDecoder := json.NewDecoder(readFile)
 				configDecoder.Decode(&extensionConfig)
-				templates = append(templates, RpcExtension{
-					Name:    extensionConfig.Name,
-					Status:  extensionConfig.Status,
-					Address: extensionConfig.Address,
-				})
+				templates = append(templates, extensionConfig)
 			}
 			return reflect.ValueOf(templates)
 		}
@@ -150,11 +168,9 @@ func renderPost(w io.Writer, post SlingPost) {
 	if err != nil {
 		log.Fatalln(pageTemplate, " - ", config.Theme, " - ", err.Error())
 	}
-
 	dataMap := map[string]interface{}{
 		"Page": post,
 	}
-
 	output := blackfriday.Run([]byte(post.Content.HTML))
 	dataMap["output"] = output
 	if err = t.Execute(w, nil, dataMap); err != nil {
