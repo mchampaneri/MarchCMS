@@ -1,0 +1,13 @@
+syntax = "proto3";
+
+message EventsHooks{
+    string event = 1;
+    bytes input = 2;
+    bytes response = 3;
+}
+
+
+
+service SearchService {
+    rpc Search (EventsHooks) returns (EventsHooks);
+  }
