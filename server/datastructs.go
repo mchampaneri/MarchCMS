@@ -34,33 +34,48 @@ type Config struct {
 	Status   string `json:"Status"`
 }
 
-// SlingPage is root struct for SlignPages
-type SlingPage struct {
+// MarchPage is root struct for SlignPages
+type MarchPage struct {
 	PageTemplate string           `json:"PageTemplate"`
 	PageURL      string           `json:"PageURL" storm:"unique"`
 	PageTitle    string           `json:"PageTitle"`
 	PageNumber   string           `json:"PageNumber" storm:"id"`
-	Content      SlingPageContent `json:"PageContent"`
+	Content      MarchPageContent `json:"PageContent"`
 	Co           time.Time        `json:"Co" storm:"index"`
 	Uo           time.Time        `json:"Uo" storm:"index"`
 	Do           time.Time        `json:"Do" storm:"index"`
 }
 
-// SlingPost is root struct for SlignPages
-type SlingPost struct {
+// MarchPost is root struct for SlignPages
+type MarchPost struct {
 	PageTemplate string           `json:"PageTemplate"`
 	PageURL      string           `json:"PageURL" storm:"unique"`
 	PageTitle    string           `json:"PageTitle"`
 	PageNumber   string           `json:"PageNumber" storm:"id"`
-	Content      SlingPageContent `json:"PageContent"`
+	Content      MarchPageContent `json:"PageContent"`
 	Co           time.Time        `json:"Co" storm:"index"`
 	Uo           time.Time        `json:"Uo" storm:"index"`
 	Do           time.Time        `json:"Do" storm:"index"`
 }
 
-// SlingPageContent holds content of the page
-type SlingPageContent struct {
+// MarchPageContent holds content of the page
+type MarchPageContent struct {
 	Keywords string `json:"Keywords"`
 	Desc     string `json:"Desc"`
 	HTML     string `json:"HTML"`
+}
+
+// MarchMenu holds content for navigation menu
+type MarchMenu struct {
+	Index uint64          `json:"Index" storm:"id,increment"`
+	Name  string          `json:"Name" storm:"unique"`
+	Items []MarchMenuItem `json:"Items`
+}
+
+// MarchMenuItem holds individual menu item for menu
+type MarchMenuItem struct {
+	Title     string `json:"Title"`
+	URL       string `json:"URL"`
+	CSSClass  string `json:"CSSClass"`
+	ElementID string `json:"ElementID"`
 }

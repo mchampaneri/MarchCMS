@@ -8,7 +8,6 @@ import (
 	"io/ioutil"
 	"log"
 	"net/http"
-	"os"
 	"path/filepath"
 	"reflect"
 
@@ -30,7 +29,7 @@ func init() {
 	})
 
 	frontInstance.AddGlobalFunc("PageList", func(a jet.Arguments) reflect.Value {
-		var AllPages []SlingPage
+		var AllPages []MarchPage
 		db.All(&AllPages)
 		return reflect.ValueOf(AllPages)
 	})
@@ -65,18 +64,18 @@ func init() {
 		return reflect.ValueOf(config.Theme)
 	})
 
-	adminInstance.AddGlobalFunc("PluginMenu", func(a jet.Arguments) reflect.Value {
+	// adminInstance.AddGlobalFunc("PluginMenu", func(a jet.Arguments) reflect.Value {
 
-		menus := make([]string, 1, 10)
-		for _, extension := range extensions {
-			request := Request{}
-			response := new(Response)
-			if err := extension.Call("Admin.HookInMenu", request, response); err == nil {
-				menus = append(menus, response.Output)
-			}
-		}
-		return reflect.ValueOf(menus)
-	})
+	// 	menus := make([]string, 1, 10)
+	// 	for _, extension := range extensions {
+	// 		request := Request{}
+	// 		response := new(Response)
+	// 		if err := extension.Call("Admin.HookInMenu", request, response); err == nil {
+	// 			menus = append(menus, response.Output)
+	// 		}
+	// 	}
+	// 	return reflect.ValueOf(menus)
+	// })
 
 	adminInstance.AddGlobalFunc("PageTemplates", func(a jet.Arguments) reflect.Value {
 		// Read Pages templates
@@ -115,29 +114,29 @@ func init() {
 		return reflect.ValueOf(nil)
 	})
 
-	adminInstance.AddGlobalFunc("AvailableExtensions", func(a jet.Arguments) reflect.Value {
-		// Read Pages templates
-		templates := make([]RpcExtension, 0, 10)
-		if fileInfo, err := ioutil.ReadDir(filepath.Join(root, "extensions")); err == nil {
-			for _, file := range fileInfo {
-				configFile := filepath.Join(extensionFolder, file.Name(), "config.json")
-				readFile, err := os.Open(configFile)
-				if err != nil {
-					log.Fatalln(err.Error())
-				}
-				var extensionConfig RpcExtension
-				configDecoder := json.NewDecoder(readFile)
-				configDecoder.Decode(&extensionConfig)
-				templates = append(templates, extensionConfig)
-			}
-			return reflect.ValueOf(templates)
-		}
-		return reflect.ValueOf(nil)
-	})
+	// adminInstance.AddGlobalFunc("AvailableExtensions", func(a jet.Arguments) reflect.Value {
+	// 	// Read Pages templates
+	// 	templates := make([]RpcExtension, 0, 10)
+	// 	if fileInfo, err := ioutil.ReadDir(filepath.Join(root, "extensions")); err == nil {
+	// 		for _, file := range fileInfo {
+	// 			configFile := filepath.Join(extensionFolder, file.Name(), "config.json")
+	// 			readFile, err := os.Open(configFile)
+	// 			if err != nil {
+	// 				log.Fatalln(err.Error())
+	// 			}
+	// 			var extensionConfig RpcExtension
+	// 			configDecoder := json.NewDecoder(readFile)
+	// 			configDecoder.Decode(&extensionConfig)
+	// 			templates = append(templates, extensionConfig)
+	// 		}
+	// 		return reflect.ValueOf(templates)
+	// 	}
+	// 	return reflect.ValueOf(nil)
+	// })
 
 }
 
-func renderPage(w io.Writer, page SlingPage) {
+func renderPage(w io.Writer, page MarchPage) {
 	var pageTemplate = "index.html"
 	if page.PageTemplate != "" && page.PageTemplate != "-" {
 		pageTemplate = filepath.Join(".", "pages", page.PageTemplate)
@@ -159,7 +158,7 @@ func renderPage(w io.Writer, page SlingPage) {
 	}
 }
 
-func renderPost(w io.Writer, post SlingPost) {
+func renderPost(w io.Writer, post MarchPost) {
 	var pageTemplate = "index.html"
 	if post.PageTemplate != "" && post.PageTemplate != "-" {
 		pageTemplate = filepath.Join(".", "posts", post.PageTemplate)

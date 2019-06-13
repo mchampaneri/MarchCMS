@@ -17,6 +17,7 @@
     "vue": "^2.1.10"
   },
   "dependencies": {
-    "vue-trix": "^0.7.5"
+    "vue-trix": "^0.7.5",
+    "vuedraggable": "^2.21.0"
   }
 }

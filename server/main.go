@@ -24,7 +24,7 @@ var extensions = make(map[string]*rpc.Client)
 // // Folder Paths
 var themesFolder = filepath.Join(root, "themes")
 var adminFolder = filepath.Join(root, "admin")
-var extensionFolder = filepath.Join(root, "extensions")
+// var extensionFolder = filepath.Join(root, "extensions")
 
 func main() {
 
@@ -50,7 +50,7 @@ func main() {
 		}
 	}
 
-	loadExtensions()
+	// loadExtensions()
 	// loading webservice
 	serveWeb(config.Address) // loading web service
 	defer db.Close()

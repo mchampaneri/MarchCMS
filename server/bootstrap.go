@@ -2,16 +2,10 @@
 package main
 
 import (
-	"encoding/gob"
 	"encoding/json"
-	"fmt"
-	"io/ioutil"
 	"log"
 	"net/http"
-	"net/rpc"
-	"net/url"
 	"os"
-	"path/filepath"
 
 	"github.com/gorilla/mux"
 )
@@ -30,34 +24,34 @@ func loadConfig(config *Config) {
 	}
 }
 
-func loadExtensions() {
-	if fileInfo, err := ioutil.ReadDir(filepath.Join(root, "extensions")); err == nil {
-		for _, file := range fileInfo {
-			configFile := filepath.Join(extensionFolder, file.Name(), "config.json")
-			readFile, err := os.Open(configFile)
-			if err != nil {
-				log.Println(err.Error())
-			}
-			var extensionConfig RpcExtension
-			configDecoder := json.NewDecoder(readFile)
-			configDecoder.Decode(&extensionConfig)
+// func loadExtensions() {
+// 	if fileInfo, err := ioutil.ReadDir(filepath.Join(root, "extensions")); err == nil {
+// 		for _, file := range fileInfo {
+// 			configFile := filepath.Join(extensionFolder, file.Name(), "config.json")
+// 			readFile, err := os.Open(configFile)
+// 			if err != nil {
+// 				log.Println(err.Error())
+// 			}
+// 			var extensionConfig RpcExtension
+// 			configDecoder := json.NewDecoder(readFile)
+// 			configDecoder.Decode(&extensionConfig)
 
-			if extensionConfig.Status == "active" {
-				// if freePort, err := getAvailablePort(); err == nil {
-				// Registring extension
-				if client, err := rpc.Dial("tcp", extensionConfig.Address); err == nil {
-					log.Println(extensionConfig.Name, " : loaded")
-					extensions[extensionConfig.Name] = client
-				} else {
-					log.Println("Failed to register extension : ", extensionConfig.Name, err.Error())
-				}
-				// }
-			}
-		}
-	} else {
-		log.Fatalln("failed to load extension ", err.Error())
-	}
-}
+// 			if extensionConfig.Status == "active" {
+// 				// if freePort, err := getAvailablePort(); err == nil {
+// 				// Registring extension
+// 				if client, err := rpc.Dial("tcp", extensionConfig.Address); err == nil {
+// 					log.Println(extensionConfig.Name, " : loaded")
+// 					extensions[extensionConfig.Name] = client
+// 				} else {
+// 					log.Println("Failed to register extension : ", extensionConfig.Name, err.Error())
+// 				}
+// 				// }
+// 			}
+// 		}
+// 	} else {
+// 		log.Fatalln("failed to load extension ", err.Error())
+// 	}
+// }
 
 func serveWeb(address string) {
 
@@ -65,7 +59,7 @@ func serveWeb(address string) {
 	router := mux.NewRouter()
 	log.Println("Listening on ", address)
 
-	// slingpages resource routes
+	//MarchPages resource routes
 	router.PathPrefix("/sl-res/").
 		Handler(http.StripPrefix("/sl-res/",
 			http.FileServer(http.Dir("./admin/public"))))
@@ -80,70 +74,70 @@ func serveWeb(address string) {
 
 	// Handling posts
 	router.HandleFunc(`/post/{rest:[a-zA-Z0-9=\-\/]*}`, func(w http.ResponseWriter, r *http.Request) {
-		var slingpost SlingPost
+		var marchPost MarchPost
 		log.Println("Handling at rest routes")
 
 		log.Println("PageURL for page ", r.URL.Path)
-		if err := db.One("PageURL", r.URL.Path, &slingpost); err == nil {
+		if err := db.One("PageURL", r.URL.Path, &marchPost); err == nil {
 			log.Println("PageURL for page ", r.URL.Path)
-			renderPost(w, slingpost)
+			renderPost(w, marchPost)
 		} else {
 			log.Println("could not fetch route ", r.URL.Path)
 		}
 	})
 
-	router.HandleFunc(`/extension`, func(w http.ResponseWriter, r *http.Request) {
-		gob.Register(url.Values{})
-		switch r.Header.Get("Content-type") {
-		case "application/x-www-form-urlencoded":
-			{
-				resp := new(Response)
-				if err := r.ParseForm(); err == nil {
-					if err := extensions[r.FormValue("extname")].Call(r.FormValue("extmethod"),
-						Request{Input: map[string]interface{}{"form": r.Form},
-							Type: "HTML"},
-						resp); err == nil {
-						log.Println(resp.Output)
-						http.Redirect(w, r, r.FormValue("redirectURL"), 301)
-					} else {
-						log.Fatalln("extensin failed to handle :", err.Error())
-					}
-				} else {
-					log.Fatalln("failed to parse form ", err.Error())
-				}
-			}
-		case "application/json":
-			{
-				var requestJSON struct {
-					ResponseType    string
-					Input           string
-					ExtensionName   string
-					ExtensionMethod string
-				}
-				resp := new(Response)
-				requrstDecoder := json.NewDecoder(r.Body)
-				if err := requrstDecoder.Decode(requestJSON); err == nil {
-					extensions[requestJSON.ExtensionName].Call(requestJSON.ExtensionMethod, requestJSON.Input, resp)
-					fmt.Fprintln(w, resp)
-				} else {
-					log.Fatalln("could not decode extension request ", err.Error())
-				}
-			}
-		}
+	// router.HandleFunc(`/extension`, func(w http.ResponseWriter, r *http.Request) {
+	// 	gob.Register(url.Values{})
+	// 	switch r.Header.Get("Content-type") {
+	// 	case "application/x-www-form-urlencoded":
+	// 		{
+	// 			resp := new(Response)
+	// 			if err := r.ParseForm(); err == nil {
+	// 				if err := extensions[r.FormValue("extname")].Call(r.FormValue("extmethod"),
+	// 					Request{Input: map[string]interface{}{"form": r.Form},
+	// 						Type: "HTML"},
+	// 					resp); err == nil {
+	// 					log.Println(resp.Output)
+	// 					http.Redirect(w, r, r.FormValue("redirectURL"), 301)
+	// 				} else {
+	// 					log.Fatalln("extensin failed to handle :", err.Error())
+	// 				}
+	// 			} else {
+	// 				log.Fatalln("failed to parse form ", err.Error())
+	// 			}
+	// 		}
+	// 	case "application/json":
+	// 		{
+	// 			var requestJSON struct {
+	// 				ResponseType    string
+	// 				Input           string
+	// 				ExtensionName   string
+	// 				ExtensionMethod string
+	// 			}
+	// 			resp := new(Response)
+	// 			requrstDecoder := json.NewDecoder(r.Body)
+	// 			if err := requrstDecoder.Decode(requestJSON); err == nil {
+	// 				extensions[requestJSON.ExtensionName].Call(requestJSON.ExtensionMethod, requestJSON.Input, resp)
+	// 				fmt.Fprintln(w, resp)
+	// 			} else {
+	// 				log.Fatalln("could not decode extension request ", err.Error())
+	// 			}
+	// 		}
+	// 	}
 
-	})
+	// })
 
 	// Handling pages
 	router.HandleFunc(`/{rest:[a-zA-Z0-9=\-\/]*}`, func(w http.ResponseWriter, r *http.Request) {
-		var slingPage SlingPage
+		var marchPage MarchPage
 		log.Println("Handling at rest routes")
 
 		log.Println("PageURL for page ", r.URL.Path)
-		if err := db.One("PageURL", r.URL.Path, &slingPage); err == nil {
+		if err := db.One("PageURL", r.URL.Path, &marchPage); err == nil {
 			log.Println("PageURL for page ", r.URL.Path)
-			renderPage(w, slingPage)
+			renderPage(w, marchPage)
 		} else {
-			renderPage(w, SlingPage{PageTemplate: "404.html"})
+			renderPage(w, MarchPage{PageTemplate: "404.html"})
 		}
 	})
 

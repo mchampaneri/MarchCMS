@@ -6,7 +6,6 @@ import (
 	"log"
 	"net/http"
 	"os"
-	"os/exec"
 	"path/filepath"
 	"time"
 
@@ -30,19 +29,19 @@ func adminRoutes(router *mux.Router) {
 		})
 
 	// extensions routes
-	router.HandleFunc("/admin/extensions/{extension-name}",
-		func(w http.ResponseWriter, r *http.Request) {
-			param := mux.Vars(r)
-			executable := filepath.Join(extensionFolder, param["extension-name"], "serve.exe")
-			cmd := exec.Command(executable)
-			if err := cmd.Start(); err == nil {
-				// configFile := filepath.Join(extensionFolder, param["extension-name"], "config.json")
-				// extensions[param["extension-name"]]
-				http.Redirect(w, r, "/admin/settings", 301)
-			} else {
-				log.Fatal(err.Error())
-			}
-		})
+	// router.HandleFunc("/admin/extensions/{extension-name}",
+	// func(w http.ResponseWriter, r *http.Request) {
+	// 	param := mux.Vars(r)
+	// 	executable := filepath.Join(extensionFolder, param["extension-name"], "serve.exe")
+	// 	cmd := exec.Command(executable)
+	// 	if err := cmd.Start(); err == nil {
+	// 		// configFile := filepath.Join(extensionFolder, param["extension-name"], "config.json")
+	// 		// extensions[param["extension-name"]]
+	// 		http.Redirect(w, r, "/admin/settings", 301)
+	// 	} else {
+	// 		log.Fatal(err.Error())
+	// 	}
+	// })
 
 	// dashboard
 	router.HandleFunc("/admin/dashboard", func(w http.ResponseWriter, r *http.Request) {
@@ -63,6 +62,25 @@ func adminRoutes(router *mux.Router) {
 		renderAdmin(w, "page/settings.html", map[string]interface{}{})
 	})
 
+	// Menu management routes
+	router.HandleFunc("/admin/menus/list", func(w http.ResponseWriter, r *http.Request) {
+		if r.Method == "GET" {
+			renderAdmin(w, "page/menus.html", map[string]interface{}{})
+		}
+	})
+
+	router.HandleFunc("/admin/menu/create", func(w http.ResponseWriter, r *http.Request) {
+		if r.Method == "GET" {
+			renderAdmin(w, "page/menu.html", map[string]interface{}{})
+		}
+	})
+
+	router.HandleFunc("/admin/menu/edit", func(w http.ResponseWriter, r *http.Request) {
+		if r.Method == "GET" {
+			renderAdmin(w, "page/menu.html", map[string]interface{}{})
+		}
+	})
+
 	// Page managemnt routes
 	router.HandleFunc("/admin/page/create", func(w http.ResponseWriter, r *http.Request) {
 		if r.Method == "GET" {
@@ -79,11 +97,11 @@ func adminRoutes(router *mux.Router) {
 				log.Fatalln("Failed to gerate page id :", err.Error())
 			} else {
 
-				newPage := SlingPage{
+				newPage := MarchPage{
 					PageTemplate: requestData.PageTemplate,
 					PageURL:      requestData.PageURL,
 					PageTitle:    requestData.PageTitle,
-					Content: SlingPageContent{
+					Content: MarchPageContent{
 						Desc:     requestData.Desc,
 						HTML:     requestData.HTML,
 						Keywords: requestData.Keywords,
@@ -106,12 +124,12 @@ func adminRoutes(router *mux.Router) {
 	router.HandleFunc("/admin/page/{id}/edit", func(w http.ResponseWriter, r *http.Request) {
 		param := mux.Vars(r)
 
-		slingPage := SlingPage{}
-		if err := db.One("PageNumber", param["id"], &slingPage); err == nil {
+		MarchPage := MarchPage{}
+		if err := db.One("PageNumber", param["id"], &MarchPage); err == nil {
 
 			if r.Method == "GET" {
 				renderAdmin(w, "page/page-edit.html", map[string]interface{}{
-					"page": slingPage,
+					"page": MarchPage,
 				})
 				return
 			} else {
@@ -121,17 +139,15 @@ func adminRoutes(router *mux.Router) {
 				}
 				requestDecoder := json.NewDecoder(r.Body)
 				requestDecoder.Decode(&requestData)
-				slingPage.PageTemplate = requestData.PageTemplate
-				slingPage.PageURL = requestData.PageURL
-				slingPage.PageNumber = param["id"]
-				slingPage.PageTitle = requestData.PageTitle
-				slingPage.Content.Desc = requestData.Desc
-				slingPage.Content.HTML = requestData.HTML
-				slingPage.Content.Keywords = requestData.Keywords
-				slingPage.Uo = time.Now()
-
-				db.Save(&slingPage)
-
+				MarchPage.PageTemplate = requestData.PageTemplate
+				MarchPage.PageURL = requestData.PageURL
+				MarchPage.PageNumber = param["id"]
+				MarchPage.PageTitle = requestData.PageTitle
+				MarchPage.Content.Desc = requestData.Desc
+				MarchPage.Content.HTML = requestData.HTML
+				MarchPage.Content.Keywords = requestData.Keywords
+				MarchPage.Uo = time.Now()
+				db.Save(&MarchPage)
 				return
 			}
 
@@ -143,10 +159,9 @@ func adminRoutes(router *mux.Router) {
 
 	router.HandleFunc("/admin/page/{id}/delete", func(w http.ResponseWriter, r *http.Request) {
 		param := mux.Vars(r)
-
-		slingPage := SlingPage{}
-		if err := db.One("PageNumber", param["id"], &slingPage); err == nil {
-			if err := db.DeleteStruct(&slingPage); err == nil {
+		MarchPage := MarchPage{}
+		if err := db.One("PageNumber", param["id"], &MarchPage); err == nil {
+			if err := db.DeleteStruct(&MarchPage); err == nil {
 				http.Redirect(w, r, "/admin/pages/list", 301)
 			} else {
 				http.Redirect(w, r, "/admin/pages/list", 301)
@@ -158,7 +173,7 @@ func adminRoutes(router *mux.Router) {
 	})
 
 	router.HandleFunc("/admin/pages/list", func(w http.ResponseWriter, r *http.Request) {
-		var pages []SlingPage
+		var pages []MarchPage
 		if err := db.All(&pages); err != nil {
 			log.Fatalln("failed to load routes : ", err.Error())
 		} else {
@@ -184,11 +199,11 @@ func adminRoutes(router *mux.Router) {
 				log.Fatalln("Failed to gerate page id :", err.Error())
 			} else {
 
-				newpost := SlingPost{
+				newpost := MarchPost{
 					PageTemplate: requestData.PageTemplate,
 					PageURL:      requestData.PageURL,
 					PageTitle:    requestData.PageTitle,
-					Content: SlingPageContent{
+					Content: MarchPageContent{
 						Desc:     requestData.Desc,
 						HTML:     requestData.HTML,
 						Keywords: requestData.Keywords,
@@ -211,12 +226,12 @@ func adminRoutes(router *mux.Router) {
 	router.HandleFunc("/admin/post/{id}/edit", func(w http.ResponseWriter, r *http.Request) {
 		param := mux.Vars(r)
 
-		slingpost := SlingPost{}
-		if err := db.One("PageNumber", param["id"], &slingpost); err == nil {
+		MarchPost := MarchPost{}
+		if err := db.One("PageNumber", param["id"], &MarchPost); err == nil {
 
 			if r.Method == "GET" {
 				renderAdmin(w, "page/post-edit.html", map[string]interface{}{
-					"post": slingpost,
+					"post": MarchPost,
 				})
 				return
 			} else {
@@ -226,16 +241,16 @@ func adminRoutes(router *mux.Router) {
 				}
 				requestDecoder := json.NewDecoder(r.Body)
 				requestDecoder.Decode(&requestData)
-				slingpost.PageTemplate = requestData.PageTemplate
-				slingpost.PageURL = requestData.PageURL
-				slingpost.PageNumber = param["id"]
-				slingpost.PageTitle = requestData.PageTitle
-				slingpost.Content.Desc = requestData.Desc
-				slingpost.Content.HTML = requestData.HTML
-				slingpost.Content.Keywords = requestData.Keywords
-				slingpost.Uo = time.Now()
+				MarchPost.PageTemplate = requestData.PageTemplate
+				MarchPost.PageURL = requestData.PageURL
+				MarchPost.PageNumber = param["id"]
+				MarchPost.PageTitle = requestData.PageTitle
+				MarchPost.Content.Desc = requestData.Desc
+				MarchPost.Content.HTML = requestData.HTML
+				MarchPost.Content.Keywords = requestData.Keywords
+				MarchPost.Uo = time.Now()
 
-				db.Save(&slingpost)
+				db.Save(&MarchPost)
 
 				return
 			}
@@ -249,9 +264,9 @@ func adminRoutes(router *mux.Router) {
 	router.HandleFunc("/admin/post/{id}/delete", func(w http.ResponseWriter, r *http.Request) {
 		param := mux.Vars(r)
 
-		slingpost := SlingPost{}
-		if err := db.One("PageNumber", param["id"], &slingpost); err == nil {
-			if err := db.DeleteStruct(&slingpost); err == nil {
+		MarchPost := MarchPost{}
+		if err := db.One("PageNumber", param["id"], &MarchPost); err == nil {
+			if err := db.DeleteStruct(&MarchPost); err == nil {
 				http.Redirect(w, r, "/admin/posts/list", 301)
 			} else {
 				http.Redirect(w, r, "/admin/posts/list", 301)
@@ -263,7 +278,7 @@ func adminRoutes(router *mux.Router) {
 	})
 
 	router.HandleFunc("/admin/posts/list", func(w http.ResponseWriter, r *http.Request) {
-		var posts []SlingPost
+		var posts []MarchPost
 		if err := db.All(&posts); err != nil {
 			log.Fatalln("failed to load routes : ", err.Error())
 		} else {

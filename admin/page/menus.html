@@ -1,0 +1,35 @@
+{{extends "./layouts/main.html "}}
+
+{{ block pageTitle() }}
+{{ SiteTitle() }}| Admin
+{{ end }}
+
+{{ block pagePreLoad() }}
+{{ end }}
+
+{{ block body() }}
+
+<section class="section ">
+
+    <div class="container box">
+        <div>
+            <div>
+              <h4 class="is-size-4 is-pulled-left"> Menus </h4>
+              <a href="/admin/menu/create" class="button is-link is-pulled-right"> New Menu </a>
+            </div>
+        </div>
+        <div style="clear:both"></div>
+        <hr>
+        <menu-editor></menu-editor>
+          <table class="table is-striped  is-fullwidth">
+              <tbody>
+
+              </tbody>
+            </table>
+      </div>
+  </section>
+
+{{ end }}
+
+{{ block pagePostLoad() }}
+{{ end }}

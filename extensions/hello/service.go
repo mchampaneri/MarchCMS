@@ -8,4 +8,4 @@ type Server{}
 
 func (* Server) Hello(ctx context.Context, e *EventsHooks ){
 
-}
+} 
