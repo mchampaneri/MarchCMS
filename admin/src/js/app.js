@@ -15,6 +15,7 @@ window.Vue = require('vue');
  * or customize the JavaScript scaffolding to fit your unique needs.
  */
 
+Vue.component("Modal",require("./comman/modal.vue"))
 
 Vue.component("PageEditor",require("./components/PageEditor.vue"))
 Vue.component("PostEditor",require("./components/PostEditor.vue"))

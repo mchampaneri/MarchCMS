@@ -28,21 +28,6 @@ func adminRoutes(router *mux.Router) {
 			}
 		})
 
-	// extensions routes
-	// router.HandleFunc("/admin/extensions/{extension-name}",
-	// func(w http.ResponseWriter, r *http.Request) {
-	// 	param := mux.Vars(r)
-	// 	executable := filepath.Join(extensionFolder, param["extension-name"], "serve.exe")
-	// 	cmd := exec.Command(executable)
-	// 	if err := cmd.Start(); err == nil {
-	// 		// configFile := filepath.Join(extensionFolder, param["extension-name"], "config.json")
-	// 		// extensions[param["extension-name"]]
-	// 		http.Redirect(w, r, "/admin/settings", 301)
-	// 	} else {
-	// 		log.Fatal(err.Error())
-	// 	}
-	// })
-
 	// dashboard
 	router.HandleFunc("/admin/dashboard", func(w http.ResponseWriter, r *http.Request) {
 		renderAdmin(w, "page/dashboard.html", map[string]interface{}{})

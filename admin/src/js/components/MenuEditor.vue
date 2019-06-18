@@ -7,26 +7,44 @@
             </div>
         </div>
         <div>
-            <input type="text" v-model="NewItem.Title" placeholder="Title">
-            <input type="text" v-model="NewItem.URL" placeholder="URL">
+            <input type="text" v-model="NewItem.nav" placeholder="Title">
             <button type="button" @click="AddItem(NewItem)">Add Item</button>
         </div>
-        <div>
-            <li v-for="(Item,Index) in Items" :key="Index">
-                {{Item.Title}} | {{Item.URL}}
-            </li>
-        </div>
-        <draggable v-model="myArray" draggable=".item">
-            <div v-for="element in myArray" :key="element.id" class="item">
-                    {{element.name}}
+        <modal v-if="deleteItem" modal_title="Are you sure?" @clicked="clicked(deleteItemId)">
+            <p> Delete item from menu list.</p>
+            <p> Action is irreversible.</p>
+        </modal>
+        <nav class="panel">
+            <p class="panel-heading">
+                Sample Menu
+            </p>
+            <draggable v-model="Items" >
+                <div v-for="element in Items" :key="element.id" class="draggable-item">
+                        <a class="panel-block">
+                            <span class="panel-icon">
+                                <i class="fa fas fa-times" @click="DeleteItem(element.id)"></i>
+                                <i class="fa fas fa-pen" @click="EditItem(element)"></i>
+                            </span>
+                            {{element.nav}}
+                        </a>
                 </div>
-            <button slot="footer" @click="addPeople">Add</button>
-        </draggable>
+                <button slot="footer" @click="AddItem(NewItem)">Add</button>
+            </draggable>
+        </nav>
+
     </div>
 </template>
 
+<style lang="scss" scoped>
+.draggable-item{
+    padding:10px 20px;
+    border:2px solid #cfcfcf;
+}
+</style>
+
 <script>
 import draggable from 'vuedraggable';
+import modal from '../comman/modal';
 
 export default {
 
@@ -36,10 +54,11 @@ export default {
 
     data(){
         return{
+            deleteItem:false,
+            deleteItemId:-1,
             Name:'',
             NewItem:{
-                Title:"",
-                URL:"",
+                nav:"",
             },
             Items:[],
         }
@@ -52,11 +71,23 @@ export default {
     methods:{
         AddItem:function(Item){
             let vm=this;
+            Item.id = vm.Items.length
             vm.Items.push(Item);
             vm.NewItem = {
-                Title:"",
-                URL:"",
+                nav:"",
             }
+        },
+
+        DeleteItem:function(id){
+            let vm = this;
+            alert("delete modal should be visible.")
+            vm.deleteItem = true;
+            vm.deleteItemId = id;
+        },
+
+        clicked:function(id){
+            alert('you got it')
+            vm.Items.splice(id,1)
         }
     }
 
