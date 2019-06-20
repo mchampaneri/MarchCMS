@@ -1,48 +1,67 @@
 <template>
     <div>
         <div class="field">
-             <div class="control">
-                 <label for="">Menu Name</label>
-                 <input type="text" v-model="Name" placeholder="Menu name">
+            <div class="field">
+              <div class="control">
+                <input class="input" type="text"
+                v-model="MenuName" placeholder="Menu Name">
+              </div>
             </div>
         </div>
         <div>
-            <input type="text" v-model="NewItem.nav" placeholder="Title">
-            <button type="button" @click="AddItem(NewItem)">Add Item</button>
+         <div class="field">
+            <div class="control">
+                <input class="input" type="text"
+                v-model="NewItem.Name" placeholder="Menu Title">
+            </div>
+        </div>
+        <div class="field">
+            <div class="control">
+                <input class="input" type="text"
+                v-model="NewItem.URL" placeholder="Menu URL">
+            </div>
+        </div>
+        <button type="button" class="button is-normal" @click="AddItem(NewItem)">Add Item</button>
         </div>
         <modal v-if="deleteItem" modal_title="Are you sure?" @clicked="clicked(deleteItemId)">
-            <p> Delete item from menu list.</p>
-            <p> Action is irreversible.</p>
+            <p>Delete item from menu list.</p>
+            <p>Action is irreversible.</p>
         </modal>
         <nav class="panel">
-            <p class="panel-heading">
-                Sample Menu
+            <p class="panel-heading">{{MenuName}}
             </p>
             <draggable v-model="Items" >
                 <div v-for="element in Items" :key="element.id" class="draggable-item">
-                        <a class="panel-block">
-                            <span class="panel-icon">
-                                <i class="fa fas fa-times" @click="DeleteItem(element.id)"></i>
-                                <i class="fa fas fa-pen" @click="EditItem(element)"></i>
-                            </span>
-                            {{element.nav}}
-                        </a>
+                    <div>
+                        <div class="field">
+                            <div class="control">
+                                <input class="input" type="text"
+                                v-model="element.Item.Name" placeholder="Menu Title">
+                            </div>
+                        </div>
+                         <div class="field">
+                            <div class="control">
+                                <input class="input" type="text"
+                                v-model="element.Item.URL" placeholder="Menu URL">
+                            </div>
+                        </div>
+                    </div>
                 </div>
-                <button slot="footer" @click="AddItem(NewItem)">Add</button>
             </draggable>
         </nav>
-
     </div>
 </template>
 
 <style lang="scss" scoped>
-.draggable-item{
-    padding:10px 20px;
-    border:2px solid #cfcfcf;
-}
+    .draggable-item{
+        padding:10px 20px;
+        border:2px solid #cfcfcf;
+        margin: 5px;
+    }
 </style>
 
 <script>
+
 import draggable from 'vuedraggable';
 import modal from '../comman/modal';
 
@@ -54,12 +73,10 @@ export default {
 
     data(){
         return{
+            MenuName:"",
             deleteItem:false,
             deleteItemId:-1,
-            Name:'',
-            NewItem:{
-                nav:"",
-            },
+            NewItem:{Name:"",URL:""},
             Items:[],
         }
     },
@@ -70,12 +87,15 @@ export default {
 
     methods:{
         AddItem:function(Item){
+            console.log(Item)
             let vm=this;
-            Item.id = vm.Items.length
-            vm.Items.push(Item);
-            vm.NewItem = {
-                nav:"",
-            }
+            vm.Items.push(
+                {
+                    Item:{"Name":Item.Name,"URL":Item.URL},
+                    id: vm.Items.length
+                }
+            );
+            vm.NewItem = {Name:"",URL:""};
         },
 
         DeleteItem:function(id){
