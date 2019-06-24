@@ -2,27 +2,6 @@ package main
 
 import "time"
 
-type RpcExtension struct {
-	Name    string `json:"Name"`
-	Address string `json:"Address"`
-	Status  string `json:"Status"`
-	Author  string `json:"Author"`
-	Desc    string `json:"Desc"`
-	Website string `json:"Website"`
-	Licence string `json:"Licence"`
-}
-
-type Response struct {
-	Output string
-	Type   string
-	Status string
-}
-
-type Request struct {
-	Type  string
-	Input map[string]interface{}
-}
-
 // Config holds global configurations
 // of cms
 type Config struct {
@@ -67,15 +46,16 @@ type MarchPageContent struct {
 
 // MarchMenu holds content for navigation menu
 type MarchMenu struct {
-	Index uint64          `json:"Index" storm:"id,increment"`
+	Slug  string          `json:"Slug"`
 	Name  string          `json:"Name" storm:"unique"`
 	Items []MarchMenuItem `json:"Items`
 }
 
 // MarchMenuItem holds individual menu item for menu
 type MarchMenuItem struct {
-	Title     string `json:"Title"`
-	URL       string `json:"URL"`
-	CSSClass  string `json:"CSSClass"`
-	ElementID string `json:"ElementID"`
+	Slug  string `json:"Slug"`
+	Title string `json:"Title"`
+	URL   string `json:"URL"`
+	// CSSClass  string `json:"CSSClass"`
+	// ElementID string `json:"ElementID"`
 }

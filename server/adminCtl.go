@@ -2,6 +2,7 @@ package main
 
 import (
 	"encoding/json"
+	"fmt"
 	"io"
 	"log"
 	"net/http"
@@ -56,7 +57,41 @@ func adminRoutes(router *mux.Router) {
 
 	router.HandleFunc("/admin/menu/create", func(w http.ResponseWriter, r *http.Request) {
 		if r.Method == "GET" {
-			renderAdmin(w, "page/menu.html", map[string]interface{}{})
+			menus := new([]MarchMenu)
+			if err := db.All(menus); err != nil {
+				renderJSON(w, map[string]interface{}{
+					"error": fmt.Sprint("Could not get all menus ", err.Error()),
+				})
+				return
+			}
+			renderAdmin(w, "page/menu-create.html", map[string]interface{}{
+				"menus": menus,
+			})
+		}
+	})
+
+	router.HandleFunc("/admin/menu/save", func(w http.ResponseWriter, r *http.Request) {
+		if r.Method == "POST" {
+			menu := new(MarchMenu)
+			inputDecoder := json.NewDecoder(r.Body)
+
+			// decoding menu input
+			if err := inputDecoder.Decode(menu); err != nil {
+				renderJSON(w, map[string]interface{}{
+					"error": fmt.Sprint("Error during decoding input :", err.Error()),
+				})
+				return
+			}
+			// Sluggifying menu title and menuItme title
+			menu.Slug = Slugy([]string{menu.Name})
+			for _, menuItem := range menu.Items {
+				menuItem.Slug = Slugy([]string{menuItem.Title})
+			}
+			db.Save(&menu)
+			renderJSON(w, map[string]interface{}{
+				"Succcess": true,
+			},
+			)
 		}
 	})
 

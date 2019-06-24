@@ -34,27 +34,6 @@ func init() {
 		return reflect.ValueOf(AllPages)
 	})
 
-	frontInstance.AddGlobalFunc("CallExtensionMethod", func(a jet.Arguments) reflect.Value {
-		inputString := map[string]interface{}{
-			"stringInput": a.Get(2).String()}
-		request := Request{
-			Type:  "HTML",
-			Input: inputString,
-		}
-		response := new(Response)
-		if extensions[a.Get(0).String()] != nil {
-			if err := extensions[a.Get(0).String()].Call(a.Get(1).String(), request, response); err == nil {
-				return reflect.ValueOf(response)
-			} else {
-				response.Output = fmt.Sprint("Extension Method not found : ", a.Get(0).String())
-				return reflect.ValueOf(response)
-			}
-		} else {
-			response.Output = fmt.Sprint("Extension not found : ", a.Get(0).String())
-			return reflect.ValueOf(response)
-		}
-	})
-
 	////////////// Admin //////////////////
 	adminInstance.AddGlobalFunc("SiteTitle", func(a jet.Arguments) reflect.Value {
 		return reflect.ValueOf(config.Name)
