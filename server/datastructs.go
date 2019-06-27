@@ -46,15 +46,23 @@ type MarchPageContent struct {
 
 // MarchMenu holds content for navigation menu
 type MarchMenu struct {
-	Slug  string          `json:"Slug"`
-	Name  string          `json:"Name" storm:"unique"`
-	Items []MarchMenuItem `json:"Items`
+	ID    int                   `storm:"id,increment"` // primary key
+	Slug  string                `json:"Slug"`
+	Name  string                `json:"menuName" storm:"unique"`
+	Items []*MarchMenuItemIndex `json:"itemList"`
+}
+
+type MarchMenuItemIndex struct {
+	ID    int            `storm:"id,increment"` // primary key
+	Item  *MarchMenuItem `json:"Item"`
+	Index int            `json:"id"`
 }
 
 // MarchMenuItem holds individual menu item for menu
 type MarchMenuItem struct {
-	Slug  string `json:"Slug"`
-	Title string `json:"Title"`
+	ID    int    `storm:"id,increment"` // primary key
+	Slug  string `json:"-"`
+	Title string `json:"Name"`
 	URL   string `json:"URL"`
 	// CSSClass  string `json:"CSSClass"`
 	// ElementID string `json:"ElementID"`

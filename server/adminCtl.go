@@ -72,11 +72,12 @@ func adminRoutes(router *mux.Router) {
 
 	router.HandleFunc("/admin/menu/save", func(w http.ResponseWriter, r *http.Request) {
 		if r.Method == "POST" {
-			menu := new(MarchMenu)
+			menu := MarchMenu{}
 			inputDecoder := json.NewDecoder(r.Body)
+			defer r.Body.Close()
 
 			// decoding menu input
-			if err := inputDecoder.Decode(menu); err != nil {
+			if err := inputDecoder.Decode(&menu); err != nil {
 				renderJSON(w, map[string]interface{}{
 					"error": fmt.Sprint("Error during decoding input :", err.Error()),
 				})
@@ -85,13 +86,16 @@ func adminRoutes(router *mux.Router) {
 			// Sluggifying menu title and menuItme title
 			menu.Slug = Slugy([]string{menu.Name})
 			for _, menuItem := range menu.Items {
-				menuItem.Slug = Slugy([]string{menuItem.Title})
+				menuItem.Item.Slug = Slugy([]string{menuItem.Item.Title})
 			}
-			db.Save(&menu)
-			renderJSON(w, map[string]interface{}{
-				"Succcess": true,
-			},
-			)
+			if err := db.Save(&menu); err != nil {
+				log.Fatal("Faild to save menu :", err.Error())
+			} else {
+				renderJSON(w, map[string]interface{}{
+					"Succcess": true,
+				},
+				)
+			}
 		}
 	})
 
