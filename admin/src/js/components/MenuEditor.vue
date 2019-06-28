@@ -10,7 +10,7 @@
             <div class="field">
               <div class="control">
                 <input class="input" type="text"
-                v-model="MenuName" placeholder="Menu Name">
+                v-model="Name" placeholder="Menu Name">
               </div>
             </div>
             <div class="field">
@@ -35,7 +35,7 @@
             </div>
             <div class="column">
           <div class="panel">
-            <p class="panel-heading">{{MenuName || "Unnamed Menu"}}
+            <p class="panel-heading">{{Name || "Unnamed Menu"}}
             </p>
             <draggable v-model="Items" >
                     <div v-for="element in Items" :key="element.id" class="draggable-item columns">
@@ -87,7 +87,7 @@ export default {
 
     data(){
         return{
-            MenuName:"",
+            Name:"",
             deleteItem:false,
             deleteItemId:-1,
             NewItem:{Name:"",URL:""},
@@ -105,8 +105,8 @@ export default {
             let vm=this;
             // Making save request for menu
             axios.post('/admin/menu/save', {
-                  menuName: vm.MenuName,
-                  itemList: vm.Items
+                  Name: vm.Name,
+                  Items: vm.Items
                 })
                 .then(function (response) {
                   console.log(response);

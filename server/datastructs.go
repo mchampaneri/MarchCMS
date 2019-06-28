@@ -48,14 +48,13 @@ type MarchPageContent struct {
 type MarchMenu struct {
 	ID    int                   `storm:"id,increment"` // primary key
 	Slug  string                `json:"Slug"`
-	Name  string                `json:"menuName" storm:"unique"`
-	Items []*MarchMenuItemIndex `json:"itemList"`
+	Name  string                `json:"Name" storm:"unique"`
+	Items []*MarchMenuItemIndex `json:"Items"`
 }
 
 type MarchMenuItemIndex struct {
-	ID    int            `storm:"id,increment"` // primary key
-	Item  *MarchMenuItem `json:"Item"`
-	Index int            `json:"id"`
+	ID   int            `storm:"id,increment"` // primary key
+	Item *MarchMenuItem `json:"Item"`
 }
 
 // MarchMenuItem holds individual menu item for menu

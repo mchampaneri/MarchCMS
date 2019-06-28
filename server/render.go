@@ -157,7 +157,7 @@ func renderPost(w io.Writer, post MarchPost) {
 }
 
 func renderAdmin(w io.Writer, page string, data map[string]interface{}) {
-	log.Println("Render admin is executing")
+	// log.Println("Render admin is executing")
 	// log.Fatalln(page)
 	if t, err := adminInstance.GetTemplate(page); err == nil {
 		// dataMap := map[string]interface{}{}

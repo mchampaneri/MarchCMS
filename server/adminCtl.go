@@ -51,7 +51,12 @@ func adminRoutes(router *mux.Router) {
 	// Menu management routes
 	router.HandleFunc("/admin/menus/list", func(w http.ResponseWriter, r *http.Request) {
 		if r.Method == "GET" {
-			renderAdmin(w, "page/menus.html", map[string]interface{}{})
+			allMenus := []MarchMenu{}
+			if err := db.All(&allMenus); err == nil {
+				renderAdmin(w, "page/menus.html", map[string]interface{}{
+					"menus": allMenus,
+				})
+			}
 		}
 	})
 
@@ -89,12 +94,15 @@ func adminRoutes(router *mux.Router) {
 				menuItem.Item.Slug = Slugy([]string{menuItem.Item.Title})
 			}
 			if err := db.Save(&menu); err != nil {
-				log.Fatal("Faild to save menu :", err.Error())
+				log.Println("Faild to save menu :", err.Error())
+				renderJSON(w, map[string]interface{}{
+					"Error": err.Error(),
+				})
 			} else {
+				log.Println("Menu saved succesfully - ", menu)
 				renderJSON(w, map[string]interface{}{
 					"Succcess": true,
-				},
-				)
+				})
 			}
 		}
 	})
