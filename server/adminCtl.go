@@ -8,6 +8,7 @@ import (
 	"net/http"
 	"os"
 	"path/filepath"
+	"strconv"
 	"time"
 
 	"github.com/gorilla/mux"
@@ -69,7 +70,7 @@ func adminRoutes(router *mux.Router) {
 				})
 				return
 			}
-			renderAdmin(w, "page/menu-create.html", map[string]interface{}{
+			renderAdmin(w, "page/menu-editor.html", map[string]interface{}{
 				"menus": menus,
 			})
 		}
@@ -80,7 +81,6 @@ func adminRoutes(router *mux.Router) {
 			menu := MarchMenu{}
 			inputDecoder := json.NewDecoder(r.Body)
 			defer r.Body.Close()
-
 			// decoding menu input
 			if err := inputDecoder.Decode(&menu); err != nil {
 				renderJSON(w, map[string]interface{}{
@@ -107,9 +107,29 @@ func adminRoutes(router *mux.Router) {
 		}
 	})
 
-	router.HandleFunc("/admin/menu/edit", func(w http.ResponseWriter, r *http.Request) {
+	router.HandleFunc("/admin/menu/{ID}/edit", func(w http.ResponseWriter, r *http.Request) {
 		if r.Method == "GET" {
-			renderAdmin(w, "page/menu.html", map[string]interface{}{})
+			vars := mux.Vars(r)
+			if _menuID, _conErr := strconv.Atoi(vars["ID"]); _conErr == nil {
+				if r.Header.Get("X-Requested-With") == "XMLHttpRequest" {
+					_menu := MarchMenu{}
+					if err := db.One("ID", _menuID, &_menu); err == nil {
+						renderJSON(w, map[string]MarchMenu{
+							"menu": _menu,
+						})
+					} else {
+						renderJSON(w, map[string]string{
+							"error": err.Error(),
+						})
+					}
+				} else {
+					renderAdmin(w, "page/menu-editor.html", map[string]interface{}{
+						"ID": _menuID,
+					})
+				}
+			} else {
+				fmt.Fprintln(w, "Wrong URL ", _conErr.Error())
+			}
 		}
 	})
 

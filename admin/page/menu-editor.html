@@ -18,9 +18,15 @@
             </div>
         </div>
         <div style="clear:both"></div>
+        {{ if isset(.ID) }}
+        <div>
+            <menu-editor id="{{.ID}}"></menu-editor>
+        </div>
+        {{ else }}
         <div>
             <menu-editor></menu-editor>
         </div>
+        {{ end }}
       </div>
   </section>
 

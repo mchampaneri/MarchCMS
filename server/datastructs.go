@@ -2,8 +2,7 @@ package main
 
 import "time"
 
-// Config holds global configurations
-// of cms
+// Config holds global configurations of cms
 type Config struct {
 	ID       string `json:"id"`
 	Address  string `json:"Address"`
@@ -46,20 +45,21 @@ type MarchPageContent struct {
 
 // MarchMenu holds content for navigation menu
 type MarchMenu struct {
-	ID    int                   `storm:"id,increment"` // primary key
+	ID    int                   `json:"ID" storm:"id,increment"` // primary key
 	Slug  string                `json:"Slug"`
 	Name  string                `json:"Name" storm:"unique"`
 	Items []*MarchMenuItemIndex `json:"Items"`
 }
 
+// MarchMenuItemIndex holds content for navigation menu
 type MarchMenuItemIndex struct {
-	ID   int            `storm:"id,increment"` // primary key
+	ID   int            `json:"ID" storm:"id,increment"` // primary key
 	Item *MarchMenuItem `json:"Item"`
 }
 
 // MarchMenuItem holds individual menu item for menu
 type MarchMenuItem struct {
-	ID    int    `storm:"id,increment"` // primary key
+	ID    int    `json:"ID" storm:"id,increment"` // primary key
 	Slug  string `json:"-"`
 	Title string `json:"Name"`
 	URL   string `json:"URL"`
