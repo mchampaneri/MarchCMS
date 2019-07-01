@@ -19,5 +19,5 @@ func getAvailablePort() (port int, err error) {
 // Slugy takes arry of string as input and makes
 // slug for it by replaceing any blank space to dash
 func Slugy(inputs []string) string {
-	return strings.TrimSpace(strings.ToLower(strings.Join(inputs, "-")))
+	return strings.Replace(strings.ToLower(strings.Join(inputs, "-")), " ", "", -1)
 }

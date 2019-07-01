@@ -3,9 +3,11 @@ package main
 
 import (
 	"encoding/json"
+	"io"
 	"log"
 	"net/http"
 	"os"
+	"path/filepath"
 
 	"github.com/gorilla/mux"
 )
@@ -59,7 +61,19 @@ func serveWeb(address string) {
 	router := mux.NewRouter()
 	log.Println("Listening on ", address)
 
-	//MarchPages resource routes
+	// assets routes
+	router.HandleFunc("/asset/uploaded/{asset}", func(w http.ResponseWriter, r *http.Request) {
+		vars := mux.Vars(r)
+		requestedAssetName := vars["asset"]
+		if file, err := os.Open(filepath.Join(assetFolder, requestedAssetName)); err == nil {
+			io.Copy(w, file)
+		} else {
+			renderJSON(w, map[string]string{"error": "Could not find asset"})
+		}
+
+	})
+
+	// marchPages resource routes
 	router.PathPrefix("/sl-res/").
 		Handler(http.StripPrefix("/sl-res/",
 			http.FileServer(http.Dir("./admin/public"))))

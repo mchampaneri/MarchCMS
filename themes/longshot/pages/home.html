@@ -4,7 +4,11 @@
     </head>
     <body>
         <div class="container">
-            <h4>Always left </h4>
+            {{ range Item := Menu("topnav").Items}}
+                <li>
+                    {{ Item.Item.Title }}
+                </li>
+            {{ end }}
         </div>
     </body>
 </html>

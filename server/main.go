@@ -24,6 +24,7 @@ var extensions = make(map[string]*rpc.Client)
 // // Folder Paths
 var themesFolder = filepath.Join(root, "themes")
 var adminFolder = filepath.Join(root, "admin")
+var assetFolder = filepath.Join(root, "assets")
 // var extensionFolder = filepath.Join(root, "extensions")
 
 func main() {

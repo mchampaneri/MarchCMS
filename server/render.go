@@ -34,6 +34,17 @@ func init() {
 		return reflect.ValueOf(AllPages)
 	})
 
+	frontInstance.AddGlobalFunc("Menu", func(a jet.Arguments) reflect.Value {
+		_menu := MarchMenu{}
+		input := a.Get(0).String()
+
+		if err := db.One("Slug", input, &_menu); err == nil {
+			return reflect.ValueOf(_menu)
+		} else {
+			log.Fatal(err.Error())
+			return reflect.ValueOf("-")
+		}
+	})
 	////////////// Admin //////////////////
 	adminInstance.AddGlobalFunc("SiteTitle", func(a jet.Arguments) reflect.Value {
 		return reflect.ValueOf(config.Name)
@@ -42,19 +53,6 @@ func init() {
 	adminInstance.AddGlobalFunc("ActiveTheme", func(a jet.Arguments) reflect.Value {
 		return reflect.ValueOf(config.Theme)
 	})
-
-	// adminInstance.AddGlobalFunc("PluginMenu", func(a jet.Arguments) reflect.Value {
-
-	// 	menus := make([]string, 1, 10)
-	// 	for _, extension := range extensions {
-	// 		request := Request{}
-	// 		response := new(Response)
-	// 		if err := extension.Call("Admin.HookInMenu", request, response); err == nil {
-	// 			menus = append(menus, response.Output)
-	// 		}
-	// 	}
-	// 	return reflect.ValueOf(menus)
-	// })
 
 	adminInstance.AddGlobalFunc("PageTemplates", func(a jet.Arguments) reflect.Value {
 		// Read Pages templates
@@ -92,26 +90,6 @@ func init() {
 		}
 		return reflect.ValueOf(nil)
 	})
-
-	// adminInstance.AddGlobalFunc("AvailableExtensions", func(a jet.Arguments) reflect.Value {
-	// 	// Read Pages templates
-	// 	templates := make([]RpcExtension, 0, 10)
-	// 	if fileInfo, err := ioutil.ReadDir(filepath.Join(root, "extensions")); err == nil {
-	// 		for _, file := range fileInfo {
-	// 			configFile := filepath.Join(extensionFolder, file.Name(), "config.json")
-	// 			readFile, err := os.Open(configFile)
-	// 			if err != nil {
-	// 				log.Fatalln(err.Error())
-	// 			}
-	// 			var extensionConfig RpcExtension
-	// 			configDecoder := json.NewDecoder(readFile)
-	// 			configDecoder.Decode(&extensionConfig)
-	// 			templates = append(templates, extensionConfig)
-	// 		}
-	// 		return reflect.ValueOf(templates)
-	// 	}
-	// 	return reflect.ValueOf(nil)
-	// })
 
 }
 

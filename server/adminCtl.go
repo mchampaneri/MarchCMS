@@ -175,17 +175,13 @@ func adminRoutes(router *mux.Router) {
 
 	router.HandleFunc("/admin/page/{id}/edit", func(w http.ResponseWriter, r *http.Request) {
 		param := mux.Vars(r)
-
 		MarchPage := MarchPage{}
 		if err := db.One("PageNumber", param["id"], &MarchPage); err == nil {
-
 			if r.Method == "GET" {
 				renderAdmin(w, "page/page-edit.html", map[string]interface{}{
 					"page": MarchPage,
 				})
-				return
 			} else {
-
 				var requestData struct {
 					Desc, HTML, Keywords, PageTitle, PageURL, PageTemplate string
 				}
@@ -202,7 +198,6 @@ func adminRoutes(router *mux.Router) {
 				db.Save(&MarchPage)
 				return
 			}
-
 		} else {
 			log.Fatalln("couldn not get page for corrsponding route")
 		}
