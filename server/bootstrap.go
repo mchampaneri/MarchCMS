@@ -70,7 +70,6 @@ func serveWeb(address string) {
 		} else {
 			renderJSON(w, map[string]string{"error": "Could not find asset"})
 		}
-
 	})
 
 	// marchPages resource routes

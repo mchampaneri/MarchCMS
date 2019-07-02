@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"io"
+	"io/ioutil"
 	"log"
 	"net/http"
 	"os"
@@ -35,7 +36,24 @@ func adminRoutes(router *mux.Router) {
 		renderAdmin(w, "page/dashboard.html", map[string]interface{}{})
 	})
 
-	// Settings Route
+	// assets
+	router.HandleFunc("/admin/assets", func(w http.ResponseWriter, r *http.Request) {
+		dataMap := make(map[string]interface{})
+		// fetching all files from assets folder
+		files, err := ioutil.ReadDir(assetFolder)
+		if err != nil {
+			log.Fatal(err)
+		}
+
+		for _, f := range files {
+			dataMap[f.Name()] = struct{size int64, url string}{f.Size(),
+				fmt.Sprintf("/assets/uploaded/%s",f.Name())
+			}
+		}
+		renderAdmin(w, "page/assets.html", dataMap)
+	})
+
+	// settings
 	router.HandleFunc("/admin/settings", func(w http.ResponseWriter, r *http.Request) {
 		renderAdmin(w, "page/settings.html", map[string]interface{}{})
 	})
