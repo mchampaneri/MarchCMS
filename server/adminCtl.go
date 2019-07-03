@@ -10,6 +10,7 @@ import (
 	"os"
 	"path/filepath"
 	"strconv"
+	"strings"
 	"time"
 
 	"github.com/gorilla/mux"
@@ -39,6 +40,10 @@ func adminRoutes(router *mux.Router) {
 	// assets
 	router.HandleFunc("/admin/assets", func(w http.ResponseWriter, r *http.Request) {
 		dataMap := make(map[string]interface{})
+
+		docMap := make(map[string]interface{})
+		imgMap := make(map[string]interface{})
+		vidMap := make(map[string]interface{})
 		// fetching all files from assets folder
 		files, err := ioutil.ReadDir(assetFolder)
 		if err != nil {
@@ -46,11 +51,70 @@ func adminRoutes(router *mux.Router) {
 		}
 
 		for _, f := range files {
-			dataMap[f.Name()] = struct{size int64, url string}{f.Size(),
-				fmt.Sprintf("/assets/uploaded/%s",f.Name())
+			splits := strings.Split(f.Name(), ".")
+
+			switch splits[len(splits)-1] {
+			case "png", "jpg", "gif":
+				{
+					{
+						imgMap[f.Name()] = struct {
+							size int64
+							url  string
+						}{
+							f.Size(),
+							fmt.Sprintf("/asset/uploaded/%s", f.Name()),
+						}
+					}
+				}
+
+			case "mp4", "avi":
+				{
+					vidMap[f.Name()] = struct {
+						size int64
+						url  string
+					}{
+						f.Size(),
+						fmt.Sprintf("/asset/uploaded/%s", f.Name()),
+					}
+				}
+
+			default:
+				{
+					docMap[f.Name()] = struct {
+						size int64
+						url  string
+					}{
+						f.Size(),
+						fmt.Sprintf("/asset/uploaded/%s", f.Name()),
+					}
+				}
 			}
+
 		}
+		dataMap["docs"] = docMap
+		dataMap["imgs"] = imgMap
+		dataMap["vids"] = vidMap
+
 		renderAdmin(w, "page/assets.html", dataMap)
+	})
+
+	// assets upload handle
+	router.HandleFunc("/asset/upload/file", func(w http.ResponseWriter, r *http.Request) {
+		r.ParseMultipartForm(32 << 20)
+		file, handler, err := r.FormFile("file")
+		if err != nil {
+			fmt.Println(err)
+			return
+		}
+		defer file.Close()
+		fmt.Fprintf(w, "%v", handler.Header)
+		f, err := os.OpenFile("./assets/"+handler.Filename, os.O_WRONLY|os.O_CREATE, 0666)
+		if err != nil {
+			fmt.Println(err)
+			return
+		}
+		defer f.Close()
+		io.Copy(f, file)
 	})
 
 	// settings

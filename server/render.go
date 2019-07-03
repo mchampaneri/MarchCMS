@@ -24,6 +24,11 @@ func init() {
 	adminInstance.SetDevelopmentMode(true)
 
 	/////////////// Front ///////////////
+
+	frontInstance.AddGlobalFunc("SiteAddress", func(a jet.Arguments) reflect.Value {
+		return reflect.ValueOf(config.Address)
+	})
+
 	frontInstance.AddGlobalFunc("SiteTitle", func(a jet.Arguments) reflect.Value {
 		return reflect.ValueOf(config.Name)
 	})
@@ -46,6 +51,10 @@ func init() {
 		}
 	})
 	////////////// Admin //////////////////
+	adminInstance.AddGlobalFunc("SiteAddress", func(a jet.Arguments) reflect.Value {
+		return reflect.ValueOf(config.Address)
+	})
+
 	adminInstance.AddGlobalFunc("SiteTitle", func(a jet.Arguments) reflect.Value {
 		return reflect.ValueOf(config.Name)
 	})

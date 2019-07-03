@@ -8,7 +8,71 @@
 {{ end }}
 
 {{ block body() }}
-{{ . }}
+<div class="section">
+    <div class="container box">
+            <div>
+                <div>
+                    <assets-editor></assets-editor>
+                </div>
+            </div>
+            <div style="clear:both"></div>
+            <hr>
+
+            <div class="card section" >
+                    <header class="card-header">
+                      <p class="card-header-title">
+                        Files
+                      </p>
+                    </header>
+                    <div class="card-content">
+                            <table class="table is-fullwidth">
+                                    <thead>
+                                        <tr>
+                                            <th>File</th>
+                                            <th>URL</th>
+                                            <th>Size</th>
+                                            <th>Action</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {{ range  key, value := .docs }}
+                                        <tr>
+                                            <td>{{ key }}</td>
+                                            <td><a href="http://{{SiteAddress()}}{{ value.url }}" target="_blank">{{ value.url }}</a></td>
+                                            <td>{{ value.size }}</td>
+                                            <td>-</td>
+                                        </tr>
+                                        {{ end  }}
+                                    </tbody>
+                                </table>
+                    </div>
+            </div>
+
+            <div class="card section">
+                    <header class="card-header">
+                      <p class="card-header-title">
+                        Images
+                      </p>
+                    </header>
+                    <div class="card-content">
+                       <div class="columns">
+                        {{ range key, img := .imgs}}
+                        <div class="column is-3">
+                            <figure class="image is-128x128">
+                                <img
+                                src="http://{{SiteAddress()}}{{img.url}}">
+                            </figure>
+                        </div>
+                       {{ end}}
+                    </div>
+                    </div>
+            </div>
+    </div>
+
+
+
+</div>
+
 {{ end }}
 
 {{ block pagePostLoad() }}
