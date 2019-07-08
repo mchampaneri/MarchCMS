@@ -102,7 +102,7 @@ func init() {
 
 }
 
-func renderPage(w io.Writer, page MarchPage) {
+func renderPage(w io.Writer, r *http.Request, page MarchPage) {
 	var pageTemplate = "index.html"
 	if page.PageTemplate != "" && page.PageTemplate != "-" {
 		pageTemplate = filepath.Join(".", "pages", page.PageTemplate)
@@ -119,12 +119,13 @@ func renderPage(w io.Writer, page MarchPage) {
 
 	output := blackfriday.Run([]byte(page.Content.HTML))
 	dataMap["output"] = output
+	dataMap["requestURL"] = r.RequestURI
 	if err = t.Execute(w, nil, dataMap); err != nil {
 		log.Fatalf(" - respnose-generator.go  View  : %s", err.Error())
 	}
 }
 
-func renderPost(w io.Writer, post MarchPost) {
+func renderPost(w io.Writer, r *http.Request, post MarchPost) {
 	var pageTemplate = "index.html"
 	if post.PageTemplate != "" && post.PageTemplate != "-" {
 		pageTemplate = filepath.Join(".", "posts", post.PageTemplate)
@@ -138,17 +139,19 @@ func renderPost(w io.Writer, post MarchPost) {
 	}
 	output := blackfriday.Run([]byte(post.Content.HTML))
 	dataMap["output"] = output
+	dataMap["requestURL"] = r.RequestURI
 	if err = t.Execute(w, nil, dataMap); err != nil {
 		log.Fatalf(" - respnose-generator.go  View  : %s", err.Error())
 	}
 }
 
-func renderAdmin(w io.Writer, page string, data map[string]interface{}) {
+func renderAdmin(w io.Writer, r *http.Request, page string, dataMap map[string]interface{}) {
 	// log.Println("Render admin is executing")
 	// log.Fatalln(page)
 	if t, err := adminInstance.GetTemplate(page); err == nil {
 		// dataMap := map[string]interface{}{}s
-		if err := t.Execute(w, nil, data); err != nil {
+		dataMap["requestURL"] = r.RequestURI
+		if err := t.Execute(w, nil, dataMap); err != nil {
 			log.Fatalf(" - respnose-generator.go  View  : %s", err.Error())
 		}
 	}

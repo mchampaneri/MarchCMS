@@ -34,7 +34,7 @@ func adminRoutes(router *mux.Router) {
 
 	// dashboard
 	router.HandleFunc("/admin/dashboard", func(w http.ResponseWriter, r *http.Request) {
-		renderAdmin(w, "page/dashboard.html", map[string]interface{}{})
+		renderAdmin(w, r, "page/dashboard.html", map[string]interface{}{})
 	})
 
 	// assets
@@ -99,7 +99,7 @@ func adminRoutes(router *mux.Router) {
 		dataMap["imgs"] = imgMap
 		dataMap["vids"] = vidMap
 
-		renderAdmin(w, "page/assets.html", dataMap)
+		renderAdmin(w, r, "page/assets.html", dataMap)
 	})
 
 	// assets upload handle
@@ -135,7 +135,7 @@ func adminRoutes(router *mux.Router) {
 
 	// settings
 	router.HandleFunc("/admin/settings", func(w http.ResponseWriter, r *http.Request) {
-		renderAdmin(w, "page/settings.html", map[string]interface{}{})
+		renderAdmin(w, r, "page/settings.html", map[string]interface{}{})
 	})
 
 	router.HandleFunc("/admin/set-theme/{theme-folder-name}", func(w http.ResponseWriter, r *http.Request) {
@@ -144,7 +144,7 @@ func adminRoutes(router *mux.Router) {
 		if err := db.Save(&config); err != nil {
 			log.Fatalln("Failed to update theme ", err.Error())
 		}
-		renderAdmin(w, "page/settings.html", map[string]interface{}{})
+		renderAdmin(w, r, "page/settings.html", map[string]interface{}{})
 	})
 
 	// Menu management routes
@@ -152,7 +152,7 @@ func adminRoutes(router *mux.Router) {
 		if r.Method == "GET" {
 			allMenus := []MarchMenu{}
 			if err := db.All(&allMenus); err == nil {
-				renderAdmin(w, "page/menus.html", map[string]interface{}{
+				renderAdmin(w, r, "page/menus.html", map[string]interface{}{
 					"menus": allMenus,
 				})
 			}
@@ -168,7 +168,7 @@ func adminRoutes(router *mux.Router) {
 				})
 				return
 			}
-			renderAdmin(w, "page/menu-editor.html", map[string]interface{}{
+			renderAdmin(w, r, "page/menu-editor.html", map[string]interface{}{
 				"menus": menus,
 			})
 		}
@@ -221,7 +221,7 @@ func adminRoutes(router *mux.Router) {
 						})
 					}
 				} else {
-					renderAdmin(w, "page/menu-editor.html", map[string]interface{}{
+					renderAdmin(w, r, "page/menu-editor.html", map[string]interface{}{
 						"ID": _menuID,
 					})
 				}
@@ -234,7 +234,7 @@ func adminRoutes(router *mux.Router) {
 	// Page managemnt routes
 	router.HandleFunc("/admin/page/create", func(w http.ResponseWriter, r *http.Request) {
 		if r.Method == "GET" {
-			renderAdmin(w, "page/page-create.html", map[string]interface{}{})
+			renderAdmin(w, r, "page/page-create.html", map[string]interface{}{})
 		} else if r.Method == "POST" {
 
 			var requestData struct {
@@ -276,7 +276,7 @@ func adminRoutes(router *mux.Router) {
 		MarchPage := MarchPage{}
 		if err := db.One("PageNumber", param["id"], &MarchPage); err == nil {
 			if r.Method == "GET" {
-				renderAdmin(w, "page/page-edit.html", map[string]interface{}{
+				renderAdmin(w, r, "page/page-edit.html", map[string]interface{}{
 					"page": MarchPage,
 				})
 			} else {
@@ -322,7 +322,7 @@ func adminRoutes(router *mux.Router) {
 		if err := db.All(&pages); err != nil {
 			log.Fatalln("failed to load routes : ", err.Error())
 		} else {
-			renderAdmin(w, "page/pages.html", map[string]interface{}{
+			renderAdmin(w, r, "page/pages.html", map[string]interface{}{
 				"pages": pages,
 			})
 		}
@@ -331,7 +331,7 @@ func adminRoutes(router *mux.Router) {
 	// Post managemnt routes
 	router.HandleFunc("/admin/post/create", func(w http.ResponseWriter, r *http.Request) {
 		if r.Method == "GET" {
-			renderAdmin(w, "page/post-create.html", map[string]interface{}{})
+			renderAdmin(w, r, "page/post-create.html", map[string]interface{}{})
 		} else if r.Method == "POST" {
 
 			var requestData struct {
@@ -375,7 +375,7 @@ func adminRoutes(router *mux.Router) {
 		if err := db.One("PageNumber", param["id"], &MarchPost); err == nil {
 
 			if r.Method == "GET" {
-				renderAdmin(w, "page/post-edit.html", map[string]interface{}{
+				renderAdmin(w, r, "page/post-edit.html", map[string]interface{}{
 					"post": MarchPost,
 				})
 				return
@@ -427,7 +427,7 @@ func adminRoutes(router *mux.Router) {
 		if err := db.All(&posts); err != nil {
 			log.Fatalln("failed to load routes : ", err.Error())
 		} else {
-			renderAdmin(w, "page/posts.html", map[string]interface{}{
+			renderAdmin(w, r, "page/posts.html", map[string]interface{}{
 				"posts": posts,
 			})
 		}
@@ -435,7 +435,7 @@ func adminRoutes(router *mux.Router) {
 
 	// main route
 	router.HandleFunc("/admin", func(w http.ResponseWriter, r *http.Request) {
-		renderAdmin(w, "page/index.html", map[string]interface{}{})
+		renderAdmin(w, r, "page/index.html", map[string]interface{}{})
 	})
 
 }

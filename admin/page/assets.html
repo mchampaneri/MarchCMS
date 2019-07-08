@@ -23,7 +23,7 @@
             </ul>
         </div>
 
-        {{ if 1 == 0}}
+
         <div class="card section">
             <header class="card-header">
                 <p class="card-header-title">
@@ -54,7 +54,14 @@
                 </table>
             </div>
         </div>
-        {{ end }}
+
+        {{if hasSuffix(.requestURL, "images") }}
+            <p> Suffix Images found</p>
+        {{ else if  hasSuffix(.requestURL, "documents")}}
+            <p> Suffix documents found </p>
+        {{ else }}
+            <p> No valid  suffix found </p>
+        {{ end}}
         <div class="columns is-multiline">
             {{ range key, img := .imgs}}
             <div class="column is-3">
