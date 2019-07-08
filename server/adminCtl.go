@@ -38,13 +38,14 @@ func adminRoutes(router *mux.Router) {
 	})
 
 	// assets
-	router.HandleFunc("/admin/assets", func(w http.ResponseWriter, r *http.Request) {
+	router.HandleFunc("/admin/assets/{type}", func(w http.ResponseWriter, r *http.Request) {
 		dataMap := make(map[string]interface{})
 
 		docMap := make(map[string]interface{})
 		imgMap := make(map[string]interface{})
 		vidMap := make(map[string]interface{})
 		// fetching all files from assets folder
+
 		files, err := ioutil.ReadDir(assetFolder)
 		if err != nil {
 			log.Fatal(err)

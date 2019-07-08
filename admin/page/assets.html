@@ -8,65 +8,82 @@
 {{ end }}
 
 {{ block body() }}
-<div class="section">
+<div class="section container">
+    <div>
+        <assets-editor></assets-editor>
+    </div>
+    <br>
+    <br>
+    <div style="clear:both"></div>
     <div class="container box">
-            <div>
-                <div>
-                    <assets-editor></assets-editor>
-                </div>
-            </div>
-            <div style="clear:both"></div>
-            <hr>
+        <div class="tabs">
+            <ul>
+                <li class="is-active"><a>Images</a></li>
+                <li><a>Documents</a></li>
+            </ul>
+        </div>
 
-            <div class="card section" >
-                    <header class="card-header">
-                      <p class="card-header-title">
-                        Files
-                      </p>
-                    </header>
-                    <div class="card-content">
-                            <table class="table is-fullwidth">
-                                    <thead>
-                                        <tr>
-                                            <th>File</th>
-                                            <th>URL</th>
-                                            <th>Size</th>
-                                            <th>Action</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        {{ range  key, value := .docs }}
-                                        <tr>
-                                            <td>{{ key }}</td>
-                                            <td><a href="http://{{SiteAddress()}}{{ value.url }}" target="_blank">{{ value.url }}</a></td>
-                                            <td>{{ value.size }}</td>
-                                            <td>-</td>
-                                        </tr>
-                                        {{ end  }}
-                                    </tbody>
-                                </table>
-                    </div>
+        {{ if 1 == 0}}
+        <div class="card section">
+            <header class="card-header">
+                <p class="card-header-title">
+                    Files
+                </p>
+            </header>
+            <div class="card-content">
+                <table class="table is-fullwidth">
+                    <thead>
+                        <tr>
+                            <th>File</th>
+                            <th>URL</th>
+                            <th>Size</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {{ range  key, value := .docs }}
+                        <tr>
+                            <td>{{ key }}</td>
+                            <td><a href="http://{{SiteAddress()}}{{ value.url }}" target="_blank">{{ value.url }}</a>
+                            </td>
+                            <td>{{ value.size }}</td>
+                            <td>-</td>
+                        </tr>
+                        {{ end  }}
+                    </tbody>
+                </table>
             </div>
-
-            <div class="card section">
-                    <header class="card-header">
-                      <p class="card-header-title">
-                        Images
-                      </p>
-                    </header>
-                    <div class="card-content">
-                       <div class="columns">
-                        {{ range key, img := .imgs}}
-                        <div class="column is-3">
-                            <figure class="image is-128x128">
-                                <img
-                                src="http://{{SiteAddress()}}{{img.url}}">
-                            </figure>
+        </div>
+        {{ end }}
+        <div class="columns is-multiline">
+            {{ range key, img := .imgs}}
+            <div class="column is-3">
+                <div class="card" style="max-height: 200px; overflow-y:hidden">
+                    <div class="card-footer">
+                        <div style="padding: 5px 25px; width: 100%;">
+                            <span class="icon has-background-warning">
+                                <i class="fa fa-1x fas fa-link  has-text-link "></i>
+                            </span>
+                            <span class="icon has-background-warning">
+                                <i class="fa fa-1x fas fa-eye  has-text-link "></i>
+                            </span>
+                            <span class="icon is-pulled-right ">
+                                <i class="fa fa-1x fas fa-trash  has-text-danger"></i>
+                            </span>
+                            <div style="clear:both"></div>
                         </div>
-                       {{ end}}
                     </div>
+                    <div class="card-content">
+                        <figure class="image is-256X256">
+                            <img src="http://{{SiteAddress()}}{{img.url}}">
+                        </figure>
                     </div>
+                </div>
+
             </div>
+            {{ end}}
+        </div>
+
     </div>
 
 
