@@ -147,7 +147,7 @@ func renderAdmin(w io.Writer, page string, data map[string]interface{}) {
 	// log.Println("Render admin is executing")
 	// log.Fatalln(page)
 	if t, err := adminInstance.GetTemplate(page); err == nil {
-		// dataMap := map[string]interface{}{}
+		// dataMap := map[string]interface{}{}s
 		if err := t.Execute(w, nil, data); err != nil {
 			log.Fatalf(" - respnose-generator.go  View  : %s", err.Error())
 		}

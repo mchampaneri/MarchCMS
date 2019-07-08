@@ -38,15 +38,18 @@ func adminRoutes(router *mux.Router) {
 	})
 
 	// assets
-	router.HandleFunc("/admin/assets/{type}", func(w http.ResponseWriter, r *http.Request) {
+	router.HandleFunc("/admin/assets/{ofType}", func(w http.ResponseWriter, r *http.Request) {
+		param := mux.Vars(r)
+		ofType := param["ofType"]
+
 		dataMap := make(map[string]interface{})
 
 		docMap := make(map[string]interface{})
 		imgMap := make(map[string]interface{})
 		vidMap := make(map[string]interface{})
 		// fetching all files from assets folder
-
-		files, err := ioutil.ReadDir(assetFolder)
+		readFolder := filepath.Join(assetFolder, ofType)
+		files, err := ioutil.ReadDir(readFolder)
 		if err != nil {
 			log.Fatal(err)
 		}
@@ -63,7 +66,7 @@ func adminRoutes(router *mux.Router) {
 							url  string
 						}{
 							f.Size(),
-							fmt.Sprintf("/asset/uploaded/%s", f.Name()),
+							fmt.Sprintf("/asset/uploaded/images/%s", f.Name()),
 						}
 					}
 				}
@@ -109,7 +112,19 @@ func adminRoutes(router *mux.Router) {
 		}
 		defer file.Close()
 		fmt.Fprintf(w, "%v", handler.Header)
-		f, err := os.OpenFile("./assets/"+handler.Filename, os.O_WRONLY|os.O_CREATE, 0666)
+
+		splits := strings.Split(handler.Filename, ".")
+
+		storeAt := filepath.Join(assetFolder, "documents", handler.Filename)
+		switch splits[len(splits)-1] {
+		case "png", "jpg", "gif":
+			storeAt = filepath.Join(assetFolder, "images", handler.Filename)
+		case "mp4", "avi":
+			storeAt = filepath.Join(assetFolder, "videos", handler.Filename)
+		default:
+		}
+
+		f, err := os.OpenFile(storeAt, os.O_WRONLY|os.O_CREATE, 0666)
 		if err != nil {
 			fmt.Println(err)
 			return

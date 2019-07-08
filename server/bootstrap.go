@@ -62,10 +62,11 @@ func serveWeb(address string) {
 	log.Println("Listening on ", address)
 
 	// assets routes
-	router.HandleFunc("/asset/uploaded/{asset}", func(w http.ResponseWriter, r *http.Request) {
+	router.HandleFunc("/asset/uploaded/{ofType}/{asset}", func(w http.ResponseWriter, r *http.Request) {
 		vars := mux.Vars(r)
+		ofType := vars["ofType"]
 		requestedAssetName := vars["asset"]
-		if file, err := os.Open(filepath.Join(assetFolder, requestedAssetName)); err == nil {
+		if file, err := os.Open(filepath.Join(assetFolder, ofType, requestedAssetName)); err == nil {
 			io.Copy(w, file)
 		} else {
 			renderJSON(w, map[string]string{"error": "Could not find asset"})
