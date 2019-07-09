@@ -18,79 +18,30 @@
     <div class="container box">
         <div class="tabs">
             <ul>
-                <li class="is-active"><a>Images</a></li>
-                <li><a>Documents</a></li>
+                <li {{if hasSuffix(.requestURL, "images") }} class="is-active" {{ end }}><a
+                        href="/admin/assets/images">Images</a></li>
+                <li {{if hasSuffix(.requestURL, "documents") }} class="is-active" {{ end }}><a
+                        href="/admin/assets/documents">Documents</a></li>
             </ul>
         </div>
 
-
-        <div class="card section">
-            <header class="card-header">
-                <p class="card-header-title">
-                    Files
-                </p>
-            </header>
-            <div class="card-content">
-                <table class="table is-fullwidth">
-                    <thead>
-                        <tr>
-                            <th>File</th>
-                            <th>URL</th>
-                            <th>Size</th>
-                            <th>Action</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {{ range  key, value := .docs }}
-                        <tr>
-                            <td>{{ key }}</td>
-                            <td><a href="http://{{SiteAddress()}}{{ value.url }}" target="_blank">{{ value.url }}</a>
-                            </td>
-                            <td>{{ value.size }}</td>
-                            <td>-</td>
-                        </tr>
-                        {{ end  }}
-                    </tbody>
-                </table>
-            </div>
-        </div>
-
         {{if hasSuffix(.requestURL, "images") }}
-            <p> Suffix Images found</p>
-        {{ else if  hasSuffix(.requestURL, "documents")}}
-            <p> Suffix documents found </p>
-        {{ else }}
-            <p> No valid  suffix found </p>
-        {{ end}}
         <div class="columns is-multiline">
             {{ range key, img := .imgs}}
-            <div class="column is-3">
-                <div class="card" style="max-height: 200px; overflow-y:hidden">
-                    <div class="card-footer">
-                        <div style="padding: 5px 25px; width: 100%;">
-                            <span class="icon has-background-warning">
-                                <i class="fa fa-1x fas fa-link  has-text-link "></i>
-                            </span>
-                            <span class="icon has-background-warning">
-                                <i class="fa fa-1x fas fa-eye  has-text-link "></i>
-                            </span>
-                            <span class="icon is-pulled-right ">
-                                <i class="fa fa-1x fas fa-trash  has-text-danger"></i>
-                            </span>
-                            <div style="clear:both"></div>
-                        </div>
-                    </div>
-                    <div class="card-content">
-                        <figure class="image is-256X256">
-                            <img src="http://{{SiteAddress()}}{{img.url}}">
-                        </figure>
-                    </div>
-                </div>
-
-            </div>
+            <assets-image delete-url="http://{{SiteAddress()}}/delete{{img.url}}"
+                view-url="http://{{SiteAddress()}}{{img.url}}" name="{{key}}">
+            </assets-image>
             {{ end}}
         </div>
-
+        {{ else if  hasSuffix(.requestURL, "documents")}}
+        <div class="columns is-multiline">
+            {{ range  key, value := .docs }}
+            <assets-document delete-url="http://{{SiteAddress()}}/delete{{value.url}}"
+                view-url="http://{{SiteAddress()}}{{value.url}}" name="{{key}}">
+            </assets-document>
+            {{ end  }}
+        </div>
+        {{ end}}
     </div>
 
 

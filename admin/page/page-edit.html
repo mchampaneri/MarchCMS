@@ -17,10 +17,10 @@
                  oPageURL="{{.page.PageURL}}"
                   oDesc="{{.page.Content.Desc}}"
                    oKeywords="{{.page.Content.Keywords}}"
-                    oHTML="{{.page.Content.HTML|raw}}"
-                    pagetemplate="{{.page.PageTemplate}}"
-                    :pagetemplates ='{{PageTemplates()| writeJson}}'
-                     oPageNumber="{{.page.PageNumber}}"></page-editor>
+                   pagetemplate="{{.page.PageTemplate}}"
+                   :pagetemplates ='{{PageTemplates()| writeJson}}'
+                   oPageNumber="{{.page.PageNumber}}"
+                   oHTML="{{.page.Content.HTML|safeHtml}}"></page-editor>
         </div>
     </div>
 </section>

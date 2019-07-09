@@ -21,6 +21,10 @@ Vue.component("PageEditor",require("./components/PageEditor.vue"))
 Vue.component("PostEditor",require("./components/PostEditor.vue"))
 Vue.component("MenuEditor",require("./components/MenuEditor.vue"))
 Vue.component("AssetsEditor",require("./components/AssetsEditor.vue"))
+
+Vue.component("AssetsImage",require("./components/AssetsImage.vue"))
+Vue.component("AssetsDocument",require("./components/AssetsDocument.vue"))
+
 const app = new Vue({
     el: '#app'
 });

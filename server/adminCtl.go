@@ -78,7 +78,7 @@ func adminRoutes(router *mux.Router) {
 						url  string
 					}{
 						f.Size(),
-						fmt.Sprintf("/asset/uploaded/%s", f.Name()),
+						fmt.Sprintf("/asset/uploaded/videos/%s", f.Name()),
 					}
 				}
 
@@ -89,7 +89,7 @@ func adminRoutes(router *mux.Router) {
 						url  string
 					}{
 						f.Size(),
-						fmt.Sprintf("/asset/uploaded/%s", f.Name()),
+						fmt.Sprintf("/asset/uploaded/documents/%s", f.Name()),
 					}
 				}
 			}
@@ -131,6 +131,18 @@ func adminRoutes(router *mux.Router) {
 		}
 		defer f.Close()
 		io.Copy(f, file)
+	})
+
+	// asset delete handle
+	router.HandleFunc("/delete/asset/uploaded/{ofType}/{asset}", func(w http.ResponseWriter, r *http.Request) {
+		vars := mux.Vars(r)
+		ofType := vars["ofType"]
+		requestedAssetName := vars["asset"]
+		if err := os.Remove(filepath.Join(assetFolder, ofType, requestedAssetName)); err == nil {
+			renderJSON(w, map[string]string{"error": "requested asset removed"})
+		} else {
+			renderJSON(w, map[string]string{"error": "Could not delete asset"})
+		}
 	})
 
 	// settings

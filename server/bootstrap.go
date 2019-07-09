@@ -9,6 +9,7 @@ import (
 	"os"
 	"path/filepath"
 
+	"github.com/gorilla/handlers"
 	"github.com/gorilla/mux"
 )
 
@@ -94,7 +95,7 @@ func serveWeb(address string) {
 		log.Println("PageURL for page ", r.URL.Path)
 		if err := db.One("PageURL", r.URL.Path, &marchPost); err == nil {
 			log.Println("PageURL for page ", r.URL.Path)
-			renderPost(w,r, marchPost)
+			renderPost(w, r, marchPost)
 		} else {
 			log.Println("could not fetch route ", r.URL.Path)
 		}
@@ -149,13 +150,19 @@ func serveWeb(address string) {
 		log.Println("PageURL for page ", r.URL.Path)
 		if err := db.One("PageURL", r.URL.Path, &marchPage); err == nil {
 			log.Println("PageURL for page ", r.URL.Path)
-			renderPage(w,r, marchPage)
+			renderPage(w, r, marchPage)
 		} else {
-			renderPage(w,r, MarchPage{PageTemplate: "404.html"})
+			renderPage(w, r, MarchPage{PageTemplate: "404.html"})
 		}
 	})
 
-	if httpErr := http.ListenAndServe(address, router); httpErr != nil {
+	headersOk := handlers.AllowedHeaders([]string{"X-Requested-With"})
+	originsOk := handlers.AllowedOrigins([]string{"*"})
+	methodsOk := handlers.AllowedMethods([]string{"GET", "HEAD", "POST", "PUT", "OPTIONS"})
+
+	corsRouter := handlers.CORS(headersOk, originsOk, methodsOk)(router)
+
+	if httpErr := http.ListenAndServe(address, corsRouter); httpErr != nil {
 		log.Fatalf("Failed to start web service : %s", httpErr.Error())
 	} else {
 		log.Println("Web service loaded ")
