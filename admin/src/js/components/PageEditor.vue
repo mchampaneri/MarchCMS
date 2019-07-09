@@ -1,59 +1,94 @@
 <template>
     <div>
-        <div class="field">
-            <div class="control">
-                 <label class="label">Page Title</label>
-                <input class="input is-medium" type="text"
-                v-model="PageTitle"
-                placeholder="Page Title">
-            </div>
-        </div>
-        <div class="field">
-             <div class="control">
-                  <label class="label">Page URL</label>
-                <input class="input is-medium" type="text"
-                v-model="PageURL"
-                placeholder="Page URL">
-            </div>
-        </div>
-        <div class="field">
-             <div class="control">
-                <label class="label">Page Description</label>
-                <input class="input is-medium" type="text"
-                v-model="Desc"
-                placeholder="Page Description">
-            </div>
-        </div>
-        <div class="field">
-             <div class="control">
-                <label class="label">Page keywords </label>
-                <input class="input is-medium" type="text"
-                v-model="Keywords"
-                placeholder="Page Keywords">
-            </div>
-        </div>
-        <div class="field">
-             <div class="control">
-                <label class="label">Page Template</label>
-                <select  v-model="PageTemplate">
-                    <option v-bind:value="template" v-bind:key="i" v-for="(template,i) in PageTemplates">
-                            {{ template }}
-                    </option>
-                </select>
-            </div>
-        </div>
 
-       <div class="field">
-                <label class="label">Content ( in markdown )</label>
+        <div>
+            <div class="field is-grouped is-pulled-right" >
                 <div class="control">
-                <textarea class="textarea"
-                v-model="HTML"
-                placeholder="Textarea"></textarea>
+                    <div class="select">
+                        <select v-model="stage" @click="checkStatus" >
+                            <option value="meta">Page Meta</option>
+                            <option value="content" :disabled="blockEditor">Page Content</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="control">
+                    <button class="button is-primary is-pulled-right" @click="SavePage()"> <i class="fa fas fa-save"></i> &nbsp Save</button>
+                </div>
             </div>
+            <div style="clear:both"></div>
         </div>
 
-        <div class="control">
-            <button class="button is-link" @click="SavePage()">Save</button>
+        <div v-if="blockEditor" class="notification is-warning">
+          <button class="delete"></button>
+          Please fill all page meta info before writing content
+        </div>
+
+        <div  v-if="fillMeta">
+            <h4 class="title is-4"> Page Meta Information </h4>
+            <div class="columns is-multiline">
+                <div class="column is-6">
+                <div class="field">
+                    <div class="control">
+                         <label class="label">Page Title</label>
+                        <input class="input is-medium" type="text"
+                        v-model="PageTitle"
+                        placeholder="Page Title">
+                    </div>
+                </div>
+                </div>
+                <div class="column is-6">
+                <div class="field">
+                    <div class="control">
+                        <label class="label">Page URL</label>
+                        <input class="input is-medium" type="text"
+                        v-model="PageURL"
+                        placeholder="Page URL">
+                    </div>
+                </div>
+                </div>
+                <div class="column is-6">
+                <div class="field">
+                     <div class="control">
+                        <label class="label">Page Description</label>
+                        <input class="input is-medium" type="text"
+                        v-model="Desc"
+                        placeholder="Page Description">
+                    </div>
+                </div>
+                </div>
+                <div class="column is-6">
+                <div class="field">
+                     <div class="control">
+                        <label class="label">Page keywords </label>
+                        <input class="input is-medium" type="text"
+                        v-model="Keywords"
+                        placeholder="Page Keywords">
+                    </div>
+                </div>
+                </div>
+                <div class="column is-6">
+                <label  class="label">Page Template</label>
+                <div class="field">
+                    <div class="control">
+                        <div class="select">
+                            <select  v-model="PageTemplate" >
+                                <option v-bind:value="template" v-bind:key="i" v-for="(template,i) in PageTemplates">
+                                        {{ template }}
+                                </option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                </div>
+            </div>
+            </div>
+            <div v-if="!fillMeta" class="field">
+            <h4 class="title is-4"> Page Content ( Markdown ) </h4>
+                <div class="control">
+                    <textarea class="textarea"
+                    v-model="HTML"
+                    placeholder="Textarea"></textarea>
+                </div>
         </div>
     </div>
 </template>
@@ -84,6 +119,10 @@ export default{
 
 data(){
         return{
+            blockEditor:true,
+            fillMeta: true,
+            stage:'meta',
+
             HTML:"",
             PageTitle:"",
             PageURL:"",
@@ -131,6 +170,15 @@ data(){
                      console.log(error);
                  });
             }
+        },
+
+        checkStatus(){
+            let vm =this;
+            if (vm.PageTitle != "" &&
+                vm.PageURL != "" &&
+                vm.PageTemplate != ""){
+                    vm.blockEditor = false;
+                }
         }
     },
 
