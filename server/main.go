@@ -7,6 +7,7 @@ import (
 	"path/filepath"
 
 	"github.com/asdine/storm"
+	"github.com/gorilla/sessions"
 	uuid "github.com/satori/go.uuid"
 )
 
@@ -20,11 +21,13 @@ var root, _ = os.Getwd()
 
 // Extension Handles
 var extensions = make(map[string]*rpc.Client)
+var UserSession = sessions.NewCookieStore([]byte("xf7KylXJ7CFSH4mLZG2Wyl86HAB9Rqvn"))
 
 // // Folder Paths
 var themesFolder = filepath.Join(root, "themes")
 var adminFolder = filepath.Join(root, "admin")
 var assetFolder = filepath.Join(root, "assets")
+
 // var extensionFolder = filepath.Join(root, "extensions")
 
 func main() {

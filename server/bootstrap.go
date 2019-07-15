@@ -101,47 +101,6 @@ func serveWeb(address string) {
 		}
 	})
 
-	// router.HandleFunc(`/extension`, func(w http.ResponseWriter, r *http.Request) {
-	// 	gob.Register(url.Values{})
-	// 	switch r.Header.Get("Content-type") {
-	// 	case "application/x-www-form-urlencoded":
-	// 		{
-	// 			resp := new(Response)
-	// 			if err := r.ParseForm(); err == nil {
-	// 				if err := extensions[r.FormValue("extname")].Call(r.FormValue("extmethod"),
-	// 					Request{Input: map[string]interface{}{"form": r.Form},
-	// 						Type: "HTML"},
-	// 					resp); err == nil {
-	// 					log.Println(resp.Output)
-	// 					http.Redirect(w, r, r.FormValue("redirectURL"), 301)
-	// 				} else {
-	// 					log.Fatalln("extensin failed to handle :", err.Error())
-	// 				}
-	// 			} else {
-	// 				log.Fatalln("failed to parse form ", err.Error())
-	// 			}
-	// 		}
-	// 	case "application/json":
-	// 		{
-	// 			var requestJSON struct {
-	// 				ResponseType    string
-	// 				Input           string
-	// 				ExtensionName   string
-	// 				ExtensionMethod string
-	// 			}
-	// 			resp := new(Response)
-	// 			requrstDecoder := json.NewDecoder(r.Body)
-	// 			if err := requrstDecoder.Decode(requestJSON); err == nil {
-	// 				extensions[requestJSON.ExtensionName].Call(requestJSON.ExtensionMethod, requestJSON.Input, resp)
-	// 				fmt.Fprintln(w, resp)
-	// 			} else {
-	// 				log.Fatalln("could not decode extension request ", err.Error())
-	// 			}
-	// 		}
-	// 	}
-
-	// })
-
 	// Handling pages
 	router.HandleFunc(`/{rest:[a-zA-Z0-9=\-\/]*}`, func(w http.ResponseWriter, r *http.Request) {
 		var marchPage MarchPage

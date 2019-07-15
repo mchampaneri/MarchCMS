@@ -66,3 +66,18 @@ type MarchMenuItem struct {
 	// CSSClass  string `json:"CSSClass"`
 	// ElementID string `json:"ElementID"`
 }
+
+// MarchUser holds user information and session details
+type MarchUser struct {
+	ID        int            `json:"ID" storm:"id,increment"` // primary key
+	Name      string         `json:"Name"`
+	SmallDesc string         `json:"SmallDesc"`
+	Extra     MarchUserExtra `json:-`
+}
+
+// MarchUser extra holds extra information about user
+type MarchUserExtra struct {
+	Website     string `json:"Website"`
+	Email       string `json:"Email"`
+	Achivements string `json:Achivements`
+}

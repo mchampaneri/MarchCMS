@@ -19,6 +19,10 @@ import (
 
 func adminRoutes(router *mux.Router) {
 
+	router.HandleFunc("/login", func(w http.ResponseWriter, r *http.Request) {
+		renderAdmin(w, r, "page/login.html", map[string]interface{}{})
+	})
+
 	// restricted asset routes
 	router.HandleFunc("/admin/themes-thumb/{theme-name}/thumb.png",
 		func(w http.ResponseWriter, r *http.Request) {
