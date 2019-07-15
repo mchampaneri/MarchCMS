@@ -1,30 +1,36 @@
 <template>
-    <div>
+    <div class="container box">
 
         <div>
             <div class="field is-grouped is-pulled-right" >
                 <div class="control">
-                    <div class="select">
-                        <select v-model="stage" @click="checkStatus" >
-                            <option value="meta">Page Meta</option>
-                            <option value="content" :disabled="blockEditor">Page Content</option>
-                        </select>
-                    </div>
-                </div>
-                <div class="control">
-                    <button class="button is-primary is-pulled-right" @click="SavePage()"> <i class="fa fas fa-save"></i> &nbsp Save</button>
+                    <button class="button is-primary is-pulled-right" v-bind:class="[isSaving ? 'is-loading':'']" @click="SavePage()"> <i class="fa fas fa-save"></i> &nbsp Save</button>
                 </div>
             </div>
             <div style="clear:both"></div>
         </div>
 
-        <div v-if="blockEditor" class="notification is-warning">
-          <button class="delete"></button>
-          Please fill all page meta info before writing content
-        </div>
+     <div class="tabs is-boxed">
+  <ul style="border-bottom-color: #dbdbdb;
+    border-bottom-style: solid;
+    border-bottom-width: 1px;">
+    <li @click="function(){fillMeta = true}" v-bind:class="[fillMeta ? 'is-active'  : '']">
+      <a>
+        <span class="icon is-small"><i class="fas fa-image" aria-hidden="true"></i></span>
+        <span>Meta</span>
+      </a>
+    </li>
+    <li  @click="function(){fillMeta = false}" v-bind:class="[!fillMeta ? 'is-active' : '']">
+      <a>
+        <span class="icon is-small"><i class="fas fa-music" aria-hidden="true"></i></span>
+        <span>Content</span>
+      </a>
+    </li>
+  </ul>
+</div>
 
         <div  v-if="fillMeta">
-            <h4 class="title is-4"> Page Meta Information </h4>
+
             <div class="columns is-multiline">
                 <div class="column is-6">
                 <div class="field">
@@ -82,8 +88,8 @@
                 </div>
             </div>
             </div>
+
             <div v-if="!fillMeta" class="field">
-            <h4 class="title is-4"> Page Content ( Markdown ) </h4>
                 <div class="control">
                     <textarea class="textarea"
                     v-model="HTML"
@@ -122,7 +128,7 @@ data(){
             blockEditor:true,
             fillMeta: true,
             stage:'meta',
-
+            isSaving:false,
             HTML:"",
             PageTitle:"",
             PageURL:"",
@@ -137,7 +143,7 @@ data(){
     methods:{
         SavePage:function(){
             var vm = this;
-
+            vm.isSaving = true;
             if (vm.isedit == 'true'){
                 axios.post('/admin/page/'+vm.PageNumber+'/edit', {
                     'PageTitle':vm.PageTitle,
@@ -149,9 +155,11 @@ data(){
                 })
                 .then(function (response) {
                     console.log(response);
+                    vm.isSaving = false;
                 })
                 .catch(function (error) {
                     console.log(error);
+                    vm.isSaving = false;
                 });
             }else{
                  axios.post('/admin/page/create', {
@@ -165,9 +173,11 @@ data(){
                  .then(function (response) {
                      console.log(response);
                      window.location = "/admin/page/"+response.data.PageNumber+"/edit"
+                     vm.isSaving = false;
                  })
                  .catch(function (error) {
                      console.log(error);
+                     vm.isSaving = false;
                  });
             }
         },
