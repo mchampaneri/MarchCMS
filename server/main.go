@@ -54,6 +54,26 @@ func main() {
 		}
 	}
 
+	// Find and load active config from db
+	// or prepare new one from json
+	AdamUser := MarchUser{
+		Name:      "Adam MarchCMS",
+		Email:     "adam@marchcms.org",
+		SmallDesc: "Adam is root user of MarchCMS",
+		Role:      adminUser,
+		Password:  "adam@1234",
+		Status:    activeAccount,
+	}
+
+	if err := db.One("Email", "adam@marchcms.org", &AdamUser); err != nil {
+		log.Println("Could not get adam user", err.Error())
+		if user, err := AdamUser.RegisterUser(); err != nil {
+			log.Println("Failed to generate Adam User : ", err.Error())
+		} else {
+			log.Println("Adam user is :", user)
+		}
+	}
+
 	// loadExtensions()
 	// loading webservice
 	serveWeb(config.Address) // loading web service

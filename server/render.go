@@ -160,9 +160,7 @@ func renderAdmin(w io.Writer, r *http.Request, page string, dataMap map[string]i
 // JSON Returns the data in form of "JSON" for the incoming
 // request
 func renderJSON(w http.ResponseWriter, data interface{}) {
-	response, err := json.Marshal(data)
-	if err != nil {
-		log.Println("Failed to generate json ")
-	}
-	fmt.Fprint(w, string(response))
+
+	w.Header().Set("Content-Type", "application/json")
+	json.NewEncoder(w).Encode(data)
 }

@@ -20,7 +20,34 @@ import (
 func adminRoutes(router *mux.Router) {
 
 	router.HandleFunc("/login", func(w http.ResponseWriter, r *http.Request) {
-		renderAdmin(w, r, "page/login.html", map[string]interface{}{})
+		if r.Method == "GET" {
+			renderAdmin(w, r, "page/login.html", map[string]interface{}{})
+		} else if r.Method == "POST" {
+			var user MarchUser
+			requestBodyDecoder := json.NewDecoder(r.Body)
+			if err := requestBodyDecoder.Decode(&user); err != nil {
+				log.Println("Failed to decode user data : ", err.Error())
+				renderJSON(w, map[string]string{"error": err.Error()})
+			} else {
+				unhashedPass := user.Password
+				log.Println("decoded user data : ", user)
+				if err := db.One("Email", user.Email, &user); err == nil {
+					user.Password = unhashedPass
+					if ok, user := user.LoginUser(); ok {
+						issueSession(w, r, user)
+						log.Println("session issued for :", user)
+						renderJSON(w, map[string]string{"success": "authentication done"})
+					} else {
+						renderJSON(w, map[string]string{"error": "authentication failed"})
+					}
+				} else {
+					log.Println("could not find user with email:", err)
+					renderJSON(w, map[string]string{"error": "email or password is incorrect"})
+				}
+			}
+		} else {
+			renderJSON(w, map[string]string{"error": "disallowed http request type"})
+		}
 	})
 
 	// restricted asset routes
