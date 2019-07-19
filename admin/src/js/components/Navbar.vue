@@ -61,7 +61,7 @@
                     <a class="navbar-item">
                         Site Settings
                     </a>
-                    <a class="navbar-item">
+                    <a class="navbar-item" href="/signout">
                         SignOut
                     </a>
                 </div>

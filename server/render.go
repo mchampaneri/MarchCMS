@@ -109,7 +109,7 @@ func renderPage(w io.Writer, r *http.Request, page MarchPage) {
 	}
 	t, err := frontInstance.GetTemplate(filepath.Join(config.Theme, pageTemplate))
 	if err != nil {
-		log.Fatalln(pageTemplate, " - ", config.Theme, " - ", err.Error())
+		log.Println(pageTemplate, " - ", config.Theme, " - ", err.Error())
 	}
 
 	dataMap := map[string]interface{}{
@@ -121,7 +121,7 @@ func renderPage(w io.Writer, r *http.Request, page MarchPage) {
 	dataMap["output"] = output
 	dataMap["requestURL"] = r.RequestURI
 	if err = t.Execute(w, nil, dataMap); err != nil {
-		log.Fatalf(" - respnose-generator.go  View  : %s", err.Error())
+		log.Println(" render.go  View  : %s", err.Error())
 	}
 }
 
@@ -132,7 +132,7 @@ func renderPost(w io.Writer, r *http.Request, post MarchPost) {
 	}
 	t, err := frontInstance.GetTemplate(filepath.Join(config.Theme, pageTemplate))
 	if err != nil {
-		log.Fatalln(pageTemplate, " - ", config.Theme, " - ", err.Error())
+		log.Println(pageTemplate, " - ", config.Theme, " - ", err.Error())
 	}
 	dataMap := map[string]interface{}{
 		"Page": post,
@@ -141,7 +141,7 @@ func renderPost(w io.Writer, r *http.Request, post MarchPost) {
 	dataMap["output"] = output
 	dataMap["requestURL"] = r.RequestURI
 	if err = t.Execute(w, nil, dataMap); err != nil {
-		log.Fatalf(" - respnose-generator.go  View  : %s", err.Error())
+		log.Println(" - respnose-generator.go  View  : %s", err.Error())
 	}
 }
 
@@ -152,7 +152,7 @@ func renderAdmin(w io.Writer, r *http.Request, page string, dataMap map[string]i
 		// dataMap := map[string]interface{}{}s
 		dataMap["requestURL"] = r.RequestURI
 		if err := t.Execute(w, nil, dataMap); err != nil {
-			log.Fatalf(" - respnose-generator.go  View  : %s", err.Error())
+			log.Println(" - respnose-generator.go  View  : %s", err.Error())
 		}
 	}
 }

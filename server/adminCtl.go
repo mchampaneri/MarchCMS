@@ -19,6 +19,18 @@ import (
 
 func adminRoutes(router *mux.Router) {
 
+	router.HandleFunc("/signout", func(w http.ResponseWriter, r *http.Request) {
+		session, err := UserSession.Get(r, "mvc-user-session")
+		if err == nil {
+			for k := range session.Values {
+				delete(session.Values, k)
+			}
+			session.Options.MaxAge = -1
+			session.Save(r, w)
+			http.Redirect(w, r, "/", http.StatusMovedPermanently)
+		}
+	})
+
 	router.HandleFunc("/login",
 		func(w http.ResponseWriter, r *http.Request) {
 			if r.Method == "GET" {

@@ -4,8 +4,8 @@ import (
 	"net/http"
 )
 
-/* Creating the Session Singleton that going
-|  to used by the other parts of the app
+/* HTTP route middlewares
+| Works on request level
 */
 
 /* Authenticates the user against the credentials stored
@@ -38,8 +38,9 @@ func author(pass http.HandlerFunc) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		if check(r) == true {
 			session, _ := UserSession.Get(r, "mvc-user-session")
-			if (session.Values["role"] == writerUser) ||
-				(session.Values["role"] == editorUser) {
+			if (session.Values["role"].(int) == writerUser) ||
+				(session.Values["role"].(int) == editorUser) ||
+				(session.Values["role"].(int) == adminUser) {
 				pass(w, r)
 				return
 			}
@@ -47,4 +48,20 @@ func author(pass http.HandlerFunc) http.HandlerFunc {
 		http.Redirect(w, r, r.Referer(), http.StatusUnauthorized)
 		// redirect to login
 	}
+}
+
+/* Operational Middlewares
+| middelware that operates on particular opertaions
+*/
+
+/* Same user middleware to verify that operation is being done
+| by the same user has created the resource
+*/
+func originalWriter(originalWritersID int, r *http.Request) bool {
+	if session, err := UserSession.Get(r, "mvc-user-session"); err == nil {
+		if originalWritersID == session.Values["role"].(int) {
+			return false
+		}
+	}
+	return false
 }
