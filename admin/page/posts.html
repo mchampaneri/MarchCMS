@@ -15,11 +15,13 @@
         <div>
             <div>
               <h4 class="is-size-4 is-pulled-left"> Posts </h4>
-              <a href="/admin/post/create" class="button is-link is-pulled-right"> New Post </a>
+              <a href="/admin/post/create" class="button is-link is-pulled-right"> <i class="fa fa-plus"></i> &nbspNew Post </a>
             </div>
         </div>
         <div style="clear:both"></div>
         <hr>
+        <div class="columns  is-multiline">
+          {{if  len(.posts) > 0 }}
           <table class="table is-striped  is-fullwidth">
 
               <tbody>
@@ -38,6 +40,15 @@
                 {{ end }}
               </tbody>
             </table>
+            {{ else }}
+            <div class="column has-background-grey-lighter is-uppercase has-text-centered"
+                style="padding:40px 0;"
+            >
+              <h1 class="has-text-white"> Add your First Post</h1>
+              <h4 class="has-text-white"> Click New post to create new post </h4>
+            </div>
+            {{ end }}
+        </div>
       </div>
   </section>
 

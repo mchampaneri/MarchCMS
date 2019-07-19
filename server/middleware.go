@@ -30,20 +30,21 @@ func auth(pass http.HandlerFunc) http.HandlerFunc {
 			return
 		}
 		// redirect to login
-		http.Redirect(w, r, "/", http.StatusMovedPermanently)
+		http.Redirect(w, r, "/login", http.StatusMovedPermanently)
 	}
 }
 
-func admin(pass http.HandlerFunc) http.HandlerFunc {
+func author(pass http.HandlerFunc) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		if check(r) == true {
 			session, _ := UserSession.Get(r, "mvc-user-session")
-			if session.Values["role"] == adminUser {
+			if (session.Values["role"] == writerUser) ||
+				(session.Values["role"] == editorUser) {
 				pass(w, r)
 				return
 			}
 		}
+		http.Redirect(w, r, r.Referer(), http.StatusUnauthorized)
 		// redirect to login
-		http.Redirect(w, r, "/", http.StatusMovedPermanently)
 	}
 }

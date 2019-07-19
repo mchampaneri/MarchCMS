@@ -25,6 +25,8 @@ Vue.component("AssetsEditor",require("./components/AssetsEditor.vue"))
 Vue.component("AssetsImage",require("./components/AssetsImage.vue"))
 Vue.component("AssetsDocument",require("./components/AssetsDocument.vue"))
 
+Vue.component("Navbar", require("./components/Navbar.vue"))
+
 Vue.component("Login", require("./components/Login.vue"))
 const app = new Vue({
     el: '#app'

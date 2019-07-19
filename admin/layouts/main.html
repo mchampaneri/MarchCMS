@@ -8,8 +8,8 @@
 </head>
 
 <body class="has-navbar-fixed-top has-background-light">
-    {{ include "./_header.html" }}
     <div id="app">
+    {{ include "./_header.html" }}
         {{ yield body() }}
     </div>
     {{ include "./_footer.html" }}

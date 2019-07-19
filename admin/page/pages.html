@@ -15,13 +15,14 @@
         <div>
             <div>
               <h4 class="is-size-4 is-pulled-left"> Pages</h4>
-              <a href="/admin/page/create" class="button is-link is-pulled-right"> New Page </a>
+              <a href="/admin/page/create" class="button is-link is-pulled-right"> <i class="fa fa-plus"></i> &nbsp New Page </a>
             </div>
         </div>
         <div style="clear:both"></div>
         <hr>
+        <div class="columns  is-multiline">
+        {{if  len(.pages) > 0 }}
           <table class="table is-striped  is-fullwidth">
-
               <tbody>
                   {{ range i , page :=   .pages }}
                   <tr>
@@ -35,9 +36,18 @@
                     </td>
                     <td> {{ page.Co }} <br> <span class="has-text-grey">Created at</span></td>
                   </tr>
-                {{ end }}
+                 {{ end}}
               </tbody>
             </table>
+            {{ else }}
+            <div class="column has-background-grey-lighter is-uppercase has-text-centered"
+                style="padding:40px 0;"
+            >
+              <h1 class="has-text-white"> Add your First Page</h1>
+              <h4 class="has-text-white"> Click New page to create new page </h4>
+            </div>
+            {{ end }}
+        </div>
       </div>
   </section>
 

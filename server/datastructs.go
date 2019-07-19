@@ -29,6 +29,7 @@ type MarchPage struct {
 	Co           time.Time        `json:"Co" storm:"index"`
 	Uo           time.Time        `json:"Uo" storm:"index"`
 	Do           time.Time        `json:"Do" storm:"index"`
+	MarchUserID  int              `json:"UserID" storm:"index"`
 }
 
 // MarchPost is root struct for SlignPages
@@ -41,6 +42,7 @@ type MarchPost struct {
 	Co           time.Time        `json:"Co" storm:"index"`
 	Uo           time.Time        `json:"Uo" storm:"index"`
 	Do           time.Time        `json:"Do" storm:"index"`
+	MarchUserID  int              `json:"UserID" storm:"index"`
 }
 
 // MarchPageContent holds content of the page
