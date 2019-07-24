@@ -256,6 +256,11 @@ func adminRoutes(router *mux.Router) {
 				for _, menuItem := range menu.Items {
 					menuItem.Item.Slug = Slugy([]string{menuItem.Item.Title})
 				}
+
+				// Setting authenticated user as menu creator
+				usession, _ := UserSession.Get(r, "mvc-user-session")
+				menu.MarchUserID = usession.Values["id"].(int)
+				menu.Co = time.Now()
 				if err := db.Save(&menu); err != nil {
 					log.Println("Faild to save menu :", err.Error())
 					renderJSON(w, map[string]interface{}{
@@ -327,7 +332,7 @@ func adminRoutes(router *mux.Router) {
 					}
 					newPage.PageNumber = uuid.String()
 					newPage.Co = time.Now()
-					newPage.Uo = time.Now()
+					// newPage.Uo = time.Now()
 					if err := db.Save(&newPage); err != nil {
 						log.Fatalln("failed to save page : ", err.Error())
 					} else {
@@ -351,8 +356,14 @@ func adminRoutes(router *mux.Router) {
 					var requestData struct {
 						Desc, HTML, Keywords, PageTitle, PageURL, PageTemplate string
 					}
+					if !originalWriter(MarchPage.MarchUserID, r) {
+						log.Println(http.StatusUnauthorized, " page editing blocked.")
+						return
+					}
 					requestDecoder := json.NewDecoder(r.Body)
 					requestDecoder.Decode(&requestData)
+					usession, _ := UserSession.Get(r, "mvc-user-session")
+					MarchPage.UpdaterID = usession.Values["id"].(int)
 					MarchPage.PageTemplate = requestData.PageTemplate
 					MarchPage.PageURL = requestData.PageURL
 					MarchPage.PageNumber = param["id"]
@@ -375,6 +386,9 @@ func adminRoutes(router *mux.Router) {
 			param := mux.Vars(r)
 			MarchPage := MarchPage{}
 			if err := db.One("PageNumber", param["id"], &MarchPage); err == nil {
+				usession, _ := UserSession.Get(r, "mvc-user-session")
+				MarchPage.UpdaterID = usession.Values["id"].(int)
+				MarchPage.Do = time.Now()
 				if err := db.DeleteStruct(&MarchPage); err == nil {
 					http.Redirect(w, r, "/admin/pages/list", 301)
 				} else {
@@ -453,12 +467,17 @@ func adminRoutes(router *mux.Router) {
 					})
 					return
 				} else {
-
+					if !originalWriter(MarchPost.MarchUserID, r) {
+						log.Println(http.StatusUnauthorized, " post editing blocked.")
+						return
+					}
 					var requestData struct {
 						Desc, HTML, Keywords, PageTitle, PageURL, PageTemplate string
 					}
 					requestDecoder := json.NewDecoder(r.Body)
 					requestDecoder.Decode(&requestData)
+					usession, _ := UserSession.Get(r, "mvc-user-session")
+					MarchPost.UpdaterID = usession.Values["id"].(int)
 					MarchPost.PageTemplate = requestData.PageTemplate
 					MarchPost.PageURL = requestData.PageURL
 					MarchPost.PageNumber = param["id"]
@@ -497,6 +516,7 @@ func adminRoutes(router *mux.Router) {
 		}))
 
 	router.HandleFunc("/admin/posts/list",
+
 		auth(func(w http.ResponseWriter, r *http.Request) {
 			var posts []MarchPost
 			if err := db.All(&posts); err != nil {
@@ -508,7 +528,20 @@ func adminRoutes(router *mux.Router) {
 			}
 		}))
 
+	// User management routes
+	router.HandleFunc("/admin/users/list",
+		auth(func(w http.ResponseWriter, r *http.Request) {
+			var users []MarchUser
+			if err := db.All(&users); err != nil {
+				log.Fatalln("failed to load routes : ", err.Error())
+			} else {
+				renderAdmin(w, r, "page/users.html", map[string]interface{}{
+					"users": users,
+				})
+			}
+		}))
 	// main route
+
 	router.HandleFunc("/admin",
 		auth(func(w http.ResponseWriter, r *http.Request) {
 			renderAdmin(w, r, "page/index.html", map[string]interface{}{})

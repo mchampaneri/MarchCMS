@@ -30,6 +30,7 @@ type MarchPage struct {
 	Uo           time.Time        `json:"Uo" storm:"index"`
 	Do           time.Time        `json:"Do" storm:"index"`
 	MarchUserID  int              `json:"UserID" storm:"index"`
+	UpdaterID    int              `json:"UpdaterUserID" storm:"index"`
 }
 
 // MarchPost is root struct for SlignPages
@@ -43,6 +44,7 @@ type MarchPost struct {
 	Uo           time.Time        `json:"Uo" storm:"index"`
 	Do           time.Time        `json:"Do" storm:"index"`
 	MarchUserID  int              `json:"UserID" storm:"index"`
+	UpdaterID    int              `json:"UpdaterUserID" storm:"index"`
 }
 
 // MarchPageContent holds content of the page
@@ -54,10 +56,15 @@ type MarchPageContent struct {
 
 // MarchMenu holds content for navigation menu
 type MarchMenu struct {
-	ID    int                   `json:"ID" storm:"id,increment"` // primary key
-	Slug  string                `json:"Slug"`
-	Name  string                `json:"Name" storm:"unique"`
-	Items []*MarchMenuItemIndex `json:"Items"`
+	ID          int                   `json:"ID" storm:"id,increment"` // primary key
+	Slug        string                `json:"Slug"`
+	Name        string                `json:"Name" storm:"unique"`
+	Items       []*MarchMenuItemIndex `json:"Items"`
+	MarchUserID int                   `json:"UserID" storm:"index"`
+	UpdaterID   int                   `json:"UpdaterUserID" storm:"index"`
+	Co          time.Time             `json:"Co" storm:"index"`
+	Uo          time.Time             `json:"Uo" storm:"index"`
+	Do          time.Time             `json:"Do" storm:"index"`
 }
 
 // MarchMenuItemIndex holds content for navigation menu
@@ -78,15 +85,17 @@ type MarchMenuItem struct {
 
 // MarchUser holds user information and session details
 type MarchUser struct {
-	ID        int            `json:"ID" storm:"id,increment"` // primary key
-	Name      string         `json:"Name"`
-	Email     string         `json:"Email"`
-	Picture   string         `json:"Picture"`
-	SmallDesc string         `json:"SmallDesc"`
-	Password  string         `json:"Password"`
-	Role      int            `json:"Role"`
-	Status    int            `json:"Status"`
-	Extra     MarchUserExtra `json:-`
+	ID          int            `json:"ID" storm:"id,increment"` // primary key
+	Name        string         `json:"Name"`
+	Email       string         `json:"Email"`
+	Picture     string         `json:"Picture"`
+	SmallDesc   string         `json:"SmallDesc"`
+	Password    string         `json:"Password"`
+	Role        int            `json:"Role"`
+	Status      int            `json:"Status"`
+	Extra       MarchUserExtra `json:-`
+	MarchUserID int            `json:"UserID" storm:"index"`
+	UpdaterID   int            `json:"UpdaterUserID" storm:"index"`
 }
 
 // MarchUserExtra holds extra information about user

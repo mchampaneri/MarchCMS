@@ -59,8 +59,8 @@ func author(pass http.HandlerFunc) http.HandlerFunc {
 */
 func originalWriter(originalWritersID int, r *http.Request) bool {
 	if session, err := UserSession.Get(r, "mvc-user-session"); err == nil {
-		if originalWritersID == session.Values["role"].(int) {
-			return false
+		if originalWritersID == session.Values["id"].(int) {
+			return true
 		}
 	}
 	return false

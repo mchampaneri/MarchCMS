@@ -151,6 +151,8 @@ func renderAdmin(w io.Writer, r *http.Request, page string, dataMap map[string]i
 	if t, err := adminInstance.GetTemplate(page); err == nil {
 		// dataMap := map[string]interface{}{}s
 		dataMap["requestURL"] = r.RequestURI
+		usession, _ := UserSession.Get(r, "mvc-user-session")
+		dataMap["authUser"] = usession
 		if err := t.Execute(w, nil, dataMap); err != nil {
 			log.Println(" - respnose-generator.go  View  : %s", err.Error())
 		}

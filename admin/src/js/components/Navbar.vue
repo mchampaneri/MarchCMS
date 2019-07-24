@@ -35,8 +35,12 @@
                 Assests
             </a>
 
+            <a class="navbar-item" href="/admin/users/list">
+                Users
+            </a>
+
             <a class="navbar-item" href="/admin/settings">
-                Settings
+                Settigns
             </a>
 
             <!-- Adminitstaration Menu -->
@@ -51,15 +55,13 @@
                 </a>
 
                 <div class="navbar-dropdown">
+                    <a class="navbar-item">
+                       Hi, &nbsp <b>{{ name }}</b>
+                    </a>
+                    <hr class="navbar-divider">
                     <!-- User & Settings  -->
                     <a class="navbar-item">
-                        Author Profile
-                    </a>
-                    <a class="navbar-item">
-                        Acess Settings
-                    </a>
-                    <a class="navbar-item">
-                        Site Settings
+                        Profile
                     </a>
                     <a class="navbar-item" href="/signout">
                         SignOut
@@ -78,6 +80,8 @@
         mounted(){
             console.log("Navbar moutned")
         },
+
+        props:["name","id","picture"],
 
         data(){
             return{

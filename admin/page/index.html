@@ -8,78 +8,63 @@
 {{ end }}
 
 {{ block body() }}
+<div class="section">
+  <div class="container">
 
+    <div class="box">
+        <div>
+            <div class="card">
+                <header class="card-header">
+                    <p class="card-header-title">
+                     Website details
+                    </p>
+                </header>
+                <div class="card-content">
+                    <div class="field">
+                        <div class="control">
+                            <label for="">Title</label>
+                            <input type="text" class="input">
+                        </div>
+                    </div>
+                    <div class="field">
+                        <div class="control">
+                            <label for="">Logo URL</label>
+                            <input type="text" class="input">
+                        </div>
+                    </div>
+                    <div class="field">
+                        <div class="control">
+                            <label for="">Favicon URL</label>
+                            <input type="text" class="input">
+                        </div>
+                    </div>
+                    <div class="field">
+                        <div class="control">
+                           <button class="button is-primary"><i class="fa fa-save"></i> &nbsp Save</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 
-<section class="hero is-medium is-primary is-bold">
-  <div class="hero-body">
-    <div class="container">
-      <h1 class="title">
-        SlingPages
-      </h1>
-      <h2 class="subtitle">
-        Open sourced content management system ( v 0.1 )
-      </h2>
+    <div class="box">
+      <div class="card">
+        <header class="card-header">
+          <p class="card-header-title">
+            Site Status
+          </p>
+        </header>
+        <div class="card-content">
+            <div class="buttons has-addons">
+                <span class="button">Live</span>
+                <span class="button" disabled ><i class="fa fa-ban"></i>&nbsp Under Maintainace</span>
+              </div>
+        </div>
+      </div>
     </div>
   </div>
-</section>
-<section class="section">
-    <div class="container">
-        <div class="columns">
-          <div class="column">
-              <div class="tile box is-vertical col-4">
-                  <p class="title">Pages Published</p>
-                  <p class="subtitle">1</p>
-              </div>
-          </div>
-          <div class="column">
-              <div class="tile box is-vertical col-4">
-                  <p class="title">Posts Published</p>
-                  <p class="subtitle">1</p>
-              </div>
-          </div>
-          <div class="column">
-              <div class="tile box is-vertical col-4">
-                  <p class="title">Pages Published</p>
-                  <p class="subtitle">1</p>
-              </div>
-          </div>
-        </div>
-
-    </div>
-  </section>
-<section class="section">
-    <div class="container">
-        <div class="columns is-desktop">
-            <div class="column">
-                <div class="notification">
-                    <nav class="panel">
-                        <h4 class="is-size-5 panel-heading">Notifications</h4>
-                        <a class="panel-block is-active">
-                          <span class="panel-icon">
-                            <i class="fas fa-book" aria-hidden="true"></i>
-                          </span>
-                          bulma
-                        </a>
-                      </nav>
-                </div>
-            </div>
-            <div class="column">
-
-                <div class="notification">
-                    <nav class="panel">
-                        <h4 class="is-size-5 panel-heading">News</h4>
-                        <a class="panel-block is-active">
-                          <span class="panel-icon">
-                            <i class="fas fa-book" aria-hidden="true"></i>
-                          </span>
-                          bulma
-                        </a>
-                      </nav>
-                </div>
-            </div>
-          </div>
-      </div>
-</section>
+</div>
 
 {{ end }}
 

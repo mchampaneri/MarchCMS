@@ -1,0 +1,96 @@
+{{extends "./layouts/main.html "}}
+
+{{ block pageTitle() }}
+{{ SiteTitle() }}| Admin
+{{ end }}
+
+{{ block pagePreLoad() }}
+{{ end }}
+
+{{ block body() }}
+
+<section class="section ">
+
+    <div class="container box">
+        <div>
+            <div>
+              <h4 class="is-size-4 is-pulled-left"> Users </h4>
+              <div class="field has-addons  has-addons-right is-pulled-right">
+                  <div class="control">
+                      <span class="select">
+                        <select>
+                          <option value="-" disabled selected> Select Role</option>
+                          <option value="0">Admin</option>
+                          <option value="2">Editor</option>
+                          <option value="3">Writer</option>
+                        </select>
+                      </span>
+                  </div>
+                  <div class="control">
+                    <input class="input" type="text" placeholder="abc@marchcms.org">
+                  </div>
+                  <div class="control">
+                    <a class="button is-info">
+                      <i class="fa fa-envelope"></i> &nbsp Invite
+                    </a>
+                  </div>
+                </div>
+            </div>
+        </div>
+        <div style="clear:both"></div>
+        <hr>
+
+        <div class="columns  is-multiline">
+          {{ range  key , user := .users }}
+
+          <div class="column is-one-third-widescreen">
+          <div class="card ">
+          <header class="card-header">
+            <p class="card-header-title">
+              {{ user.Name }}
+              {{ user.ID }}
+            </p>
+            <a href="/admin/user/{{user.ID}}/edit" class="card-header-icon" aria-label="more options">
+                <span class="icon">
+                  <i class="fa fa-trash has-text-danger" aria-hidden="true"></i>
+                </span>
+              </a>
+          </header>
+          <div class="card-content">
+            <div class="field">
+              <div class="control">
+                  <span class="select">
+                    <select>
+                      <option value="admin" {{ if user.Role == "0"}}"selected" {{end }}>Admin</option>
+                      <option value="editor" {{ if user.Role == "2"}}"selected" {{end }}>Editor</option>
+                      <option value="writer" {{ if user.Role == "3"}}"selected" {{end }}>Writer</option>
+                    </select>
+                  </span>
+              </div>
+            </div>
+            <div class="field">
+              <div class="control">
+                <button class="button is-primary"><i class="fa fa-save"></i> &nbsp Save</button>
+              </div>
+            </div>
+          </div>
+          </div>
+        </div>
+        {{else}}
+            <div class="column has-background-grey-lighter is-uppercase has-text-centered"
+                style="padding:40px 0;"
+            >
+              <h1 class="has-text-white"> Add your First Menu</h1>
+              <h4 class="has-text-white"> Click New menu to create new menu </h4>
+            </div>
+        {{ end}}
+        </div>
+
+      </div>
+
+  </section>
+
+{{ end }}
+
+{{ block pagePostLoad() }}
+{{ end }}
