@@ -1,0 +1,13 @@
+{
+  "Theme":"shortshot",
+  "Menus":[
+      {
+          "Place":"header",
+          "Menu":""
+      },
+      {
+        "Place":"footer",
+        "Menu":""
+    }
+  ]
+}

@@ -40,7 +40,7 @@
             </a>
 
             <a class="navbar-item" href="/admin/settings">
-                Settigns
+                Settings
             </a>
 
             <!-- Adminitstaration Menu -->

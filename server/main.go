@@ -17,6 +17,7 @@ var dbErr error
 
 // CMS wide config
 var config, jsonConfig Config
+var themeConfig, themeJsonConfig ThemeConfig
 var root, _ = os.Getwd()
 
 // Extension Handles
@@ -33,7 +34,7 @@ var assetFolder = filepath.Join(root, "assets")
 func main() {
 
 	// Loading configurations
-	loadConfig(&jsonConfig)
+	loadSiteConfig(&jsonConfig)
 
 	// loadExtensions()
 	// Preapring db
@@ -50,6 +51,22 @@ func main() {
 		} else {
 			if err := db.One("Status", "Active", &config); err != nil {
 				log.Fatalln("Could not save local config", err.Error())
+			}
+		}
+	}
+
+	// Loading config of active theme
+	loadThemeConfig(config.Theme, &themeJsonConfig)
+	// Load theme settings
+	if err := db.One("Theme", config.Theme, &themeConfig); err != nil {
+		idForConfig, _ := uuid.NewV4()
+		themeJsonConfig.ID = idForConfig.String()
+		log.Println("Could not get local theme config", err.Error())
+		if err := db.Save(&themeJsonConfig); err != nil {
+			log.Fatalln("Could not save local theme config", err.Error())
+		} else {
+			if err := db.One("Theme", config.Theme, &themeConfig); err != nil {
+				log.Fatalln("Could not get saved local theme config ", config.Theme, err.Error())
 			}
 		}
 	}

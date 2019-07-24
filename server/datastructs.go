@@ -11,20 +11,36 @@ import (
 
 // Config holds global configurations of cms
 type Config struct {
-	ID       string `json:"id"`
-	Address  string `json:"Address"`
-	Name     string `json:"Name"`
-	Database string `json:"Database"`
-	Theme    string `json:"Theme"`
-	Status   string `json:"Status"`
+	ID         string `json:"id"`
+	Address    string `json:"Address"`
+	Name       string `json:"Name"`
+	Database   string `json:"Database"`
+	Theme      string `json:"Theme"`
+	Status     string `json:"Status"`
+	FaviconURL string `json:"Favicon"`
+	LogoURL    string `json:"LogoURL"`
+}
+
+// ThemeConfig holds configrations for particular theme [ 1 copy per theme]
+type ThemeConfig struct {
+	ID    string       `json:"ID" storm:"id,increment"`
+	Theme string       `json:"Theme"`
+	Menus []*ThemeMenu `json:"Menus"`
+}
+
+// ThemeMenu holds MarchCMS <-> ThemeMenu maps
+type ThemeMenu struct {
+	ID    int    `json:"ID" storm:"id,increment"`
+	Place string `json:"Place"`
+	Menu  string `json:"Menu"`
 }
 
 // MarchPage is root struct for SlignPages
 type MarchPage struct {
+	PageNumber   string           `json:"PageNumber" storm:"id"`
 	PageTemplate string           `json:"PageTemplate"`
 	PageURL      string           `json:"PageURL" storm:"unique"`
 	PageTitle    string           `json:"PageTitle"`
-	PageNumber   string           `json:"PageNumber" storm:"id"`
 	Content      MarchPageContent `json:"PageContent"`
 	Co           time.Time        `json:"Co" storm:"index"`
 	Uo           time.Time        `json:"Uo" storm:"index"`
@@ -35,10 +51,10 @@ type MarchPage struct {
 
 // MarchPost is root struct for SlignPages
 type MarchPost struct {
+	PageNumber   string           `json:"PageNumber" storm:"id"`
 	PageTemplate string           `json:"PageTemplate"`
 	PageURL      string           `json:"PageURL" storm:"unique"`
 	PageTitle    string           `json:"PageTitle"`
-	PageNumber   string           `json:"PageNumber" storm:"id"`
 	Content      MarchPageContent `json:"PageContent"`
 	Co           time.Time        `json:"Co" storm:"index"`
 	Uo           time.Time        `json:"Uo" storm:"index"`
@@ -56,7 +72,7 @@ type MarchPageContent struct {
 
 // MarchMenu holds content for navigation menu
 type MarchMenu struct {
-	ID          int                   `json:"ID" storm:"id,increment"` // primary key
+	ID          int                   `json:"ID" storm:"id,increment"`
 	Slug        string                `json:"Slug"`
 	Name        string                `json:"Name" storm:"unique"`
 	Items       []*MarchMenuItemIndex `json:"Items"`

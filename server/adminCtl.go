@@ -196,7 +196,10 @@ func adminRoutes(router *mux.Router) {
 	// settings
 	router.HandleFunc("/admin/settings",
 		auth(func(w http.ResponseWriter, r *http.Request) {
-			renderAdmin(w, r, "page/settings.html", map[string]interface{}{})
+
+			renderAdmin(w, r, "page/settings.html", map[string]interface{}{
+				"themeConfig": themeConfig,
+			})
 		}))
 
 	router.HandleFunc("/admin/set-theme/{theme-folder-name}",
@@ -544,7 +547,14 @@ func adminRoutes(router *mux.Router) {
 
 	router.HandleFunc("/admin",
 		auth(func(w http.ResponseWriter, r *http.Request) {
-			renderAdmin(w, r, "page/index.html", map[string]interface{}{})
+			config := Config{}
+			if err := db.One("Status", "Active", &config); err == nil {
+				renderAdmin(w, r, "page/index.html", map[string]interface{}{
+					"config": config,
+				})
+			} else {
+				fmt.Fprintln(w, "Oops !")
+			}
 		}))
 
 }

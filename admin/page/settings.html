@@ -11,7 +11,9 @@
 <div class="section">
     <div class="container">
 
-    
+        {{ range .themeConfig.Menus }}
+                {{ .Place }}
+        {{ end }}
 
         <div class="columns">
             <div class="column is-three-quarters">

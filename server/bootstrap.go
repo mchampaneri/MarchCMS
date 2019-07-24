@@ -7,15 +7,30 @@ import (
 	"log"
 	"net/http"
 	"os"
+	"path"
 	"path/filepath"
 
 	"github.com/gorilla/handlers"
 	"github.com/gorilla/mux"
 )
 
-func loadConfig(config *Config) {
+func loadSiteConfig(config *Config) {
 	// Read and load configurtion json
 	if file, fileErr := os.Open("./config.json"); fileErr != nil {
+		log.Fatalf("Could not read ./config.json file : %s \n", fileErr.Error())
+	} else {
+		// Reading json to config variable
+		configDecoder := json.NewDecoder(file)
+		if decodingErr := configDecoder.Decode(config); decodingErr != nil {
+			log.Fatalf("Failed to decode config : %s \n", decodingErr.Error())
+		}
+
+	}
+}
+
+func loadThemeConfig(theme string, config *ThemeConfig) {
+	// Read and load configurtion json
+	if file, fileErr := os.Open(path.Join(themesFolder, theme, "./config.json")); fileErr != nil {
 		log.Fatalf("Could not read ./config.json file : %s \n", fileErr.Error())
 	} else {
 		// Reading json to config variable

@@ -11,6 +11,7 @@
 <div class="section">
   <div class="container">
 
+
     <div class="box">
         <div>
             <div class="card">
@@ -23,19 +24,19 @@
                     <div class="field">
                         <div class="control">
                             <label for="">Title</label>
-                            <input type="text" class="input">
+                            <input type="text" class="input"  value="{{ .config.Name }}">
                         </div>
                     </div>
                     <div class="field">
                         <div class="control">
                             <label for="">Logo URL</label>
-                            <input type="text" class="input">
+                            <input type="text" class="input"  value="{{ .config.LogoURL }}">
                         </div>
                     </div>
                     <div class="field">
                         <div class="control">
                             <label for="">Favicon URL</label>
-                            <input type="text" class="input">
+                            <input type="text" class="input" value="{{ .config.FaviconURL }}">
                         </div>
                     </div>
                     <div class="field">
