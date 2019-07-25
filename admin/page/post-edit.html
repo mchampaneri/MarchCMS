@@ -21,6 +21,9 @@
                    :pagetemplates='{{PostTemplates()| writeJson}}'
                    oPageNumber="{{.post.PageNumber}}"
                    oHTML="{{.post.Content.HTML|safeHtml }}"
+                   oTag1="{{.post.Tag1}}"
+                   oTag2="{{.post.Tag2}}"
+                   oTag3="{{.post.Tag3}}"
                    >
                 </post-editor>
         </div>

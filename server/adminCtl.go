@@ -196,9 +196,36 @@ func adminRoutes(router *mux.Router) {
 	// settings
 	router.HandleFunc("/admin/settings",
 		auth(func(w http.ResponseWriter, r *http.Request) {
-
 			renderAdmin(w, r, "page/settings.html", map[string]interface{}{
 				"themeConfig": themeConfig,
+				"config":      config,
+			})
+		}))
+
+	router.HandleFunc("/admin/theme-settings/set-menu",
+		auth(func(w http.ResponseWriter, r *http.Request) {
+			r.ParseForm()
+
+			FormKeys := r.Form
+
+			var themeMenus []*ThemeMenu
+			for key, value := range FormKeys {
+				themeMenu := &ThemeMenu{
+					Place: key,
+					Menu:  value[0],
+				}
+				log.Println(key, " ", value)
+				themeMenus = append(themeMenus, themeMenu)
+			}
+
+			if err := db.UpdateField(&ThemeConfig{ID: themeConfig.ID}, "Menus", themeMenus); err != nil {
+				log.Println("failed to update menu settings ", err.Error())
+			}
+
+			themeConfig.Menus = themeMenus
+			renderAdmin(w, r, "page/settings.html", map[string]interface{}{
+				"themeConfig": themeConfig,
+				"config":      config,
 			})
 		}))
 
@@ -423,7 +450,7 @@ func adminRoutes(router *mux.Router) {
 			} else if r.Method == "POST" {
 
 				var requestData struct {
-					Desc, HTML, Keywords, PageTitle, PageURL, PageTemplate string
+					Desc, HTML, Keywords, PageTitle, PageURL, PageTemplate, Tag1, Tag2, Tag3 string
 				}
 				requestDecoder := json.NewDecoder(r.Body)
 				requestDecoder.Decode(&requestData)
@@ -437,6 +464,9 @@ func adminRoutes(router *mux.Router) {
 						PageTemplate: requestData.PageTemplate,
 						PageURL:      requestData.PageURL,
 						PageTitle:    requestData.PageTitle,
+						Tag1:         requestData.Tag1,
+						Tag2:         requestData.Tag2,
+						Tag3:         requestData.Tag3,
 						Content: MarchPageContent{
 							Desc:     requestData.Desc,
 							HTML:     requestData.HTML,
@@ -475,13 +505,16 @@ func adminRoutes(router *mux.Router) {
 						return
 					}
 					var requestData struct {
-						Desc, HTML, Keywords, PageTitle, PageURL, PageTemplate string
+						Desc, HTML, Keywords, PageTitle, PageURL, PageTemplate, Tag1, Tag2, Tag3 string
 					}
 					requestDecoder := json.NewDecoder(r.Body)
 					requestDecoder.Decode(&requestData)
 					usession, _ := UserSession.Get(r, "mvc-user-session")
 					MarchPost.UpdaterID = usession.Values["id"].(int)
 					MarchPost.PageTemplate = requestData.PageTemplate
+					MarchPost.Tag1 = requestData.Tag1
+					MarchPost.Tag2 = requestData.Tag2
+					MarchPost.Tag3 = requestData.Tag3
 					MarchPost.PageURL = requestData.PageURL
 					MarchPost.PageNumber = param["id"]
 					MarchPost.PageTitle = requestData.PageTitle
@@ -547,14 +580,9 @@ func adminRoutes(router *mux.Router) {
 
 	router.HandleFunc("/admin",
 		auth(func(w http.ResponseWriter, r *http.Request) {
-			config := Config{}
-			if err := db.One("Status", "Active", &config); err == nil {
-				renderAdmin(w, r, "page/index.html", map[string]interface{}{
-					"config": config,
-				})
-			} else {
-				fmt.Fprintln(w, "Oops !")
-			}
+
+			renderAdmin(w, r, "page/index.html", map[string]interface{}{})
+
 		}))
 
 }

@@ -11,11 +11,86 @@
 <div class="section">
     <div class="container">
 
-        {{ range .themeConfig.Menus }}
-                {{ .Place }}
-        {{ end }}
 
         <div class="columns">
+            <div class="column is-6">
+                <!-- <div class="box"> -->
+                <div>
+                    <div class="card">
+                        <header class="card-header">
+                            <p class="card-header-title">
+                                Website details
+                            </p>
+                        </header>
+                        <div class="card-content">
+                            <div class="field">
+                                <div class="control">
+                                    <label for="" class="label">Title</label>
+                                    <input type="text" class="input" value="{{ .config.Name }}">
+                                </div>
+                            </div>
+                            <div class="field">
+                                <div class="control">
+                                    <label for="" class="label">Logo URL</label>
+                                    <input type="text" class="input" value="{{ .config.LogoURL }}">
+                                </div>
+                            </div>
+                            <div class="field">
+                                <div class="control">
+                                    <label for="" class="label">Favicon URL</label>
+                                    <input type="text" class="input" value="{{ .config.FaviconURL }}">
+                                </div>
+                            </div>
+                            <div class="field is-pulled-right">
+                                <div class="control">
+                                    <button class="button is-primary"><i class="fa fa-save"></i> &nbsp Save</button>
+                                </div>
+                            </div>
+                            <div style="clear:both"></div>
+                        </div>
+                    </div>
+                    <!-- </div> -->
+                </div>
+            </div>
+            <div class="column is-6">
+                <!-- <div class="box"> -->
+                <form action="/admin/theme-settings/set-menu" method="post">
+                    <div class="card">
+                        <div class="card-header">
+                            <p class="card-header-title">Theme Configuration</p>
+                        </div>
+                        <div class="card-content">
+                            <div class="card">
+                                <div class="card-header">
+                                    <p class="card-header-title">Menus</p>
+                                </div>
+                                <div class="card-content">
+                                    {{ range .themeConfig.Menus }}
+                                    <div class="field">
+                                        <div class="control">
+                                            <label for="" class="label">{{ .Place }}</label>
+                                            <input type="text" class="input" value="{{ .Menu }}" name="{{ .Place }}">
+                                        </div>
+                                    </div>
+                                    {{ end }}
+                                    <div class="field">
+                                            <button type="submit" class="button is-primary is-pulled-right"><i class="fa fa-save"></i>&nbsp
+                                             Save</button>
+                                            </div>
+                                            <div style="clear: both"></div>
+                                </div>
+
+
+                            </div>
+
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+
+        <!-- <div class="columns">
             <div class="column is-three-quarters">
                 <h4 class="title">Themes </h4>
             </div>
@@ -33,7 +108,7 @@
                 </div>
             </div>
             {{ end }}
-        </div>
+        </div> -->
     </div>
 </div>
 

@@ -72,7 +72,7 @@
                     </div>
                 </div>
                 </div>
-                <div class="column is-6">
+                <div class="column is-12">
                 <label  class="label">Page Template</label>
                 <div class="field">
                     <div class="control">
@@ -86,7 +86,33 @@
                     </div>
                 </div>
                 </div>
-            </div>
+
+                        <div class="column is-4">
+                            <label for="" class="label">Tag1</label>
+                            <div class="field">
+                                <div class="contro">
+                                    <input type="text" class="input"  v-model="Tag1">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="column is-4">
+                            <label for="" class="label">Tag2</label>
+                            <div class="field">
+                                <div class="contro">
+                                    <input type="text" class="input"  v-model="Tag2">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="column is-4">
+                            <label for="" class="label">Tag3</label>
+                            <div class="field">
+                                <div class="contro">
+                                    <input type="text" class="input"  v-model="Tag3">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
             </div>
 
             <div v-if="!fillMeta" class="field">
@@ -96,7 +122,19 @@
                     placeholder="Textarea"></textarea>
                 </div>
         </div>
+
+        <br>
+          <div>
+            <div class="field is-grouped is-pulled-right" >
+                <div class="control">
+                    <button class="button is-primary is-pulled-right" v-bind:class="[isSaving ? 'is-loading':'']" @click="SavePage()"> <i class="fa fas fa-save"></i> &nbsp Save</button>
+                </div>
+            </div>
+            <div style="clear:both"></div>
+        </div>
     </div>
+
+
 </template>
 
 <script>
@@ -104,7 +142,7 @@
 
 export default{
 
-    props:['isedit','opagetitle','opageurl','odesc','okeywords','ohtml','opagenumber', 'pagetemplates', 'pagetemplate'],
+    props:['isedit','opagetitle','opageurl','odesc','okeywords','ohtml','opagenumber', 'pagetemplates', 'pagetemplate', 'otag1', 'otag2', 'otag3'],
 
 
     mounted(){
@@ -119,12 +157,18 @@ export default{
             vm.Keywords = vm.okeywords
             vm.PageNumber = vm.opagenumber
             vm.PageTemplate = vm.pagetemplate
+            vm.Tag1 = vm.otag1
+            vm.Tag2 = vm.otag2
+            vm.Tag3 = vm.otag3
         }
     },
 
 
 data(){
         return{
+            Tag1:"",
+            Tag2:"",
+            Tag3:"",
             HTML:"",
             PageTitle:"",
             PageURL:"",
@@ -133,7 +177,7 @@ data(){
             PageNumber:"-",
             PageTemplate:"-",
             PageTemplates:"-",
-            fillMeta:false,
+            fillMeta:true,
             isSaving:false,
         }
     },
@@ -150,6 +194,9 @@ data(){
                     'Keywords':vm.Keywords,
                     'HTML':vm.HTML,
                     'PageTemplate':vm.PageTemplate,
+                    'Tag1':vm.Tag1,
+                    'Tag2':vm.Tag2,
+                    'Tag3':vm.Tag3,
                 })
                 .then(function (response) {
                     console.log(response);
@@ -166,7 +213,10 @@ data(){
                      'Desc':vm.Desc,
                      'Keywords':vm.Keywords,
                      'HTML':vm.HTML,
-                       'PageTemplate':vm.PageTemplate,
+                    'PageTemplate':vm.PageTemplate,
+                    'Tag1':vm.Tag1,
+                    'Tag2':vm.Tag2,
+                    'Tag3':vm.Tag3,
                  })
                  .then(function (response) {
                      console.log(response);

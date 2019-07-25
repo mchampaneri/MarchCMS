@@ -59,6 +59,9 @@ type MarchPost struct {
 	Co           time.Time        `json:"Co" storm:"index"`
 	Uo           time.Time        `json:"Uo" storm:"index"`
 	Do           time.Time        `json:"Do" storm:"index"`
+	Tag1         string           `json:"Tag1" storm:"index"`
+	Tag2         string           `json:"Tag2" storm:"index"`
+	Tag3         string           `json:"Tag3" storm:"index"`
 	MarchUserID  int              `json:"UserID" storm:"index"`
 	UpdaterID    int              `json:"UpdaterUserID" storm:"index"`
 }

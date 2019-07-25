@@ -1,0 +1,15 @@
+<html>
+
+<head>
+        <link rel="stylesheet" href="/th-res/css/bootstrap.css">
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+</head>
+
+<body class="has-navbar-fixed-top has-background-light">
+    {{ include "shortshot/pages/partials/navbar.html" }}
+    <div class="container">
+    {{ .output |raw}}
+    </div>
+</body>
+
+</html>

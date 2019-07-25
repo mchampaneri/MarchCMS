@@ -43,12 +43,20 @@ func init() {
 		_menu := MarchMenu{}
 		input := a.Get(0).String()
 
-		if err := db.One("Slug", input, &_menu); err == nil {
-			return reflect.ValueOf(_menu)
-		} else {
-			log.Fatal(err.Error())
-			return reflect.ValueOf("-")
+		for _, menu := range themeConfig.Menus {
+			if menu.Place == input {
+				log.Println("we found menu ", menu.Place)
+				if err := db.One("Slug", menu.Menu, &_menu); err == nil {
+					return reflect.ValueOf(_menu)
+				} else {
+					log.Fatal(err.Error())
+				}
+
+			}
 		}
+
+		return reflect.ValueOf("-")
+
 	})
 	////////////// Admin //////////////////
 	adminInstance.AddGlobalFunc("SiteAddress", func(a jet.Arguments) reflect.Value {
@@ -105,11 +113,12 @@ func init() {
 func renderPage(w io.Writer, r *http.Request, page MarchPage) {
 	var pageTemplate = "index.html"
 	if page.PageTemplate != "" && page.PageTemplate != "-" {
-		pageTemplate = filepath.Join(".", "pages", page.PageTemplate)
+		pageTemplate = filepath.Join(config.Theme, "pages", page.PageTemplate)
 	}
-	t, err := frontInstance.GetTemplate(filepath.Join(config.Theme, pageTemplate))
+	t, err := frontInstance.GetTemplate(pageTemplate)
 	if err != nil {
 		log.Println(pageTemplate, " - ", config.Theme, " - ", err.Error())
+		return
 	}
 
 	dataMap := map[string]interface{}{
@@ -128,7 +137,7 @@ func renderPage(w io.Writer, r *http.Request, page MarchPage) {
 func renderPost(w io.Writer, r *http.Request, post MarchPost) {
 	var pageTemplate = "index.html"
 	if post.PageTemplate != "" && post.PageTemplate != "-" {
-		pageTemplate = filepath.Join(".", "posts", post.PageTemplate)
+		pageTemplate = filepath.Join(config.Theme, "posts", post.PageTemplate)
 	}
 	t, err := frontInstance.GetTemplate(filepath.Join(config.Theme, pageTemplate))
 	if err != nil {
