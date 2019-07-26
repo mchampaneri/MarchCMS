@@ -204,29 +204,24 @@ func adminRoutes(router *mux.Router) {
 
 	router.HandleFunc("/admin/theme-settings/set-menu",
 		auth(func(w http.ResponseWriter, r *http.Request) {
-			r.ParseForm()
+			inputDecoder := json.NewDecoder(r.Body)
+			var menus = struct {
+				themeMenus []ThemeMenu `json:menus`
+			}{}
 
-			FormKeys := r.Form
-
-			var themeMenus []*ThemeMenu
-			for key, value := range FormKeys {
-				themeMenu := &ThemeMenu{
-					Place: key,
-					Menu:  value[0],
-				}
-				log.Println(key, " ", value)
-				themeMenus = append(themeMenus, themeMenu)
+			if err := inputDecoder.Decode(&menus); err != nil {
+				renderJSON(w, map[string]string{"error": err.Error()})
+				return
 			}
+			log.Println(menus.themeMenus)
+			// if err := db.UpdateField(&ThemeConfig{ID: themeConfig.ID}, "Menus", menus.themeMenus); err != nil {
+			// 	log.Println("failed to update menu settings ", err.Error())
+			// 	renderJSON(w, map[string]string{"error": err.Error()})
+			// 	return
+			// }
 
-			if err := db.UpdateField(&ThemeConfig{ID: themeConfig.ID}, "Menus", themeMenus); err != nil {
-				log.Println("failed to update menu settings ", err.Error())
-			}
-
-			themeConfig.Menus = themeMenus
-			renderAdmin(w, r, "page/settings.html", map[string]interface{}{
-				"themeConfig": themeConfig,
-				"config":      config,
-			})
+			// themeConfig.Menus = menus.themeMenus
+			renderJSON(w, map[string]interface{}{"success": themeConfig.Menus})
 		}))
 
 	router.HandleFunc("/admin/set-theme/{theme-folder-name}",

@@ -53,39 +53,7 @@
                 </div>
             </div>
             <div class="column is-6">
-                <!-- <div class="box"> -->
-                <form action="/admin/theme-settings/set-menu" method="post">
-                    <div class="card">
-                        <div class="card-header">
-                            <p class="card-header-title">Theme Configuration</p>
-                        </div>
-                        <div class="card-content">
-                            <div class="card">
-                                <div class="card-header">
-                                    <p class="card-header-title">Menus</p>
-                                </div>
-                                <div class="card-content">
-                                    {{ range .themeConfig.Menus }}
-                                    <div class="field">
-                                        <div class="control">
-                                            <label for="" class="label">{{ .Place }}</label>
-                                            <input type="text" class="input" value="{{ .Menu }}" name="{{ .Place }}">
-                                        </div>
-                                    </div>
-                                    {{ end }}
-                                    <div class="field">
-                                            <button type="submit" class="button is-primary is-pulled-right"><i class="fa fa-save"></i>&nbsp
-                                             Save</button>
-                                            </div>
-                                            <div style="clear: both"></div>
-                                </div>
-
-
-                            </div>
-
-                        </div>
-                    </div>
-                </form>
+                <theme-config menus='{{.themeConfig.Menus |  writeJson}}'></theme-config>
             </div>
         </div>
 
