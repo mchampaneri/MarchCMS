@@ -196,32 +196,7 @@ func adminRoutes(router *mux.Router) {
 	// settings
 	router.HandleFunc("/admin/settings",
 		auth(func(w http.ResponseWriter, r *http.Request) {
-			renderAdmin(w, r, "page/settings.html", map[string]interface{}{
-				"themeConfig": themeConfig,
-				"config":      config,
-			})
-		}))
-
-	router.HandleFunc("/admin/theme-settings/set-menu",
-		auth(func(w http.ResponseWriter, r *http.Request) {
-			inputDecoder := json.NewDecoder(r.Body)
-			var menus = struct {
-				themeMenus []ThemeMenu `json:menus`
-			}{}
-
-			if err := inputDecoder.Decode(&menus); err != nil {
-				renderJSON(w, map[string]string{"error": err.Error()})
-				return
-			}
-			log.Println(menus.themeMenus)
-			// if err := db.UpdateField(&ThemeConfig{ID: themeConfig.ID}, "Menus", menus.themeMenus); err != nil {
-			// 	log.Println("failed to update menu settings ", err.Error())
-			// 	renderJSON(w, map[string]string{"error": err.Error()})
-			// 	return
-			// }
-
-			// themeConfig.Menus = menus.themeMenus
-			renderJSON(w, map[string]interface{}{"success": themeConfig.Menus})
+			renderAdmin(w, r, "page/settings.html", map[string]interface{}{})
 		}))
 
 	router.HandleFunc("/admin/set-theme/{theme-folder-name}",
@@ -298,6 +273,71 @@ func adminRoutes(router *mux.Router) {
 					})
 				}
 			}
+		}))
+
+	router.HandleFunc("/admin/site/settings",
+		auth(func(w http.ResponseWriter, r *http.Request) {
+			if r.Method == "GET" {
+				if r.Header.Get("X-Requested-With") == "XMLHttpRequest" {
+					renderJSON(w, map[string]Config{"config": config})
+					return
+				}
+			} else if r.Method == "POST" {
+				var inputStruct struct {
+					Name       string `json:"Name"`
+					LogoURL    string `json:"LogoURL"`
+					FaviconURL string `json:"FaviconURL"`
+				}
+				// decoding input
+				inputDecoder := json.NewDecoder(r.Body)
+				if err := inputDecoder.Decode(&inputStruct); err == nil {
+
+					if err := db.One("Status", "Active", &config); err == nil {
+						config.Name = inputStruct.Name
+						config.FaviconURL = inputStruct.FaviconURL
+						config.LogoURL = inputStruct.LogoURL
+						if err := db.Save(&config); err != nil {
+							log.Fatalln("failed to save config", err.Error())
+						}
+					} else {
+						log.Fatalln("Could not save local config", err.Error())
+					}
+				} else {
+					log.Fatalln("Failed to decode input", err.Error())
+				}
+			}
+
+		}))
+
+	router.HandleFunc("/admin/theme/settings",
+		auth(func(w http.ResponseWriter, r *http.Request) {
+			if r.Method == "GET" {
+				if r.Header.Get("X-Requested-With") == "XMLHttpRequest" {
+					renderJSON(w, map[string]ThemeConfig{"config": themeConfig})
+					return
+				}
+			} else if r.Method == "POST" {
+				inputDecoder := json.NewDecoder(r.Body)
+				var menus = struct {
+					themeMenus []*ThemeMenu `json:menus`
+				}{}
+
+				if err := inputDecoder.Decode(&menus); err != nil {
+					renderJSON(w, map[string]string{"error": err.Error()})
+					return
+				}
+				log.Println(menus.themeMenus)
+				// if err := db.UpdateField(&ThemeConfig{ID: themeConfig.ID}, "Menus", menus.themeMenus); err != nil {
+				// 	log.Println("failed to update menu settings ", err.Error())
+				// 	renderJSON(w, map[string]string{"error": err.Error()})
+				// 	return
+				// }
+
+				// themeConfig.Menus = menus.themeMenus
+
+				renderJSON(w, map[string]interface{}{"success": themeConfig.Menus})
+			}
+
 		}))
 
 	router.HandleFunc("/admin/menu/{ID}/edit",

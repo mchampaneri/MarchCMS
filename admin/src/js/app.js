@@ -26,7 +26,7 @@ Vue.component("AssetsImage",require("./components/AssetsImage.vue"))
 Vue.component("AssetsDocument",require("./components/AssetsDocument.vue"))
 
 Vue.component("ThemeConfig",require("./components/ThemeConfig.vue"))
-
+Vue.component("SiteConfig",require("./components/SiteConfig.vue"))
 
 Vue.component("Navbar", require("./components/Navbar.vue"))
 

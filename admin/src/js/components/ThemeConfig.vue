@@ -37,12 +37,16 @@
 
 <script>
 export default {
-    props:["menus"],
 
     mounted(){
         var vm = this
-        vm.Menus = JSON.parse(vm.menus)
-        console.log(vm.Menus)
+          axios.get('/admin/theme/settings')
+          .then((result) => {
+              console.log(result.data)
+              vm.Menus = result.data.config.Menus
+            }).catch((err) => {
+                console.log(err)
+            });
     },
 
     data(){
@@ -55,7 +59,7 @@ export default {
     methods:{
         SaveSettings(){
             let vm = this;
-            axios.post('/admin/theme-settings/set-menu',{
+            axios.post('/admin/theme/settings',{
                 'menus':vm.Menus
             }).then((result) => {
                 console.log(result)

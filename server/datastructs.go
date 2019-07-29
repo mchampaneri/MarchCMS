@@ -17,7 +17,7 @@ type Config struct {
 	Database   string `json:"Database"`
 	Theme      string `json:"Theme"`
 	Status     string `json:"Status"`
-	FaviconURL string `json:"Favicon"`
+	FaviconURL string `json:"FaviconURL"`
 	LogoURL    string `json:"LogoURL"`
 }
 

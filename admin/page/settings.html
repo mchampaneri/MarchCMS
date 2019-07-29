@@ -15,68 +15,13 @@
         <div class="columns">
             <div class="column is-6">
                 <!-- <div class="box"> -->
-                <div>
-                    <div class="card">
-                        <header class="card-header">
-                            <p class="card-header-title">
-                                Website details
-                            </p>
-                        </header>
-                        <div class="card-content">
-                            <div class="field">
-                                <div class="control">
-                                    <label for="" class="label">Title</label>
-                                    <input type="text" class="input" value="{{ .config.Name }}">
-                                </div>
-                            </div>
-                            <div class="field">
-                                <div class="control">
-                                    <label for="" class="label">Logo URL</label>
-                                    <input type="text" class="input" value="{{ .config.LogoURL }}">
-                                </div>
-                            </div>
-                            <div class="field">
-                                <div class="control">
-                                    <label for="" class="label">Favicon URL</label>
-                                    <input type="text" class="input" value="{{ .config.FaviconURL }}">
-                                </div>
-                            </div>
-                            <div class="field is-pulled-right">
-                                <div class="control">
-                                    <button class="button is-primary"><i class="fa fa-save"></i> &nbsp Save</button>
-                                </div>
-                            </div>
-                            <div style="clear:both"></div>
-                        </div>
-                    </div>
-                    <!-- </div> -->
-                </div>
+                <site-config></site-config>
             </div>
             <div class="column is-6">
-                <theme-config menus='{{.themeConfig.Menus |  writeJson}}'></theme-config>
+                <theme-config></theme-config>
             </div>
         </div>
 
-
-        <!-- <div class="columns">
-            <div class="column is-three-quarters">
-                <h4 class="title">Themes </h4>
-            </div>
-            <div class="column"><input type="text" class="input" placeholder="Search More"></div>
-        </div>
-        <div class="columns">
-            {{ range InstalledThemes() }}
-            <div class="column is-one-quarter">
-                <div class="box">
-                    <img src="{{.Thumb}}" alt="" class="image">
-                    <h5 class="title is-5">{{.Name}}</h5>
-                    <a href="/admin/set-theme/{{.Name}}"
-                        class="button  is-primary  {{ if . == ActiveTheme() }} has-text-success {{ else }}  {{ end }}">
-                        Apply </a>
-                </div>
-            </div>
-            {{ end }}
-        </div> -->
     </div>
 </div>
 
