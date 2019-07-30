@@ -59,12 +59,15 @@ export default {
     methods:{
         SaveSettings(){
             let vm = this;
+            vm.isSaving = true;
             axios.post('/admin/theme/settings',{
                 'menus':vm.Menus
             }).then((result) => {
-                console.log(result)
+                vm.Menus  = result.data.menus
+                vm.isSaving = false;
             }).catch((err) => {
                 console.log(err)
+                vm.isSaving = false;
             });
         }
     }

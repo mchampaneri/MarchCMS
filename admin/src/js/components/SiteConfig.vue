@@ -27,7 +27,9 @@
                             </div>
                             <div class="field is-pulled-right">
                                 <div class="control">
-                                    <button class="button is-primary" @click="SaveConfig()">
+                                    <button class="button is-primary is-pulled-right"
+                                             v-bind:class="[isSaving ? 'is-loading':'']"
+                                     @click="SaveConfig()">
                                         <i class="fa fa-save"></i> &nbsp Save
                                     </button>
                                 </div>
@@ -57,6 +59,7 @@ export default {
     },
     data(){
         return{
+            'isSaving':false,
             'Name':'',
             'FaviconURL':'',
             'LogoURL':'',
@@ -65,17 +68,19 @@ export default {
     methods:{
         SaveConfig(){
             let vm = this;
-        axios.post('/admin/site/settings',{
-            "Name": vm.Name,
-            "LogoURL":vm.LogoURL,
-            "FaviconURL": vm.FaviconURL,
-            }).then(function(response){
-                      console.log(response)
-
-                  }).catch(function(err){
-                      console.log(err)
-                  })
-              }
+            vm.isSaving = true;
+            axios.post('/admin/site/settings',{
+                "Name": vm.Name,
+                "LogoURL":vm.LogoURL,
+                "FaviconURL": vm.FaviconURL,
+                }).then(function(response){
+                          console.log(response)
+                        vm.isSaving = false;
+                      }).catch(function(err){
+                          console.log(err)
+                          vm.isSaving = false;
+                      })
+                  }
     }
 }
 </script>

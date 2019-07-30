@@ -309,6 +309,16 @@ func adminRoutes(router *mux.Router) {
 
 		}))
 
+	router.HandleFunc("/admin/user/profile",
+		auth(func(w http.ResponseWriter, r *http.Request) {
+			if r.Method == "GET" {
+				if r.Header.Get("X-Requested-With") == "XMLHttpRequest" {
+				} else {
+					renderAdmin(w, r, "page/profile.html", map[string]interface{}{})
+				}
+			}
+		}))
+
 	router.HandleFunc("/admin/theme/settings",
 		auth(func(w http.ResponseWriter, r *http.Request) {
 			if r.Method == "GET" {
@@ -318,24 +328,24 @@ func adminRoutes(router *mux.Router) {
 				}
 			} else if r.Method == "POST" {
 				inputDecoder := json.NewDecoder(r.Body)
-				var menus = struct {
-					themeMenus []*ThemeMenu `json:menus`
-				}{}
+				var menus struct {
+					ThemeMenus []*ThemeMenu `json:"menus"`
+				}
 
 				if err := inputDecoder.Decode(&menus); err != nil {
 					renderJSON(w, map[string]string{"error": err.Error()})
 					return
 				}
-				log.Println(menus.themeMenus)
-				// if err := db.UpdateField(&ThemeConfig{ID: themeConfig.ID}, "Menus", menus.themeMenus); err != nil {
-				// 	log.Println("failed to update menu settings ", err.Error())
-				// 	renderJSON(w, map[string]string{"error": err.Error()})
-				// 	return
-				// }
+				log.Println(menus.ThemeMenus)
+				if err := db.UpdateField(&ThemeConfig{ID: themeConfig.ID}, "Menus", menus.ThemeMenus); err != nil {
+					log.Println("failed to update menu settings ", err.Error())
+					renderJSON(w, map[string]string{"error": err.Error()})
+					return
+				}
 
-				// themeConfig.Menus = menus.themeMenus
+				themeConfig.Menus = menus.ThemeMenus
 
-				renderJSON(w, map[string]interface{}{"success": themeConfig.Menus})
+				renderJSON(w, map[string]interface{}{"menus": themeConfig.Menus, "success": true})
 			}
 
 		}))
