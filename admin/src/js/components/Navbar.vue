@@ -50,7 +50,7 @@
 
                 <a class="navbar-link">
                     <div class="image is-32X32">
-                        <img class="is-rounded" src="https://bulma.io/images/placeholders/128x128.png">
+                        <img class="is-rounded" :src="picture">
                     </div>
                 </a>
 
@@ -79,6 +79,10 @@
 
         mounted(){
             console.log("Navbar moutned")
+            let vm = this;
+            if(vm.picture == ''){
+                vm.picture = "https://bulma.io/images/placeholders/128x128.png";
+            }
         },
 
         props:["name","id","picture"],

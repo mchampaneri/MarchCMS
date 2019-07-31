@@ -3,6 +3,7 @@ package main
 
 import (
 	"encoding/json"
+	"fmt"
 	"io"
 	"log"
 	"net/http"
@@ -136,10 +137,24 @@ func serveWeb(address string) {
 
 	corsRouter := handlers.CORS(headersOk, originsOk, methodsOk)(router)
 
-	if httpErr := http.ListenAndServe(address, corsRouter); httpErr != nil {
+	if httpErr := http.ListenAndServe(address, statusMiddleware(corsRouter)); httpErr != nil {
 		log.Fatalf("Failed to start web service : %s", httpErr.Error())
 	} else {
 		log.Println("Web service loaded ")
 	}
 
+}
+
+func statusMiddleware(next http.Handler) http.Handler {
+	if config.Live == "Yes" {
+		return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+			// Our middleware logic goes here...
+			next.ServeHTTP(w, r)
+		})
+	} else {
+		return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+			// Our middleware logic goes here...
+			fmt.Fprintln(w, "Site under maintianance")
+		})
+	}
 }

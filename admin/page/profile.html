@@ -1,0 +1,29 @@
+{{extends "./layouts/main.html "}}
+
+{{ block pageTitle() }}
+{{ SiteTitle() }}| Settings
+{{ end }}
+
+{{ block pagePreLoad() }}
+{{ end }}
+
+{{ block body() }}
+<div class="section">
+    <div class="container">
+
+
+        <div class="columns">
+            <div class="column is-6">
+                <user-profile></user-profile>
+            </div>
+
+        </div>
+
+    </div>
+</div>
+
+
+{{ end }}
+
+{{ block pagePostLoad() }}
+{{ end }}

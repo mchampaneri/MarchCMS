@@ -98,7 +98,7 @@
         </div>
 
         <br>
-               <div>
+        <div>
             <div class="field is-grouped is-pulled-right" >
                 <div class="control">
                     <button class="button is-primary is-pulled-right" v-bind:class="[isSaving ? 'is-loading':'']" @click="SavePage()"> <i class="fa fas fa-save"></i> &nbsp Save</button>

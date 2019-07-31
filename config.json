@@ -3,5 +3,6 @@
     "Name":"SlingPages",
     "Database":"spd",
     "Status":"Active",
+    "Live":"No",
     "Theme":"shortshot"
 }

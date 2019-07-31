@@ -28,6 +28,8 @@ Vue.component("AssetsDocument",require("./components/AssetsDocument.vue"))
 Vue.component("ThemeConfig",require("./components/ThemeConfig.vue"))
 Vue.component("SiteConfig",require("./components/SiteConfig.vue"))
 
+Vue.component("UserProfile",require("./components/UserProfile.vue"))
+
 Vue.component("Navbar", require("./components/Navbar.vue"))
 
 Vue.component("Login", require("./components/Login.vue"))

@@ -313,8 +313,47 @@ func adminRoutes(router *mux.Router) {
 		auth(func(w http.ResponseWriter, r *http.Request) {
 			if r.Method == "GET" {
 				if r.Header.Get("X-Requested-With") == "XMLHttpRequest" {
+					var u MarchUser
+					usession, _ := UserSession.Get(r, "mvc-user-session")
+					if err := db.One("ID", usession.Values["id"].(int), &u); err == nil {
+
+						renderJSON(w, map[string]interface{}{"user": u, "success": true})
+					} else {
+						renderJSON(w, map[string]string{"error": err.Error()})
+
+					}
 				} else {
 					renderAdmin(w, r, "page/profile.html", map[string]interface{}{})
+				}
+			} else if r.Method == "POST" {
+				var u MarchUser
+				var inputData struct {
+					Name      string `json:"Name"`
+					Picture   string `json:"Picture"`
+					SmallDesc string `json:"SmallDesc"`
+				}
+				inputDecoder := json.NewDecoder(r.Body)
+				if err := inputDecoder.Decode(&inputData); err == nil {
+					usession, _ := UserSession.Get(r, "mvc-user-session")
+					if err := db.One("ID", usession.Values["id"].(int), &u); err == nil {
+						u.Name = inputData.Name
+						u.Picture = inputData.Picture
+						u.SmallDesc = inputData.SmallDesc
+						if err := db.Save(&u); err == nil {
+							// Session also have to show the updated value .
+							usession.Values["name"] = u.Name
+							usession.Values["email"] = u.Email
+							usession.Values["picture"] = u.Picture
+							usession.Save(r, w)
+							renderJSON(w, map[string]interface{}{"user": u, "success": true})
+						} else {
+							renderJSON(w, map[string]string{"error": err.Error()})
+						}
+					} else {
+						renderJSON(w, map[string]string{"error": err.Error()})
+					}
+				} else {
+					renderJSON(w, map[string]string{"error": err.Error()})
 				}
 			}
 		}))
