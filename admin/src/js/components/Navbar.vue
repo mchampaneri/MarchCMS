@@ -60,7 +60,7 @@
                     </a>
                     <hr class="navbar-divider">
                     <!-- User & Settings  -->
-                    <a class="navbar-item">
+                    <a class="navbar-item" href="/admin/user/profile">
                         Profile
                     </a>
                     <a class="navbar-item" href="/signout">

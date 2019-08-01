@@ -1,6 +1,11 @@
 <template>
     <div class="container box">
 
+        <div class="notification is-warning" v-if="message">
+          <button class="delete" @click="clearMessage()"></button>
+            {{ message }}
+        </div>
+
         <div>
             <div class="field is-grouped is-pulled-right" >
                 <div class="control">
@@ -148,11 +153,12 @@ data(){
             PageNumber:"-",
             PageTemplate:"-",
             PageTemplates:"-",
+            message: false,
         }
     },
 
     methods:{
-        SavePage:function(){
+        SavePage(){
             var vm = this;
             vm.isSaving = true;
             if (vm.isedit == 'true'){
@@ -167,10 +173,12 @@ data(){
                 .then(function (response) {
                     console.log(response);
                     vm.isSaving = false;
+                    vm.message = "Page updated successfuly."
                 })
                 .catch(function (error) {
                     console.log(error);
                     vm.isSaving = false;
+                      vm.message = "Failed to update page."
                 });
             }else{
                  axios.post('/admin/page/create', {
@@ -185,14 +193,20 @@ data(){
                      console.log(response);
                      window.location = "/admin/page/"+response.data.PageNumber+"/edit"
                      vm.isSaving = false;
+                     vm.message = "Page saved successfuly."
                  })
                  .catch(function (error) {
                      console.log(error);
                      vm.isSaving = false;
+                     vm.message = "Failed to save page."
                  });
             }
         },
 
+       clearMessage(){
+           let vm = this;
+            vm.message = false;
+       },
         checkStatus(){
             let vm =this;
             if (vm.PageTitle != "" &&

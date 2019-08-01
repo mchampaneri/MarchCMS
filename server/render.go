@@ -10,6 +10,7 @@ import (
 	"net/http"
 	"path/filepath"
 	"reflect"
+	"sync"
 
 	"github.com/CloudyKit/jet"
 	blackfriday "gopkg.in/russross/blackfriday.v2"
@@ -49,13 +50,57 @@ func init() {
 				if err := db.One("Slug", menu.Menu, &_menu); err == nil {
 					return reflect.ValueOf(_menu)
 				} else {
-					log.Fatal(err.Error())
+					return reflect.ValueOf(fmt.Sprint(menu.Place, " menu missig"))
 				}
 
 			}
 		}
 
 		return reflect.ValueOf("-")
+
+	})
+
+	frontInstance.AddGlobalFunc("PostByTag", func(a jet.Arguments) reflect.Value {
+		wg := &sync.WaitGroup{}
+		input := a.Get(0).String()
+
+		wg.Add(3)
+		var postsTag1, postsTag2, postsTag3 []MarchPost
+
+		finalList := make(map[string]MarchPost, 1000)
+
+		go func() {
+			if err := db.Find("Tag1", input, &postsTag1); err == nil {
+				for _, post := range postsTag1 {
+					finalList[post.PageNumber] = post
+				}
+			}
+			log.Println("Tag1 search complete.")
+			wg.Done()
+		}()
+
+		go func() {
+			if err := db.Find("Tag2", input, &postsTag2); err == nil {
+				for _, post := range postsTag2 {
+					finalList[post.PageNumber] = post
+				}
+			}
+			log.Println("Tag2 search complete.")
+			wg.Done()
+		}()
+
+		go func() {
+			if err := db.Find("Tag3", input, &postsTag3); err == nil {
+				for _, post := range postsTag3 {
+					finalList[post.PageNumber] = post
+				}
+			}
+			log.Println("Tag3 search complete.")
+			wg.Done()
+		}()
+
+		wg.Wait()
+		return reflect.ValueOf(finalList)
 
 	})
 	////////////// Admin //////////////////
@@ -139,7 +184,7 @@ func renderPost(w io.Writer, r *http.Request, post MarchPost) {
 	if post.PageTemplate != "" && post.PageTemplate != "-" {
 		pageTemplate = filepath.Join(config.Theme, "posts", post.PageTemplate)
 	}
-	t, err := frontInstance.GetTemplate(filepath.Join(config.Theme, pageTemplate))
+	t, err := frontInstance.GetTemplate(pageTemplate)
 	if err != nil {
 		log.Println(pageTemplate, " - ", config.Theme, " - ", err.Error())
 	}

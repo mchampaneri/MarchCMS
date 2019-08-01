@@ -1,6 +1,7 @@
 package main
 
 import (
+	"flag"
 	"log"
 	"net/rpc"
 	"os"
@@ -91,6 +92,16 @@ func main() {
 		}
 	}
 
+	// Reading commmadn line inputs
+	// It can change runtime value of config
+	wordPtr := flag.String("live", "yes", "a string")
+
+	flag.Parse()
+	if *wordPtr == "Yes" {
+		goLive()
+	} else {
+		devMode()
+	}
 	// loadExtensions()
 	// loading webservice
 	serveWeb(config.Address) // loading web service

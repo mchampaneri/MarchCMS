@@ -1,7 +1,28 @@
 <html>
-    <head></head>
-    <body>
+
+<head>
+    <title>{{ .Page.PageTitle }}
+    </title>
+    <link rel="stylesheet" href="https://unpkg.com/spectre.css/dist/spectre.min.css">
+    <link rel="stylesheet" href="https://unpkg.com/spectre.css/dist/spectre-exp.min.css">
+    <link rel="stylesheet" href="https://unpkg.com/spectre.css/dist/spectre-icons.min.css">
+
+</head>
+
+<body>
+
+    {{  range Menu("header").Items}}
+        {{ .Item.Title }}
+    {{ end }}
+    <hr>
+    <div class="container grid-lg">
+        <h1> {{  .Page.PageTitle }} </h1>
+    </div>
+    <div class="container grid-lg">
         <h2>Text html template loaded for rendering post</h2>
-        {{ . }}
-    </body>
+        {{ .Output }}
+    </div>
+
+</body>
+
 </html>
