@@ -5,13 +5,18 @@
     <link rel="stylesheet" href="https://unpkg.com/spectre.css/dist/spectre-exp.min.css">
     <link rel="stylesheet" href="https://unpkg.com/spectre.css/dist/spectre-icons.min.css">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+
+    <title>{{ .Page.PageTitle }}</title>
 </head>
 
 <body class="has-navbar-fixed-top has-background-light">
     {{ include "shortshot/pages/partials/navbar.html" }}
     <div class="container grid-lg">
     {{ .output |raw}}
-    {{ PostByTag("zoom")}}
+
+    {{ range PostByTag("zoom")}}
+        {{   include "shortshot/pages/partials/singlePost.html" . }}
+    {{ end }}
     </div>
 </body>
 
