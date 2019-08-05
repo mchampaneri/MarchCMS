@@ -534,7 +534,7 @@ func adminRoutes(router *mux.Router) {
 			} else if r.Method == "POST" {
 
 				var requestData struct {
-					Desc, HTML, Keywords, PageTitle, PageURL, PageTemplate, Tag1, Tag2, Tag3 string
+					Desc, HTML, Keywords, PageTitle, PageURL, PageTemplate, Tag1, Tag2, Tag3, PageThumb string
 				}
 				requestDecoder := json.NewDecoder(r.Body)
 				requestDecoder.Decode(&requestData)
@@ -551,6 +551,7 @@ func adminRoutes(router *mux.Router) {
 						Tag1:         requestData.Tag1,
 						Tag2:         requestData.Tag2,
 						Tag3:         requestData.Tag3,
+						PageThumb:    requestData.PageThumb,
 						Content: MarchPageContent{
 							Desc:     requestData.Desc,
 							HTML:     requestData.HTML,
@@ -589,7 +590,7 @@ func adminRoutes(router *mux.Router) {
 						return
 					}
 					var requestData struct {
-						Desc, HTML, Keywords, PageTitle, PageURL, PageTemplate, Tag1, Tag2, Tag3 string
+						Desc, HTML, Keywords, PageTitle, PageURL, PageTemplate, Tag1, Tag2, Tag3, PageThumb string
 					}
 					requestDecoder := json.NewDecoder(r.Body)
 					requestDecoder.Decode(&requestData)
@@ -599,6 +600,7 @@ func adminRoutes(router *mux.Router) {
 					MarchPost.Tag1 = requestData.Tag1
 					MarchPost.Tag2 = requestData.Tag2
 					MarchPost.Tag3 = requestData.Tag3
+					MarchPost.PageThumb = requestData.PageThumb
 					MarchPost.PageURL = requestData.PageURL
 					MarchPost.PageNumber = param["id"]
 					MarchPost.PageTitle = requestData.PageTitle

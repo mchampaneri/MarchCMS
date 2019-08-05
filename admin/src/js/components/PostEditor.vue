@@ -61,6 +61,14 @@
                         placeholder="Page Description">
                     </div>
                 </div>
+                 <div class="field">
+                     <div class="control">
+                        <label class="label">Page Thumb</label>
+                        <input class="input is-medium" type="text"
+                        v-model="PageThumb"
+                        placeholder="Page Description">
+                    </div>
+                </div>
                 </div>
                 <div class="column is-6">
                 <div class="field">
@@ -121,7 +129,7 @@
                     v-model="HTML"
                     placeholder="Textarea"></textarea>
                 </div>
-        </div>
+            </div>
 
         <br>
           <div>
@@ -142,7 +150,7 @@
 
 export default{
 
-    props:['isedit','opagetitle','opageurl','odesc','okeywords','ohtml','opagenumber', 'pagetemplates', 'pagetemplate', 'otag1', 'otag2', 'otag3'],
+    props:['isedit','opagetitle','opageurl','odesc','okeywords','ohtml','opagenumber', 'pagetemplates', 'pagetemplate', 'otag1', 'otag2', 'otag3', 'opagethumb'],
 
 
     mounted(){
@@ -160,6 +168,7 @@ export default{
             vm.Tag1 = vm.otag1
             vm.Tag2 = vm.otag2
             vm.Tag3 = vm.otag3
+            vm.PageThumb = vm.opagethumb
         }
     },
 
@@ -177,6 +186,7 @@ data(){
             PageNumber:"-",
             PageTemplate:"-",
             PageTemplates:"-",
+            PageThumb: "",
             fillMeta:true,
             isSaving:false,
         }
@@ -197,6 +207,7 @@ data(){
                     'Tag1':vm.Tag1,
                     'Tag2':vm.Tag2,
                     'Tag3':vm.Tag3,
+                    'PageThumb': vm.PageThumb,
                 })
                 .then(function (response) {
                     console.log(response);
@@ -213,10 +224,11 @@ data(){
                      'Desc':vm.Desc,
                      'Keywords':vm.Keywords,
                      'HTML':vm.HTML,
-                    'PageTemplate':vm.PageTemplate,
-                    'Tag1':vm.Tag1,
-                    'Tag2':vm.Tag2,
-                    'Tag3':vm.Tag3,
+                     'PageTemplate':vm.PageTemplate,
+                     'Tag1':vm.Tag1,
+                     'Tag2':vm.Tag2,
+                     'Tag3':vm.Tag3,
+                     'PageThumb': vm.PageThumb,
                  })
                  .then(function (response) {
                      console.log(response);
