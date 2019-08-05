@@ -10,9 +10,15 @@
 <body>
     {{ include "shortshot/pages/partials/navbar.html" }}
     <div class="container grid-lg">
-        {{ PostByTag("")}}
+        {{ tag := split(.requestURL,"?")[1]}}
+        {{ if tag }}
+            {{ range PostByTag(tag)}}
+                {{ include "shortshot/pages/partials/singlePost.html" . }}
+            {{ else }}
+                <h5> No post found for {{ tag }} </h5>
+            {{ end }}
+        {{ end }}
     </div>
-
 </body>
 
 </html>
