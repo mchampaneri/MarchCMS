@@ -1,4 +1,33 @@
-<div style="border: 2px solid #cfcfcf; padding: 20px;">
-    {{ .PageTitle}}
-    {{ .Content.Desc }}
-</div>
+
+<div class="card"
+style="background-image: url('http://127.0.0.1:20196/asset/uploaded/images/social.png');
+    background-size: cover;
+    background-blend-mode: overlay;
+    background-color: #f7f8f9;
+">
+
+    <div class="card-header">
+      <div class="card-title h5"><a href="#" class="text-primary">{{ .PageTitle}} </a></div>
+      <div class="card-subtitle text-gray">Manish Champaneri</div>
+    </div>
+    <div class="card-body">
+        {{ .Content.Desc }}
+    </div>
+    <div class="card-footer">
+        {{if .Tag1}}
+        <span class="chip">
+            {{.Tag1}}
+        </span>
+        {{ end }}
+        {{if .Tag2}}
+        <span class="chip">
+            {{.Tag2}}
+        </span>
+        {{ end }}
+        {{if .Tag3}}
+        <span class="chip">
+            {{.Tag3}}
+        </span>
+        {{ end }}
+    </div>
+  </div>

@@ -1,10 +1,19 @@
-<div class="container grid-lg">
-<header class="navbar">
+<div class="bg-warning text-light"
+    style="box-shadow: 1px "
+>
+    <div class="container grid-lg ">
+        <header class="navbar ">
 
-    <section class="navbar-center">
-        <h4>{{ SiteTitle() }}</h4>
-    </section>
+            <section class="navbar-section">
+                <h4>{{ SiteTitle() }}</h4>
+            </section>
 
-</header>
-<hr>
+            <section class="navbar-section">
+                {{ range Menu("header").Items}}
+                <a href="#" class="btn text-light btn-link">{{.Item.Title}}</a>
+                {{ end }}
+            </section>
+
+        </header>
+    </div>
 </div>

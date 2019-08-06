@@ -7,16 +7,20 @@
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
 </head>
 
-<body>
+<body class="bg-gray">
     {{ include "shortshot/pages/partials/navbar.html" }}
-    <div class="container grid-lg">
-        {{ tag := split(.requestURL,"?")[1]}}
-        {{ if tag }}
-            {{ range PostByTag(tag)}}
+    <div class="container grid-lg" style="padding: 20px 0;">
+        {{ tags := split(.requestURL,"?")}}
+        {{ if len(tags) > 1 &&  tags[1] }}
+        <div class="columns">
+            {{ range PostByTag(tags[1])}}
+            <div class="column col-6">
                 {{ include "shortshot/pages/partials/singlePost.html" . }}
+            </div>
             {{ else }}
-                <h5> No post found for {{ tag }} </h5>
+            <h5> No post found for {{ tags[1] }} </h5>
             {{ end }}
+        </div>
         {{ end }}
     </div>
 </body>
