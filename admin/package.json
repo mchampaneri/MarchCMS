@@ -18,6 +18,7 @@
   "dependencies": {
     "axios": "^0.19.0",
     "vue-trix": "^0.7.5",
+    "vue2-dropzone": "^3.2.1",
     "vuedraggable": "^2.21.0"
   }
 }
