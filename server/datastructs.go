@@ -56,6 +56,7 @@ type MarchPost struct {
 	PageTemplate string           `json:"PageTemplate"`
 	PageURL      string           `json:"PageURL" storm:"unique"`
 	PageTitle    string           `json:"PageTitle"`
+	PageThumb    string           `json:"PageThumb"`
 	Content      MarchPageContent `json:"PageContent"`
 	Co           time.Time        `json:"Co" storm:"index"`
 	Uo           time.Time        `json:"Uo" storm:"index"`
