@@ -195,6 +195,7 @@ func adminRoutes(router *mux.Router) {
 	// settings
 	router.HandleFunc("/admin/settings",
 		auth(func(w http.ResponseWriter, r *http.Request) {
+			log.Println("Getting settings page for you")
 			renderAdmin(w, r, "page/settings.html", map[string]interface{}{})
 		}))
 

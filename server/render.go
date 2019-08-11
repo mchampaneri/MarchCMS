@@ -198,7 +198,7 @@ func renderPost(w io.Writer, r *http.Request, post MarchPost) {
 }
 
 func renderAdmin(w io.Writer, r *http.Request, page string, dataMap map[string]interface{}) {
-	// log.Println("Render admin is executing")
+	log.Println("Render admin is executing")
 	// log.Fatalln(page)
 	if t, err := adminInstance.GetTemplate(page); err == nil {
 		// dataMap := map[string]interface{}{}s
@@ -208,6 +208,8 @@ func renderAdmin(w io.Writer, r *http.Request, page string, dataMap map[string]i
 		if err := t.Execute(w, nil, dataMap); err != nil {
 			log.Println(" - respnose-generator.go  View  : %s", err.Error())
 		}
+	} else {
+		log.Println("Err during getting template:", err.Error())
 	}
 }
 
