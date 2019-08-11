@@ -48,8 +48,7 @@ func adminRoutes(router *mux.Router) {
 						user.Password = unhashedPass
 						if ok, user := user.LoginUser(); ok {
 							issueSession(w, r, user)
-							log.Println("session issued for :", user)
-							renderJSON(w, map[string]string{"success": "authentication done"})
+
 						} else {
 							renderJSON(w, map[string]string{"error": "authentication failed"})
 						}

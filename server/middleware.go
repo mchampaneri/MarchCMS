@@ -1,6 +1,7 @@
 package main
 
 import (
+	"log"
 	"net/http"
 )
 
@@ -16,8 +17,11 @@ import (
 */
 
 func check(req *http.Request) bool {
-	session, err := UserSession.Get(req, "mvc-user-session")
-	if (err != nil) || session.IsNew || (session.Values["auth"] == false) {
+	usession, err := UserSession.Get(req, "mvc-user-session")
+	if (err != nil) || (usession.Values["auth"] != true) {
+		if err != nil {
+			log.Println("error in auth:", err.Error())
+		}
 		return false
 	}
 	return true
@@ -26,11 +30,13 @@ func check(req *http.Request) bool {
 func auth(pass http.HandlerFunc) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		if check(r) == true {
+			log.Println("auth done")
 			pass(w, r)
-			return
+
 		}
+		log.Println("auth failed")
 		// redirect to login
-		http.Redirect(w, r, "/login", http.StatusMovedPermanently)
+		http.Redirect(w, r, "/login", http.StatusTemporaryRedirect)
 	}
 }
 
@@ -42,7 +48,7 @@ func author(pass http.HandlerFunc) http.HandlerFunc {
 				(session.Values["role"].(int) == editorUser) ||
 				(session.Values["role"].(int) == adminUser) {
 				pass(w, r)
-				return
+
 			}
 		}
 		http.Redirect(w, r, r.Referer(), http.StatusUnauthorized)

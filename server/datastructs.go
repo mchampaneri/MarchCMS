@@ -169,7 +169,10 @@ func (u *MarchUser) LoginUser() (authPass bool, su MarchUser) {
 }
 
 func issueSession(w http.ResponseWriter, r *http.Request, su MarchUser) bool {
-	usession, _ := UserSession.Get(r, "mvc-user-session")
+	usession, err := UserSession.Get(r, "mvc-user-session")
+	if err != nil {
+		log.Println("failed to issue session :", err.Error())
+	}
 	usession.Values["id"] = su.ID
 	usession.Values["name"] = su.Name
 	usession.Values["email"] = su.Email
@@ -185,5 +188,7 @@ func issueSession(w http.ResponseWriter, r *http.Request, su MarchUser) bool {
 	}
 	log.Println("Session Issued")
 	usession.Save(r, w)
+	log.Println("session issued for :", usession.Values["name"])
+	renderJSON(w, map[string]string{"success": "authentication done"})
 	return true
 }

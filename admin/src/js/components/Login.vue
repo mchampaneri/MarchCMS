@@ -87,7 +87,8 @@ export default {
                   if (response.data.error){
                       vm.errors.push(response.data.error);
                   }else if(response.data.success){
-                      window.location = "/admin"
+                    alert('redirecting')
+                     
                     }
                    vm.is_processing = false
                 })
