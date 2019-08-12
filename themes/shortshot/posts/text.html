@@ -23,11 +23,10 @@
     {{ include "shortshot/pages/partials/navbar.html" }}
 
     <div class="container grid-lg">
+        <div style="padding:30px 0;">
         <h1 class=""> {{  .Page.PageTitle }} </h1>
-    </div>
-
-    <div class="container grid-lg">
         {{ .output | raw }}
+        </div>
     </div>
 
     <script>hljs.initHighlightingOnLoad();</script>
