@@ -28,15 +28,11 @@ func check(req *http.Request) bool {
 }
 
 func auth(pass http.HandlerFunc) http.HandlerFunc {
-	log.Println("auth middleware processing")
 	return func(w http.ResponseWriter, r *http.Request) {
-		log.Println(r.RequestURI)
 		if check(r) == true {
-			log.Println("auth done")
 			pass(w, r)
 
 		} else {
-			log.Println("auth failed")
 			// redirect to login
 			http.Redirect(w, r, "/login", http.StatusTemporaryRedirect)
 		}

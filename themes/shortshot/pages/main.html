@@ -10,7 +10,9 @@
 </head>
 
 <body class="has-navbar-fixed-top has-background-light">
+
     {{ include "shortshot/pages/partials/navbar.html" }}
+
     <div class="container grid-lg">
     {{ .output |raw}}
 
@@ -20,6 +22,7 @@
         {{   include "shortshot/pages/partials/singlePost.html" . }}
     {{ end }}
     </div>
+
 </body>
 
 </html>

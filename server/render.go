@@ -45,11 +45,10 @@ func init() {
 
 		for _, menu := range themeConfig.Menus {
 			if menu.Place == input {
-				log.Println("we found menu ", menu.Place)
 				if err := db.One("Slug", menu.Menu, &_menu); err == nil {
 					return reflect.ValueOf(_menu)
 				} else {
-					return reflect.ValueOf(fmt.Sprint(menu.Place, " menu missig"))
+					return reflect.ValueOf("-")
 				}
 
 			}
@@ -198,7 +197,6 @@ func renderPost(w io.Writer, r *http.Request, post MarchPost) {
 }
 
 func renderAdmin(w io.Writer, r *http.Request, page string, dataMap map[string]interface{}) {
-	log.Println("Render admin is executing")
 	// log.Fatalln(page)
 	if t, err := adminInstance.GetTemplate(page); err == nil {
 		// dataMap := map[string]interface{}{}s
@@ -216,7 +214,6 @@ func renderAdmin(w io.Writer, r *http.Request, page string, dataMap map[string]i
 // JSON Returns the data in form of "JSON" for the incoming
 // request
 func renderJSON(w http.ResponseWriter, data interface{}) {
-
 	w.Header().Set("Content-Type", "application/json")
 	json.NewEncoder(w).Encode(data)
 }

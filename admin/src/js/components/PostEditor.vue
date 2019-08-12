@@ -50,6 +50,7 @@
                         v-model="PageURL"
                         placeholder="Page URL">
                     </div>
+
                 </div>
                 </div>
                 <div class="column is-6">
@@ -220,7 +221,7 @@ data(){
             }else{
                  axios.post('/admin/post/create', {
                      'PageTitle':vm.PageTitle,
-                     'PageURL':vm.PageURL,
+                     'PageURL': vm.PageURL,
                      'Desc':vm.Desc,
                      'Keywords':vm.Keywords,
                      'HTML':vm.HTML,

@@ -107,7 +107,6 @@ func serveWeb(address string) {
 	router.HandleFunc(`/post/{rest:[a-zA-Z0-9=\-\/]*}`, func(w http.ResponseWriter, r *http.Request) {
 		var marchPost MarchPost
 		log.Println("Handling at rest routes")
-
 		log.Println("PageURL for page ", r.URL.Path)
 		if err := db.One("PageURL", r.URL.Path, &marchPost); err == nil {
 			log.Println("PageURL for page ", r.URL.Path)
@@ -121,7 +120,6 @@ func serveWeb(address string) {
 	router.HandleFunc(`/{rest:[a-zA-Z0-9=\-\/]*}`, func(w http.ResponseWriter, r *http.Request) {
 		var marchPage MarchPage
 		log.Println("Handling at rest routes")
-
 		log.Println("PageURL for page ", r.URL.Path)
 		if err := db.One("PageURL", r.URL.Path, &marchPage); err == nil {
 			log.Println("PageURL for page ", r.URL.Path)

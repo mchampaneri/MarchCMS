@@ -9,9 +9,11 @@
             </section>
 
             <section class="navbar-section">
+            {{ if Menu("header") != "-"  }}
                 {{ range Menu("header").Items}}
                 <a href="#" class="btn text-light btn-link">{{.Item.Title}}</a>
                 {{ end }}
+            {{ end }}
             </section>
 
         </header>

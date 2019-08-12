@@ -7,22 +7,30 @@
     <link rel="stylesheet" href="https://unpkg.com/spectre.css/dist/spectre-exp.min.css">
     <link rel="stylesheet" href="https://unpkg.com/spectre.css/dist/spectre-icons.min.css">
 
+    <link rel="stylesheet"
+      href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.9/styles/isbl-editor-dark.min.css">
+    <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.9/highlight.min.js"></script>
+
+    <style>
+        .hljs{
+            line-height: 1.5rem;
+            font-size: 0.8rem;
+        }
+    </style>
 </head>
 
 <body>
+    {{ include "shortshot/pages/partials/navbar.html" }}
 
-    {{  range Menu("header").Items}}
-        {{ .Item.Title }}
-    {{ end }}
-    <hr>
     <div class="container grid-lg">
-        <h1> {{  .Page.PageTitle }} </h1>
-    </div>
-    <div class="container grid-lg">
-        <h2>Text html template loaded for rendering post</h2>
-        {{ .Output }}
+        <h1 class=""> {{  .Page.PageTitle }} </h1>
     </div>
 
+    <div class="container grid-lg">
+        {{ .output | raw }}
+    </div>
+
+    <script>hljs.initHighlightingOnLoad();</script>
 </body>
 
 </html>
