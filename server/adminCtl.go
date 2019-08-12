@@ -93,6 +93,7 @@ func adminRoutes(router *mux.Router) {
 			docMap := make(map[string]interface{})
 			imgMap := make(map[string]interface{})
 			vidMap := make(map[string]interface{})
+
 			// fetching all files from assets folder
 			readFolder := filepath.Join(assetFolder, ofType)
 			files, err := ioutil.ReadDir(readFolder)
