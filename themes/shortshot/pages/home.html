@@ -8,7 +8,7 @@
 </head>
 
 <body class="bg-gray">
-    {{ include "shortshot/pages/partials/navbar.html" }}
+  
     <div class="container grid-lg" style="padding: 20px 0;">
         {{ tags := split(.requestURL,"?")}}
         {{ if len(tags) > 1 &&  tags[1] }}
