@@ -5,26 +5,18 @@
     <link rel="stylesheet" href="https://unpkg.com/spectre.css/dist/spectre-exp.min.css">
     <link rel="stylesheet" href="https://unpkg.com/spectre.css/dist/spectre-icons.min.css">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+
+    <title>{{ .Page.PageTitle }}</title>
 </head>
 
-<body class="bg-gray">
+<body class="has-navbar-fixed-top has-background-light">
 
     {{ include "shortshot/pages/partials/navbar.html" }}
 
-    <div class="container grid-lg" style="padding: 20px 0;">
-
-
-        <div class="columns">
-            {{ range PostByTag("tutorials")}}
-            <div class="column col-6">
-                {{ include "shortshot/pages/partials/singlePost.html" . }}
-            </div>
-            {{ else }}
-            <h5> No tutorials found.</h5>
-            {{ end }}
-        </div>
-
+    <div class="container grid-lg">
+        <h4> Coming back soon !</h4>
     </div>
+
 </body>
 
 </html>
