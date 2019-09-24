@@ -16,11 +16,11 @@
 
         <div class="columns">
             {{ range PostByTag("tutorials")}}
-            <div class="column col-6">
-                {{ include "shortshot/pages/partials/singlePost.html" . }}
-            </div>
-            {{ else }}
-            <h5> No tutorials found.</h5>
+                <div class="column col-6">
+                    {{ include "shortshot/pages/partials/singlePost.html" . }}
+                </div>
+                {{ else }}
+                <h5> No tutorials found.</h5>
             {{ end }}
         </div>
 

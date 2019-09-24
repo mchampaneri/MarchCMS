@@ -15,12 +15,6 @@
 
     <div class="container grid-lg">
     {{ .output |raw}}
-
-    {{ abc := "Zoom"}}
-
-    {{ range PostByTag(abc)}}
-        {{   include "shortshot/pages/partials/singlePost.html" . }}
-    {{ end }}
     </div>
 
 </body>

@@ -50,7 +50,7 @@
 
                 <a class="navbar-link">
                     <div class="image is-32X32">
-                        <img class="is-rounded" :src="picture">
+                        <img class="is-rounded" src="picture">
                     </div>
                 </a>
 
