@@ -15,6 +15,42 @@ import (
 	"github.com/gorilla/mux"
 )
 
+func systemCheck() {
+
+	// check if theme folder is existing.
+	if _, err := os.Open(themesFolder); err != nil {
+		log.Println("Can not find theme folder :", err.Error())
+		if err := os.Mkdir(themesFolder, os.ModePerm); err != nil {
+			log.Println("Can not create new theme folder :", err.Error())
+		}
+	}
+
+	// check if admin folder is existing.
+	if _, err := os.Open(adminFolder); err != nil {
+		log.Println("Can not find admin folder :", err.Error())
+		if err := os.Mkdir(adminFolder, os.ModePerm); err != nil {
+			log.Println("Can not create new admin folder :", err.Error())
+		}
+	}
+
+	// check if assets folder is existing.
+	if _, err := os.Open(assetFolder); err != nil {
+		log.Println("Can not find asset folder :", err.Error())
+		if err := os.Mkdir(assetFolder, os.ModePerm); err != nil {
+			log.Println("Can not create new asset folder :", err.Error())
+		}
+		if err := os.Mkdir(filepath.Join(assetFolder, "images"), os.ModePerm); err != nil {
+			log.Println("Can not create new asset folder :", err.Error())
+		}
+		if err := os.Mkdir(filepath.Join(assetFolder, "videos"), os.ModePerm); err != nil {
+			log.Println("Can not create new asset folder :", err.Error())
+		}
+		if err := os.Mkdir(filepath.Join(assetFolder, "documents"), os.ModePerm); err != nil {
+			log.Println("Can not create new asset folder :", err.Error())
+		}
+	}
+}
+
 func loadSiteConfig(config *Config) {
 	// Read and load configurtion json
 	if file, fileErr := os.Open("./config.json"); fileErr != nil {

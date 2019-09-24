@@ -34,6 +34,7 @@ var assetFolder = filepath.Join(root, "assets")
 
 func main() {
 
+	systemCheck()
 	// Loading configurations
 	loadSiteConfig(&jsonConfig)
 
