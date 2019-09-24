@@ -13,9 +13,8 @@
 
     <div class="container grid-lg" style="padding: 20px 0;">
 
-  {{ .requestGetParam["hi"][0] }}
         <div class="columns">
-            {{ range PostByType("tutorial", 0, 19 )}}
+            {{ range PostByType("tutorial", .requestGetParam["limit"][0] , .requestGetParam["skip"][0] ) }}
                 <div class="column col-6">
                     {{ include "shortshot/pages/partials/singlePost.html" . }}
                 </div>

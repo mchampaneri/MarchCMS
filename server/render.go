@@ -10,6 +10,7 @@ import (
 	"net/http"
 	"path/filepath"
 	"reflect"
+	"strconv"
 
 	"github.com/CloudyKit/jet"
 	"github.com/asdine/storm"
@@ -62,8 +63,8 @@ func init() {
 	frontInstance.AddGlobalFunc("PostByType", func(a jet.Arguments) reflect.Value {
 		// wg := &sync.WaitGroup{}
 		input := a.Get(0).String()
-		limit := int(a.Get(2).Float())
-		skip := int(a.Get(1).Float())
+		limit, _ := strconv.Atoi(a.Get(1).String())
+		skip, _ := strconv.Atoi(a.Get(2).String())
 		var posts []MarchPost
 
 		if err := db.Find("Type", input, &posts, storm.Limit(limit), storm.Skip(skip)); err != nil {
@@ -76,16 +77,14 @@ func init() {
 	frontInstance.AddGlobalFunc("PostByTag", func(a jet.Arguments) reflect.Value {
 		// wg := &sync.WaitGroup{}
 		input := a.Get(0).String()
-		limit := int(a.Get(2).Float())
-		skip := int(a.Get(1).Float())
+
 		// wg.Add(3)
 		var postsTag1, postsTag2, postsTag3 []MarchPost
 
 		finalList := make(map[string]MarchPost, 1000)
 
-		log.Printf("Skip %d and limit %d", skip, limit)
 		// go func() {
-		if err := db.Find("Tag1", input, &postsTag1, storm.Limit(limit), storm.Skip(skip)); err == nil {
+		if err := db.Find("Tag1", input, &postsTag1); err == nil {
 			for _, post := range postsTag1 {
 				finalList[post.PageNumber] = post
 			}
@@ -171,7 +170,7 @@ func init() {
 }
 
 func renderPage(w io.Writer, r *http.Request, page MarchPage) {
-var pageTemplate = "index.html"
+	var pageTemplate = "index.html"
 	if page.PageTemplate != "" && page.PageTemplate != "-" {
 		pageTemplate = filepath.Join(config.Theme, "pages", page.PageTemplate)
 	}
