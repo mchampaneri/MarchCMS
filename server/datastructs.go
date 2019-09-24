@@ -64,6 +64,7 @@ type MarchPost struct {
 	Tag1         string           `json:"Tag1" storm:"index"`
 	Tag2         string           `json:"Tag2" storm:"index"`
 	Tag3         string           `json:"Tag3" storm:"index"`
+	Type         string           `json:"Type" storm:"index"`
 	MarchUserID  int              `json:"UserID" storm:"index"`
 	UpdaterID    int              `json:"UpdaterUserID" storm:"index"`
 }

@@ -96,27 +96,39 @@
                 </div>
                 </div>
 
-                        <div class="column is-4">
+                        <div class="column is-3">
                             <label for="" class="label">Tag1</label>
                             <div class="field">
-                                <div class="contro">
+                                <div class="control">
                                     <input type="text" class="input"  v-model="Tag1">
                                 </div>
                             </div>
                         </div>
-                        <div class="column is-4">
+
+
+                        <div class="column is-3">
                             <label for="" class="label">Tag2</label>
                             <div class="field">
-                                <div class="contro">
+                                <div class="control">
                                     <input type="text" class="input"  v-model="Tag2">
                                 </div>
                             </div>
                         </div>
-                        <div class="column is-4">
+
+                        <div class="column is-3">
                             <label for="" class="label">Tag3</label>
                             <div class="field">
-                                <div class="contro">
+                                <div class="control">
                                     <input type="text" class="input"  v-model="Tag3">
+                                </div>
+                            </div>
+                        </div>
+
+                    <div class="column is-3">
+                            <label for="" class="label">Type</label>
+                            <div class="field">
+                                <div class="control">
+                                    <input type="text" class="input"  v-model="Type">
                                 </div>
                             </div>
                         </div>
@@ -151,7 +163,7 @@
 
 export default{
 
-    props:['isedit','opagetitle','opageurl','odesc','okeywords','ohtml','opagenumber', 'pagetemplates', 'pagetemplate', 'otag1', 'otag2', 'otag3', 'opagethumb'],
+    props:['isedit','opagetitle','opageurl','odesc','okeywords','ohtml','opagenumber', 'pagetemplates', 'pagetemplate', 'otag1', 'otag2', 'otag3', 'opagethumb','otype'],
 
 
     mounted(){
@@ -170,6 +182,7 @@ export default{
             vm.Tag2 = vm.otag2
             vm.Tag3 = vm.otag3
             vm.PageThumb = vm.opagethumb
+            vm.Type = vm.otype
         }
     },
 
@@ -188,6 +201,7 @@ data(){
             PageTemplate:"-",
             PageTemplates:"-",
             PageThumb: "",
+            Type:"",
             fillMeta:true,
             isSaving:false,
         }
@@ -208,6 +222,7 @@ data(){
                     'Tag1':vm.Tag1,
                     'Tag2':vm.Tag2,
                     'Tag3':vm.Tag3,
+                    'Type':vm.Type,
                     'PageThumb': vm.PageThumb,
                 })
                 .then(function (response) {
@@ -229,6 +244,7 @@ data(){
                      'Tag1':vm.Tag1,
                      'Tag2':vm.Tag2,
                      'Tag3':vm.Tag3,
+                     'Type':vm.Type,
                      'PageThumb': vm.PageThumb,
                  })
                  .then(function (response) {
