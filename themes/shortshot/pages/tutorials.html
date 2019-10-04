@@ -5,17 +5,20 @@
     <link rel="stylesheet" href="https://unpkg.com/spectre.css/dist/spectre-exp.min.css">
     <link rel="stylesheet" href="https://unpkg.com/spectre.css/dist/spectre-icons.min.css">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 </head>
 
 <body class="bg-gray">
 
     {{ include "shortshot/pages/partials/navbar.html" }}
 
-    <div class="container grid-lg" style="padding: 20px 0;">
+    <div class="container grid-lg " >
 
         <div class="columns">
             {{ range PostByTag("tutorials") }}
-                <div class="column col-6">
+
+                <div class="column col-8  col-md-12 col-ml-auto " style="margin-bottom: 1.4rem">
                     {{ include "shortshot/pages/partials/singlePost.html" . }}
                 </div>
 
@@ -23,29 +26,7 @@
                 <h5> No tutorials found.</h5>
             {{ end }}
         </div>
-        <ul class="pagination">
-            <li class="page-item disabled">
-              <a href="#" tabindex="-1">Previous</a>
-            </li>
-            <li class="page-item active">
-              <a href="#">1</a>
-            </li>
-            <li class="page-item">
-              <a href="#">2</a>
-            </li>
-            <li class="page-item">
-              <a href="#">3</a>
-            </li>
-            <li class="page-item">
-              <span>...</span>
-            </li>
-            <li class="page-item">
-              <a href="#">12</a>
-            </li>
-            <li class="page-item">
-              <a href="#">Next</a>
-            </li>
-          </ul>
+
 
     </div>
 </body>
