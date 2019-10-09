@@ -1,10 +1,12 @@
 ========================================================================================================================
-Non Js Css Framework :
-Wysiwug Editor : 
-JS Framework : Vuejs 
-Routing : Mux
-Db : 
-Cache : 
-Templating : jetTemplate
+Built using
+---------------------------
+Admin panel css : Bulma CSS
+Admin panel js : vueJs
+Text editor : Markdown
+Server : GoLang
+
+Theme css : Any
+Theme js : any
 =========================================================================================================================
 
