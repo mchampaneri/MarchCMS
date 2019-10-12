@@ -13,7 +13,6 @@ import (
 	"strconv"
 
 	"github.com/CloudyKit/jet"
-	"github.com/asdine/storm"
 	"github.com/asdine/storm/q"
 	blackfriday "gopkg.in/russross/blackfriday.v2"
 )
@@ -62,24 +61,39 @@ func init() {
 	})
 
 	frontInstance.AddGlobalFunc("PostByType", func(a jet.Arguments) reflect.Value {
+
 		// wg := &sync.WaitGroup{}
 		input := a.Get(0).String()
 		limit, _ := strconv.Atoi(a.Get(1).String())
 		skip, _ := strconv.Atoi(a.Get(2).String())
 		var posts []MarchPost
 
-		if err := db.Find("Type", input, &posts, storm.Limit(limit), storm.Skip(skip)); err != nil {
-			log.Println("failed to get post by type ", err.Error())
-		}
+		query := db.Select(q.Eq("Type", input)).Limit(limit).Skip(skip)
+		query.Each(new(MarchPost), func(marchPost interface{}) error {
+			p := marchPost.(*MarchPost)
+			marchUser := MarchUser{}
+			var err error
+			if err := db.One("ID", p.MarchUserID, &marchUser); err == nil {
+				log.Println(marchUser)
+				p.MarchUserObj = marchUser
+				posts = append(posts, *p)
+			}
+			return err
+
+		})
+
+		// if err := db.Find("Type", input, &posts, storm.Limit(limit), storm.Skip(skip)); err != nil {
+		// 	log.Println("failed to get post by type ", err.Error())
+		// }
 
 		return reflect.ValueOf(posts)
+
 	})
 
 	frontInstance.AddGlobalFunc("PostByTag", func(a jet.Arguments) reflect.Value {
 		// wg := &sync.WaitGroup{}
 		input := a.Get(0).String()
 
-		// wg.Add(3)
 		var postsByTags []MarchPost
 
 		filterQuery := q.Or(
@@ -89,9 +103,18 @@ func init() {
 		)
 
 		query := db.Select(filterQuery)
-		if err := query.Find(&postsByTags); err != nil {
-			log.Println("Error while fetching posts : ", err.Error())
-		}
+		query.Each(new(MarchPost), func(marchPost interface{}) error {
+			p := marchPost.(*MarchPost)
+			marchUser := MarchUser{}
+			var err error
+			if err := db.One("ID", p.MarchUserID, &marchUser); err == nil {
+				log.Println(marchUser)
+				p.MarchUserObj = marchUser
+				postsByTags = append(postsByTags, *p)
+			}
+			return err
+
+		})
 		return reflect.ValueOf(postsByTags)
 		// go func() {
 		// if err := db.Find("Tag1", input, &postsTag1); err == nil {
@@ -216,6 +239,7 @@ func renderPost(w io.Writer, r *http.Request, post MarchPost) {
 	dataMap := map[string]interface{}{
 		"Page": post,
 	}
+
 	output := blackfriday.Run([]byte(post.Content.HTML))
 	dataMap["output"] = output
 	dataMap["requestURL"] = r.RequestURI

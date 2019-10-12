@@ -146,6 +146,12 @@ func serveWeb(address string) {
 		log.Println("PageURL for page ", r.URL.Path)
 		if err := db.One("PageURL", r.URL.Path, &marchPost); err == nil {
 			log.Println("PageURL for page ", r.URL.Path)
+
+			marchUser := MarchUser{}
+			if err := db.One("ID", marchPost.MarchUserID, &marchUser); err == nil {
+				marchPost.MarchUserObj = marchUser
+			}
+
 			renderPost(w, r, marchPost)
 		} else {
 			log.Println("could not fetch route ", r.URL.Path)
@@ -159,6 +165,10 @@ func serveWeb(address string) {
 		log.Println("PageURL for page ", r.URL.Path)
 		if err := db.One("PageURL", r.URL.Path, &marchPage); err == nil {
 			log.Println("PageURL for page ", r.URL.Path)
+			marchUser := MarchUser{}
+			if err := db.One("ID", marchPage.MarchUserID, &marchUser); err == nil {
+				marchPage.MarchUserObj = marchUser
+			}
 			renderPage(w, r, marchPage)
 		} else {
 			renderPage(w, r, MarchPage{PageTemplate: "404.html"})

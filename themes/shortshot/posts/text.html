@@ -16,22 +16,56 @@
             line-height: 1.5rem;
             font-size: 0.8rem;
         }
-        p::first-letter {
-            font-size: 200%;
-            color: #8A2BE2;
-        }
+
+        
+
     </style>
+
+    <script type="text/javascript">
+        var activeATag = Array.prototype.slice.call(document.querySelectorAll('img'));
+
+activeATag.map(function(x) {
+  if(x.parentNode.tagName === 'p') {
+    x.parentNode.style['text-align'] = "center"; // Your property: value;
+  }
+});
+    </script>
 </head>
 
 <body class="bg-gray">
-    {{ include "shortshot/pages/partials/navbar.html" }}
+  
+    {{ include "shortshot/posts/navbar.html" . }}
+
+  
+
 
     <div class="container grid-lg">
-        <div style="padding:30px 0;">
-        <h1 style= 'font-size:36px'> {{  .Page.PageTitle }} </h1>
-        {{ .output | raw }}
+
+        <div class="columns">
+
+          <div class="column col-9  col-md-12 col-ml-auto " style="margin-bottom: 1.4rem">
+            <div style="padding:30px 0;">
+  
+                <div class="d-inline-block" style="margin-bottom: 2.8rem;">
+              
+                    <figure class="avatar avatar-md">
+                      <img src="{{ .Page.MarchUserObj.Picture }}" alt="...">       
+                    </figure>   
+                    <span> 
+                      <b>{{ .Page.MarchUserObj.Name }}</b>
+                      <i>{{ .Page.MarchUserObj.Email }} </i>
+                    </span>
+                  </div>
+                  
+      
+            {{ .output | raw }}
+        
+          </div>
         </div>
-    </div>
+      </div>
+       
+        
+   
 
     <script>hljs.initHighlightingOnLoad();</script>
 </body>

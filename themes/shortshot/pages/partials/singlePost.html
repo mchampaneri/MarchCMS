@@ -21,7 +21,7 @@
     <div class="card-header"  >
 
 
-
+     
       <div class="card-title h4 " style="margin-bottom:1rem ;position: relative;">
         <a href="{{.PageURL}}" class="text-dark">{{ .PageTitle}} </a>
         <img src="https://3.bp.blogspot.com/-mb7DiJ-mysA/W0dX9ikwuTI/AAAAAAAAFig/19Dd5AxW5rMLtRiSOGt7ZN4AMWNDICTVgCLcBGAs/w128-h128-p-k-no-nu/go-sciter-calc-banner.png" alt=""
@@ -37,39 +37,43 @@
     >
     </div>
       <div class="card-subtitle text-dark" style="margin-bottom: 0.2rem">
+       
         <div class="d-inline-block">
-        <a href="#">
+       
           <figure class="avatar avatar-md">
-            <img src="https://4.bp.blogspot.com/-ySkDGR_J1rg/XKWYAIu8Y8I/AAAAAAAAGzg/GD_1wpygnT8g3s5R1p7kntL7wWruLRCKgCK4BGAYYCw/s120-pf/profile_pic.jpg" alt="...">
-          </figure>
-          <div style="line-height: 32px" class="d-inline-block">  Manish Champaneri
-          </div>
-            </a>
+            <img src="{{ .MarchUserObj.Picture }}" alt="...">       
+          </figure>   
+          <span> 
+              <b>{{ .MarchUserObj.Name }}</b>
+              <i>{{ .MarchUserObj.Email }} </i>
+            </span>
+
         </div>
       </div>
-      <div>
-      {{if .Tag1}}
-      <span class="chip">
-          {{.Tag1}}
-      </span>
-      {{ end }}
-      {{if .Tag2}}
-      <span class="chip">
-          {{.Tag2}}
-      </span>
-      {{ end }}
-      {{if .Tag3}}
-      <span class="chip">
-          {{.Tag3}}
-      </span>
-      {{ end }}
-      </div>
+    
     </div>
     <div class="card-body text-justify" style="margin-bottom: 0.2rem ">
         {{ .Content.Desc }}
 
-        <div style="margin-top:1rem">
+        <div style="margin-top:1rem; margin-bottom: 1rem;">
                 <a href="#"> Read more <i class="fa fa-chevron-right" style="font-size:12px;"></i></a>
-            </div>
+        </div>
+        <div>
+          {{if .Tag1}}
+          <span class="chip">
+              {{.Tag1}}
+          </span>
+          {{ end }}
+          {{if .Tag2}}
+          <span class="chip">
+              {{.Tag2}}
+          </span>
+          {{ end }}
+          {{if .Tag3}}
+          <span class="chip">
+              {{.Tag3}}
+          </span>
+          {{ end }}
+          </div>
     </div>
   </div>

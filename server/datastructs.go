@@ -37,6 +37,7 @@ type ThemeMenu struct {
 }
 
 // MarchPage is root struct for SlignPages
+
 type MarchPage struct {
 	PageNumber   string           `json:"PageNumber" storm:"id"`
 	PageTemplate string           `json:"PageTemplate"`
@@ -48,6 +49,7 @@ type MarchPage struct {
 	Do           time.Time        `json:"Do" storm:"index"`
 	MarchUserID  int              `json:"UserID" storm:"index"`
 	UpdaterID    int              `json:"UpdaterUserID" storm:"index"`
+	MarchUserObj MarchUser        `json:"Author"`
 }
 
 // MarchPost is root struct for SlignPages
@@ -67,7 +69,27 @@ type MarchPost struct {
 	Type         string           `json:"Type" storm:"index"`
 	MarchUserID  int              `json:"UserID" storm:"index"`
 	UpdaterID    int              `json:"UpdaterUserID" storm:"index"`
+	MarchUserObj MarchUser        `json:"Author"`
 }
+
+// func (p *MarchPost) MarshalJSON() ([]byte, error) {
+// 	type Alias MarchPost
+// 	marchUser := MarchUser{}
+// 	if err := db.One("ID", p.MarchUserID, &marchUser); err == nil {
+// 		log.Println(marchUser)
+// 		return json.Marshal(&struct {
+// 			MarchUserObj MarchUser `json:"Author"`
+// 			*Alias
+// 		}{
+// 			MarchUserObj: marchUser,
+// 			Alias:        (*Alias)(p),
+// 		})
+// 	} else {
+// 		log.Fatalln("colud not fetch user:", err.Error())
+// 		return []byte("hello"), nil
+// 	}
+
+// }
 
 // MarchPageContent holds content of the page
 type MarchPageContent struct {
