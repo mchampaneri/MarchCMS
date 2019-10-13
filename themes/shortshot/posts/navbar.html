@@ -2,18 +2,13 @@
         <div class="container grid-lg ">
             <header class="navbar" style=" padding:20px 0; ">
                
-                    <section class="navbar-section hide-md">
-                            <h4 class="text-light">{{ SiteTitle() }}</h4>
-                        </section>
-                    
-               
                
                
                 <section class="text-left navbar-section">
-                       <h3 class="text-light"> {{  .Page.PageTitle }} </h3>
+                  <a href="/">   <h4 class="text-light">{{ SiteTitle() }}</h4> </a>     
+                  <h5 class="text-light" style="margin-left: 20px; padding-left:20px; border-left: 3px solid #fff;"> {{  .Page.PageTitle }} </h5>
                 </section>
-                <section class="text-left navbar-section hide-md">
-                </section>
+               
 
         
                  </section>

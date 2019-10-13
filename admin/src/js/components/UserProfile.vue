@@ -10,6 +10,7 @@
                     <input type="text" class="input" v-model="Name" />
                 </div>
             </div>
+            
             <div class="field">
                 <div class="control">
                     <label for="" class="label">Picture URL</label>

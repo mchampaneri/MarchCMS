@@ -1,0 +1,35 @@
+<html>
+
+<head>
+    <link rel="stylesheet" href="https://unpkg.com/spectre.css/dist/spectre.min.css">
+    <link rel="stylesheet" href="https://unpkg.com/spectre.css/dist/spectre-exp.min.css">
+    <link rel="stylesheet" href="https://unpkg.com/spectre.css/dist/spectre-icons.min.css">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+
+<body class="bg-gray">
+
+    {{ include "shortshot/pages/partials/navbar.html" }}
+
+    <div class="container grid-lg " >
+      
+        
+        <div class="columns">
+            {{ range PostByTag( .requestGetParam.tag[0] ) }}
+                
+                <div class="column col-9  col-md-12 col-ml-auto " style="margin-bottom: 1.4rem">
+                    {{ include "shortshot/pages/partials/singlePost.html" . }}
+                </div>
+
+                {{ else }}
+                <h5> No tutorials found.</h5>
+            {{ end }}
+        </div>
+
+
+    </div>
+</body>
+
+</html>

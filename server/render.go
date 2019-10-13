@@ -68,7 +68,9 @@ func init() {
 		skip, _ := strconv.Atoi(a.Get(2).String())
 		var posts []MarchPost
 
-		query := db.Select(q.Eq("Type", input)).Limit(limit).Skip(skip)
+		log.Println("input ", input, " limit ", limit, " skip ", skip)
+		query := db.Select(q.Eq("Type", input)).Skip(skip).Limit(limit)
+
 		query.Each(new(MarchPost), func(marchPost interface{}) error {
 			p := marchPost.(*MarchPost)
 			marchUser := MarchUser{}
@@ -79,7 +81,6 @@ func init() {
 				posts = append(posts, *p)
 			}
 			return err
-
 		})
 
 		// if err := db.Find("Type", input, &posts, storm.Limit(limit), storm.Skip(skip)); err != nil {
@@ -101,6 +102,8 @@ func init() {
 			q.Eq("Tag2", input),
 			q.Eq("Tag3", input),
 		)
+
+		log.Println("tag for filter is ", input)
 
 		query := db.Select(filterQuery)
 		query.Each(new(MarchPost), func(marchPost interface{}) error {
