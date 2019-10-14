@@ -1,20 +1,18 @@
 <div style="position: fixed; width:100%; top:0; left:0;; z-index:4; background: #333;">
         <div class="container grid-lg ">
-            <header class="navbar" style=" padding:20px 0; ">
-               
-               
-               
-                <section class="text-left navbar-section">
-                  <a href="/">   <h4 class="text-light">{{ SiteTitle() }}</h4> </a>     
-                  <h5 class="text-light" style="margin-left: 20px; padding-left:20px; border-left: 3px solid #fff;"> {{  .Page.PageTitle }} </h5>
-                </section>
-               
-
-        
-                 </section>
-    
-              
-            </header>
+          <div class="columns" >
+              <div class="col-3 col-md-12">
+                  <a href="/"> <h4 class="text-light text-center hide-md" 
+                    style="margin:1.2rem"
+                    >{{ SiteTitle() }}</h4> </a>
+              </div>
+              <div class="col-9 col-md-12">
+                <h5 class="text-light text-center" 
+                style="margin: 1.2rem;"
+               > 
+                {{  .Page.PageTitle }} </h5>
+              </div>
+          </div>     
         </div>
     </div>
     <div style="padding: 50px; content:' ';"></div>

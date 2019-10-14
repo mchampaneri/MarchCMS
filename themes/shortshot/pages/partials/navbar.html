@@ -1,30 +1,29 @@
 <div style="position: fixed; width:100%; top:0; left:0;; z-index:4; background: #333;">
     <div class="container grid-lg ">
-        <header class="navbar" style=" padding:20px 0; ">
+       <div class="columns">
            
-                <section class="navbar-section">
-                       <a href="/"> <h4 class="text-light">{{ SiteTitle() }}</h4> </a>
+                <section class="col-3 col-md-12 "">
+                       <a href="/"> <h4 class="text-light text-center hide-md" 
+                        style="margin:1.2rem"
+                        >{{ SiteTitle() }}</h4> </a>
                     </section>
-                <section class="navbar-section">
+                <section class="col-9 col-md-12">
+                    <ul style="list-style: none;">
                         <!-- <h4 style=" background: #ccc; padding: 5px ;;">{{ SiteTitle() }}</h4> -->
                         {{ if Menu("header") != "-"  }}
                             {{ range Menu("header").Items}}
-                            <h4>
+                            <li style="display: inline-block">
                                 <a class="btn text-light btn-link" href="{{.Item.URL}}">
                                     {{.Item.Title}}
                                 </a>
-                            </h4>
+                            </li>
                             {{ end }}
                         {{ end }}
                         </section>
+                    </ul>
            
-           
-           
-            <section class="navbar-section">
-            </section>
-
-          
-        </header>
+   
+        </div>
     </div>
 </div>
 <div style="padding: 60px; content:' ';"></div>
