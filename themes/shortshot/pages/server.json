@@ -1,0 +1,8 @@
+{   
+     "sites":[
+	    {
+            "incomming":"whiskynk.mchampaneri.in/",
+            "forward":"http://localhost:20196/"
+        }   
+    ]
+}
