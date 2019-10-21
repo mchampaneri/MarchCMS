@@ -1,19 +1,30 @@
+<!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-71252860-10"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'UA-71252860-10');
+</script>
+
+
 
 <div style="position: fixed; width:100%; top:0; left:0;; z-index:4; background: #fff; border-bottom:1px solid #c6c6c6;">
         <div class="container grid-lg ">
           <div class="columns" >
               <div class="col-3 col-md-12">
-                  <a href="/"> <h4 class="text-light text-center hide-md" 
+                  <a href="/"> <h4 class="text-light text-center hide-md"
                     style="margin:1.2rem"
                     >{{ SiteTitle() }}</h4> </a>
               </div>
               <div class="col-9 col-md-12">
-                <h6 class="text-light text-center" 
+                <h6 class="text-light text-center"
                 style="margin: 1.2rem;"
-               > 
+               >
                 {{  .Page.PageTitle }} </h6>
               </div>
-          </div>     
+          </div>
         </div>
     </div>
     <div style="padding: 50px; content:' ';"></div>
@@ -22,16 +33,16 @@
     <!-- <div class="text-center" style="position: fixed;width:100%; top:0;right:0; z-index: 4; background: #fff;">
 
             <h1 style= 'font-size:36px'  style="margin-bottom: 1.4rem"> {{  .Page.PageTitle }} </h1>
-      
+
               <div class="d-inline-block" >
-              
+
                 <figure class="avatar avatar-md">
-                  <img src="{{ .Page.MarchUserObj.Picture }}" alt="...">       
-                </figure>   
-                <span> 
+                  <img src="{{ .Page.MarchUserObj.Picture }}" alt="...">
+                </figure>
+                <span>
                   <b>{{ .Page.MarchUserObj.Name }}</b>
                   <i>{{ .Page.MarchUserObj.Email }} </i>
                 </span>
-              
+
               </div>
           </div> -->

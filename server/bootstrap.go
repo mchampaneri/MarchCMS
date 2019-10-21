@@ -148,6 +148,8 @@ func serveWeb(address string) {
 			log.Println("PageURL for page ", r.URL.Path)
 
 			marchUser := MarchUser{}
+			marchPost.CoStr = marchPost.Co.Format("January 2, 2006")
+			marchPost.UoStr = marchPost.Uo.Format("January 2, 2006")
 			if err := db.One("ID", marchPost.MarchUserID, &marchUser); err == nil {
 				marchPost.MarchUserObj = marchUser
 			}
@@ -166,6 +168,8 @@ func serveWeb(address string) {
 		if err := db.One("PageURL", r.URL.Path, &marchPage); err == nil {
 			log.Println("PageURL for page ", r.URL.Path)
 			marchUser := MarchUser{}
+			marchPage.CoStr = marchPage.Co.Format("January 2, 2006")
+			marchPage.UoStr = marchPage.Uo.Format("January 2, 2006")
 			if err := db.One("ID", marchPage.MarchUserID, &marchUser); err == nil {
 				marchPage.MarchUserObj = marchUser
 			}

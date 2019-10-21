@@ -69,7 +69,7 @@ func init() {
 		var posts []MarchPost
 
 		log.Println("input ", input, " limit ", limit, " skip ", skip)
-		query := db.Select(q.Eq("Type", input)).Skip(skip).Limit(limit)
+		query := db.Select(q.Eq("Type", input)).Skip(skip).Limit(limit).OrderBy("Co").Reverse()
 
 		query.Each(new(MarchPost), func(marchPost interface{}) error {
 			p := marchPost.(*MarchPost)
@@ -78,6 +78,8 @@ func init() {
 			if err := db.One("ID", p.MarchUserID, &marchUser); err == nil {
 				log.Println(marchUser)
 				p.MarchUserObj = marchUser
+				p.CoStr = p.Co.Format("January 2, 2006")
+				p.UoStr = p.Uo.Format("January 2, 2006")
 				posts = append(posts, *p)
 			}
 			return err
@@ -113,6 +115,8 @@ func init() {
 			if err := db.One("ID", p.MarchUserID, &marchUser); err == nil {
 				log.Println(marchUser)
 				p.MarchUserObj = marchUser
+				p.CoStr = p.Co.Format("January 2, 2006")
+				p.UoStr = p.Uo.Format("January 2, 2006")
 				postsByTags = append(postsByTags, *p)
 			}
 			return err

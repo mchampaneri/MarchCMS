@@ -21,7 +21,7 @@
     <div class="card-header"  >
 
 
-     
+
       <div class="card-title h4 " style="margin-bottom:1rem ;position: relative;">
         <a href="{{.PageURL}}" class="text-dark">{{ .PageTitle}} </a>
         <img src="{{ .PageThumb}}" alt=""
@@ -37,27 +37,30 @@
     >
     </div>
       <div class="card-subtitle text-dark" style="margin-bottom: 0.2rem">
-       
+
         <div class="d-inline-block">
-       
+
           <figure class="avatar avatar-md">
-            <img src="{{ .MarchUserObj.Picture }}" alt="...">       
-          </figure>   
-          <span> 
+            <img src="{{ .MarchUserObj.Picture }}" alt="...">
+          </figure>
+          <span>
               <b>{{ .MarchUserObj.Name }}</b>
-            
-            </span>
+          </span>
 
         </div>
+        <span class="float-right">
+          {{ .CoStr }}
+        </span>
       </div>
-    
+
     </div>
     <div class="card-body text-justify" style="margin-bottom: 0.2rem ">
         {{ .Content.Desc }}
 
         <div style="margin-top:1rem; margin-bottom: 1rem;">
-                <a href="#"> Read more <i class="fa fa-chevron-right" style="font-size:12px;"></i></a>
+                <a href="{{.PageURL}}"> Read more <i class="fa fa-chevron-right" style="font-size:12px;"></i></a>
         </div>
+
         <div>
           {{if .Tag1}}
           <span class="chip">
