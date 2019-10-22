@@ -11,7 +11,7 @@
 
 <link href="https://fonts.googleapis.com/css?family=Cousine|Crimson+Text&amp;display=swap" rel="stylesheet">
 <style>
-   .text-light{
+   .text-theme{
           color: rgb(45, 43, 87) !important
         }
     p{
@@ -19,14 +19,14 @@
     }
 </style>
 
-<div style="position: fixed; width:100%; top:0; left:0;; z-index:4; background: #fff; border-bottom:1px solid #c6c6c6;">
+<div style="position: fixed; width:100%; top:0; left:0; z-index:4; background: #fff; border-bottom:1px solid #c6c6c6;">
     <div class="container grid-lg ">
        <div class="columns">
 
                 <section class="col-3 col-md-12 "">
-                       <a href="/"> <h4 class="text-light text-center hide-md"
-                        style="margin:1.2rem"
-                        >{{ SiteTitle() }}</h4> </a>
+                       <a href="/"> <h1 class="text-theme text-center hide-md"
+                        style="margin:1.2rem;font-size: 0.9rem"
+                        >{{ SiteTitle() }}</h1> </a>
                     </section>
                 <section class="col-9 col-md-12">
                     <ul style="list-style: none;">
@@ -34,7 +34,7 @@
                         {{ if Menu("header") != "-"  }}
                             {{ range Menu("header").Items}}
                             <li style="display: inline-block">
-                                <a class="btn text-light btn-link" href="{{.Item.URL}}">
+                                <a class="btn text-theme btn-link" href="{{.Item.URL}}">
                                     {{.Item.Title}}
                                 </a>
                             </li>

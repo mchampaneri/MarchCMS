@@ -13,16 +13,21 @@
 <div style="position: fixed; width:100%; top:0; left:0;; z-index:4; background: #fff; border-bottom:1px solid #c6c6c6;">
         <div class="container grid-lg ">
           <div class="columns" >
-              <div class="col-3 col-md-12">
-                  <a href="/"> <h4 class="text-light text-center hide-md"
-                    style="margin:1.2rem"
-                    >{{ SiteTitle() }}</h4> </a>
+              <div class="col-3 col-md-1">
+                  <a href="/"> <h1 class="text-theme text-center hide-md"
+                    style="margin:1.2rem; font-size: 0.9rem"
+                    >{{ SiteTitle() }}</h1>
+                    <h1 class="show-md"  style="margin:1.27rem; font-size: 0.9rem"> <i class="icon icon-back" style=" font-size: 0.9rem"></i></h1>
+                  </a>
               </div>
-              <div class="col-9 col-md-12">
-                <h6 class="text-light text-center"
-                style="margin: 1.2rem;"
+
+              <div class="col-9 col-md-11">
+
+
+                <h1 class="text-theme text-center"
+                style="margin: 1.2rem; font-size:0.9rem"
                >
-                {{  .Page.PageTitle }} </h6>
+                {{  .Page.PageTitle }} </h1>
               </div>
           </div>
         </div>

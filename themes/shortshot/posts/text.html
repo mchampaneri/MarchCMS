@@ -15,7 +15,7 @@
 
     <style>
 
-        p,h3,h4,h5,h6{
+        p,h3,h4,h5{
           font-size: 1.05rem;
           font-family: 'Crimson Text', serif;
         }
@@ -27,7 +27,7 @@
             font-size: 0.8rem;
         }
 
-        .text-light{
+        .text-theme{
           color: rgb(45, 43, 87) !important
         }
 
@@ -50,12 +50,9 @@ activeATag.map(function(x) {
     </script>
 </head>
 
-<body>
+<body class="has-navbar-fixed-top has-background-light">
 
     {{ include "shortshot/posts/navbar.html" . }}
-
-
-
 
     <div class="container grid-lg">
 
@@ -85,7 +82,8 @@ activeATag.map(function(x) {
           </div>
         </div>
       </div>
-
+    </div>
+      {{ include "shortshot/posts/footer.html" . }}
 
 
 <script>
@@ -95,7 +93,7 @@ activeATag.map(function(x) {
 *  LEARN WHY DEFINING THESE VARIABLES IS IMPORTANT: https://disqus.com/admin/universalcode/#configuration-variables*/
 
 var disqus_config = function () {
-this.page.url =  '{your-site-path}/{{ .Page.PageURL }}';
+this.page.url =  'http://learnit.mchampaneri.in/{{ .Page.PageURL }}';
 this.page.identifier =  '{{ .Page.PageNumber }}';
 };
 

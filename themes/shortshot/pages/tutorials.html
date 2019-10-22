@@ -9,16 +9,16 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 </head>
 
-<body class="bg-white">
+<body class="has-navbar-fixed-top has-background-light">
 
     {{ include "shortshot/pages/partials/navbar.html" }}
 
     <div class="container grid-lg " >
 
-        
+
         <div class="columns">
             {{ range PostByType( .requestGetParam.about[0] ,"100","0") }}
-                
+
                 <div class="column col-9  col-md-12 col-ml-auto " style="margin-bottom: 1.4rem">
                     {{ include "shortshot/pages/partials/singlePost.html" . }}
                 </div>
@@ -28,8 +28,8 @@
             {{ end }}
         </div>
 
-
     </div>
+    {{ include "shortshot/pages/partials/footer.html" }}
 </body>
 
 </html>
