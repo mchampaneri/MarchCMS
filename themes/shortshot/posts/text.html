@@ -1,8 +1,13 @@
 <html>
 
 <head>
-    <title>{{ .Page.PageTitle }}
+    <title>{{ .Page.PageTitle }} | {{ SiteTitle() }}
     </title>
+
+    <meta name="keywords" content= "{{ .Page.MarchPageContent.Keywords }}">
+    <meta name="description" content= "{{ .Page.MarchPageContent.Desc }}">
+
+
     <link rel="stylesheet" href="https://unpkg.com/spectre.css/dist/spectre.min.css">
     <link rel="stylesheet" href="https://unpkg.com/spectre.css/dist/spectre-exp.min.css">
     <link rel="stylesheet" href="https://unpkg.com/spectre.css/dist/spectre-icons.min.css">
@@ -10,6 +15,8 @@
     <link rel="stylesheet"
       href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.9/styles/shades-of-purple.min.css">
     <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.9/highlight.min.js"></script>
+
+
 
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
