@@ -27,4 +27,4 @@ jobs:
     - name: Build
       run: |
         cd ./server
-        go build -v ./server -o ../app
+        go build -v  -o ../app
