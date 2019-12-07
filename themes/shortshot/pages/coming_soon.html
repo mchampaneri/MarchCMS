@@ -1,6 +1,11 @@
 <html>
-
 <head>
+
+    <title>{{ .Page.PageTitle }} | {{ SiteTitle() }}
+    </title>
+    <meta name="keywords" content= "{{ .Page.Content.Keywords }}">
+    <meta name="description" content= "{{ .Page.Content.Desc }}">
+
     <link rel="stylesheet" href="https://unpkg.com/spectre.css/dist/spectre.min.css">
     <link rel="stylesheet" href="https://unpkg.com/spectre.css/dist/spectre-exp.min.css">
     <link rel="stylesheet" href="https://unpkg.com/spectre.css/dist/spectre-icons.min.css">

@@ -47,6 +47,9 @@ type MarchPage struct {
 	Co           time.Time        `json:"Co" storm:"index"`
 	Uo           time.Time        `json:"Uo" storm:"index"`
 	Do           time.Time        `json:"Do" storm:"index"`
+	CoStr        string           `json:"CoStr"`
+	UoStr        string           `json:"UoStr"`
+	DoStr        string           `json:"DoStr"`
 	MarchUserID  int              `json:"UserID" storm:"index"`
 	UpdaterID    int              `json:"UpdaterUserID" storm:"index"`
 	MarchUserObj MarchUser        `json:"Author"`
@@ -61,6 +64,9 @@ type MarchPost struct {
 	PageThumb    string           `json:"PageThumb"`
 	Content      MarchPageContent `json:"PageContent"`
 	Co           time.Time        `json:"Co" storm:"index"`
+	CoStr        string           `json:"CoStr"`
+	UoStr        string           `json:"UoStr"`
+	DoStr        string           `json:"DoStr"`
 	Uo           time.Time        `json:"Uo" storm:"index"`
 	Do           time.Time        `json:"Do" storm:"index"`
 	Tag1         string           `json:"Tag1" storm:"index"`

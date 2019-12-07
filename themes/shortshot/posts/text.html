@@ -1,8 +1,13 @@
 <html>
 
 <head>
-    <title>{{ .Page.PageTitle }}
+    <title>{{ .Page.PageTitle }} | {{ SiteTitle() }}
     </title>
+
+    <meta name="keywords" content= "{{ .Page.Content.Keywords }}">
+    <meta name="description" content= "{{ .Page.Content.Desc }}">
+
+
     <link rel="stylesheet" href="https://unpkg.com/spectre.css/dist/spectre.min.css">
     <link rel="stylesheet" href="https://unpkg.com/spectre.css/dist/spectre-exp.min.css">
     <link rel="stylesheet" href="https://unpkg.com/spectre.css/dist/spectre-icons.min.css">
@@ -11,11 +16,13 @@
       href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.9/styles/shades-of-purple.min.css">
     <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.9/highlight.min.js"></script>
 
+
+
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    
+
     <style>
 
-        p,h3,h4,h5,h6{
+        p,h3,h4,h5{
           font-size: 1.05rem;
           font-family: 'Crimson Text', serif;
         }
@@ -27,7 +34,7 @@
             font-size: 0.8rem;
         }
 
-        .text-light{
+        .text-theme{
           color: rgb(45, 43, 87) !important
         }
 
@@ -50,43 +57,65 @@ activeATag.map(function(x) {
     </script>
 </head>
 
-<body>
-  
+<body class="has-navbar-fixed-top has-background-light">
+
     {{ include "shortshot/posts/navbar.html" . }}
 
-
- 
-   
     <div class="container grid-lg">
-
 
         <div class="columns">
 
           <div class="column col-9  col-md-12 col-ml-auto " >
             <div style="padding:30px 0;">
-  
+
                 <div class="d-inline-block">
-              
+
                     <figure class="avatar avatar-md">
-                      <img src="{{ .Page.MarchUserObj.Picture }}" alt="...">       
-                    </figure>   
-                    <span> 
+                      <img src="{{ .Page.MarchUserObj.Picture }}" alt="...">
+                    </figure>
+                    <span>
                       <b>{{ .Page.MarchUserObj.Name }}</b>
-                    
+
                     </span>
                   </div>
-                  
-      
+                <div class="float-right">
+                {{ .Page.CoStr }}
+
+                </div>
             {{ .output | raw }}
-        
+
+            <div id="disqus_thread"></div>
+
           </div>
         </div>
       </div>
-       
-        
-   
+    </div>
+      {{ include "shortshot/posts/footer.html" . }}
+
+
+<script>
+
+/**
+*  RECOMMENDED CONFIGURATION VARIABLES: EDIT AND UNCOMMENT THE SECTION BELOW TO INSERT DYNAMIC VALUES FROM YOUR PLATFORM OR CMS.
+*  LEARN WHY DEFINING THESE VARIABLES IS IMPORTANT: https://disqus.com/admin/universalcode/#configuration-variables*/
+
+var disqus_config = function () {
+this.page.url =  'http://learnit.mchampaneri.in/{{ .Page.PageURL }}';
+this.page.identifier =  '{{ .Page.PageNumber }}';
+};
+
+(function() { // DON'T EDIT BELOW THIS LINE
+var d = document, s = d.createElement('script');
+s.src = 'https://learnit-2.disqus.com/embed.js';
+s.setAttribute('data-timestamp', +new Date());
+(d.head || d.body).appendChild(s);
+})();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+
 
     <script>hljs.initHighlightingOnLoad();</script>
+    <script id="dsq-count-scr" src="//learnit-2.disqus.com/count.js" async></script>
 </body>
 
 </html>
